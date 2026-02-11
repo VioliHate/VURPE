@@ -1,8 +1,8 @@
-# Design Document: Smart-BPM Dashboard
+# Design Document: Smart-BPM Dashboard (VURPE)
 
 ## Overview
 
-The Smart-BPM Dashboard is an enterprise full-stack application for analyzing business data through a hybrid ML + Rules Engine approach. The system enables users to upload CSV files, apply configurable business rules, and visualize insights through an interactive dashboard. The architecture follows Clean Architecture principles with clear separation of concerns across three main layers: backend (Spring Boot), database (PostgreSQL), and frontend (Angular).
+The Smart-BPM Dashboard (VURPE) is an enterprise full-stack application for analyzing business data through a hybrid ML + Rules Engine approach. The system enables users to upload CSV files, apply configurable business rules, and visualize insights through an interactive dashboard. The architecture follows Clean Architecture principles with clear separation of concerns across three main layers: backend (Spring Boot), database (H2), and frontend (Angular).
 
 ### Key Design Principles
 
@@ -18,18 +18,18 @@ The Smart-BPM Dashboard is an enterprise full-stack application for analyzing bu
 
 ```
 ┌─────────────────────────────────────────────────────────────────┐
-│                        Frontend (Angular)                        │
+│                        Frontend (Angular)                       │
 │  ┌──────────────────────────────────────────────────────────┐   │
 │  │  Dashboard UI                                            │   │
-│  │  - Data Table (paginated, sortable, filterable)         │   │
-│  │  - Charts (bar, line, pie)                              │   │
+│  │  - Data Table (paginated, sortable, filterable)          │   │
+│  │  - Charts (bar, line, pie)                               │   │
 │  │  - Upload Component                                      │   │
-│  │  - Responsive Layout (desktop/tablet/mobile)            │   │
+│  │  - Responsive Layout (desktop/tablet/mobile)             │   │
 │  └──────────────────────────────────────────────────────────┘   │
 └─────────────────────────────────────────────────────────────────┘
                               ↕ (REST API + WebSocket)
 ┌─────────────────────────────────────────────────────────────────┐
-│                    Backend (Spring Boot)                         │
+│                    Backend (Spring Boot)                        │
 │  ┌──────────────────────────────────────────────────────────┐   │
 │  │  API Layer                                               │   │
 │  │  - FileUploadController                                  │   │
@@ -38,9 +38,9 @@ The Smart-BPM Dashboard is an enterprise full-stack application for analyzing bu
 │  └──────────────────────────────────────────────────────────┘   │
 │  ┌──────────────────────────────────────────────────────────┐   │
 │  │  Service Layer                                           │   │
-│  │  - IngestionService (CSV parsing, validation)           │   │
-│  │  - IntelligenceService (rules engine, metrics)          │   │
-│  │  - AnalysisService (async task orchestration)           │   │
+│  │  - IngestionService (CSV parsing, validation)            │   │
+│  │  - IntelligenceService (rules engine, metrics)           │   │
+│  │  - AnalysisService (async task orchestration)            │   │
 │  └──────────────────────────────────────────────────────────┘   │
 │  ┌──────────────────────────────────────────────────────────┐   │
 │  │  Data Access Layer                                       │   │
@@ -51,11 +51,11 @@ The Smart-BPM Dashboard is an enterprise full-stack application for analyzing bu
 └─────────────────────────────────────────────────────────────────┘
                               ↕ (JDBC)
 ┌─────────────────────────────────────────────────────────────────┐
-│                  Database (PostgreSQL)                           │
-│  - data_records table                                            │
-│  - analysis_results table                                        │
-│  - business_rules table                                          │
-│  - async_tasks table                                             │
+│                  Database (H2)                                  │
+│  - data_records table                                           │
+│  - analysis_results table                                       │
+│  - business_rules table                                         │
+│  - async_tasks table                                            │
 └─────────────────────────────────────────────────────────────────┘
 ```
 
@@ -70,7 +70,7 @@ The Smart-BPM Dashboard is an enterprise full-stack application for analyzing bu
 - JUnit 5 + Mockito (testing)
 
 **Database**:
-- PostgreSQL 14+ (relational data persistence)
+- p (relational data persistence)
 - Flyway (database migrations)
 - JDBC (connection pooling via HikariCP)
 
@@ -111,7 +111,7 @@ parseAndStoreRecords(file: MultipartFile): List<DataRecord>
   - Parses CSV rows into DataRecord objects
   - Assigns unique ID and timestamp to each record
   - Enforces data type constraints
-  - Stores in PostgreSQL
+  - Stores in H2
 ```
 
 **Error Handling**:

@@ -2,7 +2,7 @@
 
 ## Overview
 
-The Smart-BPM Dashboard (VURPE) is an enterprise full-stack application for analyzing business data through a hybrid ML + Rules Engine approach. The system enables users to upload CSV files, apply configurable business rules, and visualize insights through an interactive dashboard. The architecture follows Clean Architecture principles with clear separation of concerns across three main layers: backend (Spring Boot), database (H2), and frontend (Angular).
+The Smart-BPM Dashboard (VURPE) is an enterprise full-stack application for analyzing business data through a hybrid ML + Rules Engine approach. The system enables users to upload CSV files, apply configurable business rules, and visualize insights through an interactive dashboard. The architecture follows Clean Architecture principles with clear separation of concerns across three main layers: backend (Spring Boot), database (PostgreSQL), and frontend (Angular).
 
 ### Key Design Principles
 
@@ -51,7 +51,7 @@ The Smart-BPM Dashboard (VURPE) is an enterprise full-stack application for anal
 └─────────────────────────────────────────────────────────────────┘
                               ↕ (JDBC)
 ┌─────────────────────────────────────────────────────────────────┐
-│                  Database (H2)                                  │
+│                  Database (PostgreSQL)                                  │
 │  - data_records table                                           │
 │  - analysis_results table                                       │
 │  - business_rules table                                         │
@@ -70,7 +70,7 @@ The Smart-BPM Dashboard (VURPE) is an enterprise full-stack application for anal
 - JUnit 5 + Mockito (testing)
 
 **Database**:
-- p (relational data persistence)
+- PostgreSQL  (relational data persistence)
 - Flyway (database migrations)
 - JDBC (connection pooling via HikariCP)
 
@@ -111,7 +111,7 @@ parseAndStoreRecords(file: MultipartFile): List<DataRecord>
   - Parses CSV rows into DataRecord objects
   - Assigns unique ID and timestamp to each record
   - Enforces data type constraints
-  - Stores in H2
+  - Stores in PostgreSQL 
 ```
 
 **Error Handling**:

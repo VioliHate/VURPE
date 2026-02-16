@@ -82,6 +82,7 @@
 				<directory>src/main/resources</directory>
 				<filtering>true</filtering>
 				<includes>
+					<include>**/*.sql</include>
 					<include>application.properties</include>
 				</includes>
 			</resource>

@@ -5,17 +5,15 @@ import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 
 import java.time.Instant;
-import java.util.Date;
+import java.util.UUID;
 
 @Entity
 @Table(name = "files")
 public class Files {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "files_id_gen")
-    @SequenceGenerator(name = "files_id_gen", sequenceName = "files_id_seq", allocationSize = 1)
-    @Column(name = "id", nullable = false)
-    private Long id;
+    @GeneratedValue(strategy = GenerationType.UUID)
+    private UUID id;
 
     @Size(max = 100)
     @Column(name = "original_filename")

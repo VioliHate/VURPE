@@ -19,6 +19,18 @@ public class DataRecordSpecifications {
                 return cb.conjunction();
             }
 
+            if(filter.id() != null){
+                predicates.add(cb.equal(root.get("id"), filter.id()
+                ));
+            }
+
+            if(filter.file_id() != null){
+                predicates.add(cb.equal(root.get("file_id"), filter.file_id()));
+            }
+
+            if(filter.original_id() != null){
+                predicates.add(cb.equal(root.get("original_id"), filter.original_id()));
+            }
 
             if (filter.amount() != null) {
                 predicates.add(cb.equal(root.get("amount"), filter.amount()
@@ -31,6 +43,10 @@ public class DataRecordSpecifications {
 
             if(filter.date() != null) {
                 predicates.add(cb.equal(root.get("date"), filter.date()));
+            }
+
+            if(filter.description() != null){
+                predicates.add(cb.equal(root.get("description"), filter.description()));
             }
 
             if(filter.risk_flag() != null &&  !filter.risk_flag().isEmpty()) {

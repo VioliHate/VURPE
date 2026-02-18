@@ -8,15 +8,16 @@ import java.util.UUID;
 
 public record DataRecordResponse (
         UUID id,
-        UUID fileId,
-        String originalId,
+        UUID file_id,
+        String original_id,
         BigDecimal amount,
         String category,
         LocalDateTime date,
         String description,
-        String riskFlag,
-        LocalDateTime createdAt,
-        LocalDateTime updatedAt){
+        String risk_flag,
+        LocalDateTime created_at,
+        LocalDateTime updated_at
+){
 
     public static DataRecordResponse fromEntity(DataRecord entity) {
         return new DataRecordResponse(

@@ -1,0 +1,30 @@
+INSERT INTO business_rules (
+    id,
+    rule_name,
+    rule_condition,
+    risk_flag,
+    severity
+) VALUES
+      (gen_random_uuid(), 'Importo molto elevato singolo pagamento',           'amount > 50000',                               'HIGH',     8),
+      (gen_random_uuid(), 'Pagamento a nuovo fornitore elevato',               'new_supplier = true AND amount > 15000',       'HIGH',     7),
+      (gen_random_uuid(), 'Pagamento duplicato stesso importo stesso giorno',  'same_amount AND same_supplier AND same_date',  'HIGH',     9),
+      (gen_random_uuid(), 'Frequenza pagamenti stesso fornitore alta',         'payments_to_supplier_last_7d > 5',             'MEDIUM',   5),
+      (gen_random_uuid(), 'Pagamento fuori orario lavorativo',                 'hour_of_day < 7 OR hour_of_day > 20',          'MEDIUM',   6),
+      (gen_random_uuid(), 'Importo multiplo di 10000 sospetto',                'amount % 10000 = 0 AND amount > 20000',        'MEDIUM',   6),
+      (gen_random_uuid(), 'Descrizione generica o vuota',                      'description IS NULL OR description = "" OR length(description) < 5', 'MEDIUM', 4),
+      (gen_random_uuid(), 'Categoria non dichiarata o OTHER frequente',        'category = "OTHER" AND count_other_last_30d > 8', 'MEDIUM', 5),
+      (gen_random_uuid(), 'Pagamento a fornitore blacklistato',                'supplier IN (blacklist)',                      'CRITICAL', 10),
+      (gen_random_uuid(), 'Importo negativo elevato (nota di credito)',        'amount < -10000',                              'HIGH',     8),
+      (gen_random_uuid(), 'Divisione pagamento in tranche sospette',           'same_supplier AND same_description AND amount < 10000 AND count_last_24h > 3', 'HIGH', 7),
+      (gen_random_uuid(), 'Cambio IBAN fornitore improvviso',                  'supplier_iban_changed_last_30d = true',        'HIGH',     9),
+      (gen_random_uuid(), 'Pagamento verso paese ad alto rischio',             'country_risk_score > 7',                       'HIGH',     8),
+      (gen_random_uuid(), 'Spesa viaggio senza giustificativo allegato',       'category = "TRAVEL" AND has_attachment = false', 'MEDIUM', 5),
+      (gen_random_uuid(), 'Importo spesa dipendente > soglia mensile',         'employee_monthly_spend > 8000',                'MEDIUM',   6),
+      (gen_random_uuid(), 'Categoria TRAINING con importo > 3000',             'category = "TRAINING" AND amount > 3000',      'MEDIUM',   5),
+      (gen_random_uuid(), 'Pagamento multiplo stesso giorno stesso fornitore', 'same_supplier AND same_date AND count > 2',    'MEDIUM',   6),
+      (gen_random_uuid(), 'Descrizione con parole chiave sospette',            'description ILIKE "%urgent%" OR description ILIKE "%cash%" OR description ILIKE "%gift%"', 'HIGH', 7),
+      (gen_random_uuid(), 'Fattura fornitore non registrata in anagrafica',    'supplier_not_in_master_data = true',           'HIGH',     8),
+      (gen_random_uuid(), 'Importo molto basso ripetuto (test frode)',         'amount BETWEEN 0.01 AND 1.00 AND count_last_7d > 10', 'LOW',   3),
+      (gen_random_uuid(), 'Spesa in weekend non giustificata',                 'day_of_week IN (6,7) AND category != "TRAVEL"', 'LOW',    4),
+      (gen_random_uuid(), 'Categoria MARKETING senza approvazione',            'category = "MARKETING" AND approved = false',  'MEDIUM',   5)
+;

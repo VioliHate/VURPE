@@ -1,4 +1,4 @@
-package it.study.bruvio.vurpe.utils;
+package it.study.bruvio.vurpe.specifications;
 
 import it.study.bruvio.vurpe.dto.criteria.DataRecordFilter;
 import it.study.bruvio.vurpe.entity.DataRecord;
@@ -12,31 +12,40 @@ public class DataRecordSpecifications {
     private DataRecordSpecifications() {}
     public static Specification<DataRecord> fromFilter(DataRecordFilter filter) {
         return (root, query, cb) -> {
+
             List<Predicate> predicates = new ArrayList<>();
 
             if(filter.isEmpty()){
                 return cb.conjunction();
             }
 
+
             if (filter.amount() != null) {
                 predicates.add(cb.equal(root.get("amount"), filter.amount()
                 ));
             }
+
             if(filter.category() != null && !filter.category().isEmpty()) {
                 predicates.add(cb.equal(root.get("category"), filter.category()));
             }
+
             if(filter.date() != null) {
                 predicates.add(cb.equal(root.get("date"), filter.date()));
             }
-            if(filter.riskFlag() != null &&  !filter.riskFlag().isEmpty()) {
-                predicates.add(cb.equal(root.get("riskFlag"), filter.riskFlag()));
+
+            if(filter.risk_flag() != null &&  !filter.risk_flag().isEmpty()) {
+                predicates.add(cb.equal(root.get("risk_flag"), filter.risk_flag()));
             }
-            if(filter.createdAt() != null) {
-                predicates.add(cb.equal(root.get("createdAt"), filter.createdAt()));
+
+            if(filter.created_at() != null) {
+                predicates.add(cb.equal(root.get("created_at"), filter.created_at()));
             }
-            if(filter.updatedAt() != null) {
-                predicates.add(cb.equal(root.get("updatedAt"), filter.updatedAt()));
+
+            if(filter.updated_at() != null) {
+                predicates.add(cb.equal(root.get("updated_at"), filter.updated_at()));
             }
+
+
 
             return cb.and(predicates.toArray(Predicate[]::new));
         };

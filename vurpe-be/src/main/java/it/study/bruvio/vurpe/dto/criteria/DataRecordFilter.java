@@ -7,13 +7,13 @@ public record DataRecordFilter(
     BigDecimal amount,
     String  category,
     LocalDateTime date,
-    String riskFlag,
-    LocalDateTime createdAt,
-    LocalDateTime updatedAt)
+    String risk_flag,
+    LocalDateTime created_at,
+    LocalDateTime updated_at)
 
 {
     public boolean isEmpty(){
-        return amount == null && category == null && date == null && riskFlag == null && updatedAt == null;
+        return amount == null && category == null && date == null && risk_flag == null && updated_at == null;
 
     }
 }

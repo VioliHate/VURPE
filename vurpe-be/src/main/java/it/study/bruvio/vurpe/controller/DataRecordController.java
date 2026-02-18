@@ -3,7 +3,6 @@ package it.study.bruvio.vurpe.controller;
 import it.study.bruvio.vurpe.dto.criteria.DataRecordFilter;
 import it.study.bruvio.vurpe.dto.response.DataRecordResponse;
 import it.study.bruvio.vurpe.dto.response.PayloadResponse;
-import it.study.bruvio.vurpe.entity.DataRecord;
 import it.study.bruvio.vurpe.service.DataRecordService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -27,7 +26,7 @@ public class DataRecordController {
     @GetMapping("/data-records")
     public ResponseEntity<PayloadResponse<Page<DataRecordResponse>>> search(
             @ModelAttribute DataRecordFilter criteria,
-            @PageableDefault(size = 20, sort = "createdAt", direction = Sort.Direction.DESC) Pageable pageable) {
+            @PageableDefault(size = 20, sort = "id", direction = Sort.Direction.DESC) Pageable pageable) {
 
         Page<DataRecordResponse> page = dataRecordService.search(criteria, pageable)
                 .map(DataRecordResponse::fromEntity);

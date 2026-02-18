@@ -19,13 +19,13 @@ public class BusinessRule {
     private UUID id;
 
     @Column(name = "rule_name", nullable = false)
-    private String ruleName;
+    private String rule_name;
 
     @Column(name = "rule_condition", nullable = false)
-    private String ruleCondition;
+    private String rule_condition;
 
     @Column(name = "risk_flag", nullable = false)
-    private String riskFlag;
+    private String risk_flag;
 
     @Column(name = "severity", nullable = false)
     private Integer severity;

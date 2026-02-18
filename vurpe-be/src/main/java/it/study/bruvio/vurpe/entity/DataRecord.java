@@ -22,10 +22,10 @@ public class DataRecord {
 
 
     @Column(name="file_id",nullable=false)
-    private UUID fileId;
+    private UUID file_id;
 
     @Column(name = "original_id", nullable = false)
-    private String originalId;
+    private String original_id;
 
 
     @Column(name = "amount", nullable = false)
@@ -41,22 +41,22 @@ public class DataRecord {
     private String description;
 
     @Column(name = "risk_flag")
-    private String riskFlag;
+    private String risk_flag;
 
     @Column(name = "created_at", nullable = false, updatable = false)
-    private LocalDateTime createdAt;
+    private LocalDateTime created_at;
 
     @Column(name = "updated_at")
-    private LocalDateTime updatedAt;
+    private LocalDateTime updated_at;
 
     @PrePersist
     protected void onCreate() {
-        createdAt = LocalDateTime.now();
-        updatedAt = LocalDateTime.now();
+        created_at = LocalDateTime.now();
+        updated_at = LocalDateTime.now();
     }
 
     @PreUpdate
     protected void onUpdate() {
-        updatedAt = LocalDateTime.now();
+        updated_at = LocalDateTime.now();
     }
 }

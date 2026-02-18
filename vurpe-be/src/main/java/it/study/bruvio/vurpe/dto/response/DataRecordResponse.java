@@ -21,15 +21,15 @@ public record DataRecordResponse (
     public static DataRecordResponse fromEntity(DataRecord entity) {
         return new DataRecordResponse(
                 entity.getId(),
-                entity.getFileId(),
-                entity.getOriginalId(),
+                entity.getFile_id(),
+                entity.getOriginal_id(),
                 entity.getAmount(),
                 entity.getCategory(),
                 entity.getDate(),
                 entity.getDescription(),
-                entity.getRiskFlag(),
-                entity.getCreatedAt(),
-                entity.getUpdatedAt()
+                entity.getRisk_flag(),
+                entity.getCreated_at(),
+                entity.getUpdated_at()
         );
     }
 }

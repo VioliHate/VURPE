@@ -21,23 +21,23 @@ public class AsyncTask {
     private UUID id;
 
     @Column(name = "file_id", nullable = false)
-    private UUID fileId;
+    private UUID file_id;
 
     @Enumerated(EnumType.STRING)
     @Column(name = "status", nullable = false)
     private TaskStatus status;
 
     @Column(name = "error_message")
-    private String errorMessage;
+    private String error_message;
 
     @Column(name = "created_at", nullable = false, updatable = false)
-    private LocalDateTime createdAt;
+    private LocalDateTime created_at;
 
     @Column(name = "completed_at")
-    private LocalDateTime completedAt;
+    private LocalDateTime completed_at;
 
     @PrePersist
     protected void onCreate() {
-        createdAt = LocalDateTime.now();
+        created_at = LocalDateTime.now();
     }
 }

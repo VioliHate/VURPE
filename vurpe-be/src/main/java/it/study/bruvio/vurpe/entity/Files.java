@@ -17,16 +17,16 @@ public class Files {
 
     @Size(max = 100)
     @Column(name = "original_filename")
-    private String name;
+    private String original_name;
 
     @Column(name = "file_size")
-    private Long size;
+    private Long file_size;
 
     @Column (name = "upload_status")
-    private String status;
+    private String upload_status;
 
     @NotNull
     @Column (name= "created_at",nullable = false)
-    private Instant createdAt;
+    private Instant created_at;
 
 }

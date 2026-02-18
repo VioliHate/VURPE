@@ -3,7 +3,7 @@ package it.study.bruvio.vurpe.service;
 import it.study.bruvio.vurpe.dto.criteria.DataRecordFilter;
 import it.study.bruvio.vurpe.entity.DataRecord;
 import it.study.bruvio.vurpe.repository.DataRecordRepository;
-import it.study.bruvio.vurpe.utils.DataRecordSpecifications;
+import it.study.bruvio.vurpe.specifications.DataRecordSpecifications;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -17,6 +17,8 @@ public class DataRecordService {
 
     public Page<DataRecord> search(DataRecordFilter filter, Pageable pageable) {
         Specification<DataRecord> spec = DataRecordSpecifications.fromFilter(filter);
+
         return repository.findAll(spec, pageable);
     }
+
 }

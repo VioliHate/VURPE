@@ -26,7 +26,7 @@ public class DataRecordController {
     @GetMapping("/data-records")
     public ResponseEntity<PayloadResponse<Page<DataRecordResponse>>> search(
             @ModelAttribute DataRecordFilter criteria,
-            @PageableDefault(size = 20, sort = "id", direction = Sort.Direction.DESC) Pageable pageable) {
+            @PageableDefault(size = 20, sort = "id", direction = Sort.Direction.ASC) Pageable pageable) {
 
         Page<DataRecordResponse> page = dataRecordService.search(criteria, pageable)
                 .map(DataRecordResponse::fromEntity);

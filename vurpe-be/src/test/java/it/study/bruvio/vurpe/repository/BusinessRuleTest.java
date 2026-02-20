@@ -15,6 +15,8 @@ import org.springframework.boot.test.autoconfigure.orm.jpa.TestEntityManager;
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.jupiter.api.Assertions.*;
+
 @DataJpaTest
 @DisplayName("TestBusinessRule repo")
 @AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE)
@@ -42,6 +44,64 @@ public class BusinessRuleTest {
                     .isNotNull();
 
 
+        });
+    }
+    @Test
+    void shouldRejectInvalidDataTypes() {
+        // Test 1: rule_name null (NOT NULL)
+        assertThrows(Exception.class, () -> {
+            BusinessRule rule = new BusinessRule();
+            rule.setRule_name(null); // INVALIDO
+            rule.setRule_condition("amount > 1000");
+            rule.setRisk_flag("HIGH");
+            rule.setSeverity(3);
+            repository.saveAndFlush(rule);
+        });
+
+        // Test 2: rule_condition null (NOT NULL)
+        assertThrows(Exception.class, () -> {
+            BusinessRule rule = new BusinessRule();
+            rule.setRule_name("High Amount Rule");
+            rule.setRule_condition(null); // INVALIDO
+            rule.setRisk_flag("HIGH");
+            rule.setSeverity(3);
+            repository.saveAndFlush(rule);
+        });
+
+        // Test 3: risk_flag null (NOT NULL)
+        assertThrows(Exception.class, () -> {
+            BusinessRule rule = new BusinessRule();
+            rule.setRule_name("High Amount Rule");
+            rule.setRule_condition("amount > 1000");
+            rule.setRisk_flag(null); // INVALIDO
+            rule.setSeverity(3);
+            repository.saveAndFlush(rule);
+        });
+
+        // Test 4: severity null (NOT NULL)
+        assertThrows(Exception.class, () -> {
+            BusinessRule rule = new BusinessRule();
+            rule.setRule_name("High Amount Rule");
+            rule.setRule_condition("amount > 1000");
+            rule.setRisk_flag("HIGH");
+            rule.setSeverity(null); // INVALIDO
+            repository.saveAndFlush(rule);
+        });
+    }
+
+    @Test
+    void shouldAcceptValidDataTypes() {
+        assertDoesNotThrow(() -> {
+            BusinessRule rule = new BusinessRule();
+            rule.setRule_name("High Amount Alert");
+            rule.setRule_condition("amount > 10000");
+            rule.setRisk_flag("HIGH");
+            rule.setSeverity(5);
+
+            BusinessRule saved = repository.saveAndFlush(rule);
+            assertNotNull(saved.getId());
+            assertEquals("High Amount Alert", saved.getRule_name());
+            assertEquals(5, saved.getSeverity());
         });
     }
 }

@@ -8,6 +8,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.time.Instant;
+import java.time.LocalDateTime;
 import java.util.UUID;
 
 @Entity
@@ -34,5 +35,10 @@ public class Files {
     @NotNull
     @Column (name= "created_at",nullable = false)
     private Instant created_at;
+
+    @PrePersist
+    protected void onCreate() {
+        created_at = Instant.now();
+    }
 
 }

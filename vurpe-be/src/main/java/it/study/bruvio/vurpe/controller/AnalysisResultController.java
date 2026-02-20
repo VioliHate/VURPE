@@ -27,7 +27,6 @@ public class AnalysisResultController {
             @ModelAttribute AnalysisResultFilter criteria,
 
             @PageableDefault(size=20 , sort="id" , direction= Sort.Direction.ASC) Pageable pageable){
-        System.out.print("CRITERIA:"+criteria.toString());
         Page<AnalysisResultResponse> page = service.search(criteria,pageable)
                 .map(AnalysisResultResponse::fromEntity);
         PayloadResponse<Page<AnalysisResultResponse>> response = PayloadResponse.success(page , "Search completed");

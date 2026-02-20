@@ -63,7 +63,7 @@ public class AsyncTaskTest {
         // Test 2: status null (NOT NULL)
         assertThrows(Exception.class, () -> {
             AsyncTask task = new AsyncTask();
-            task.setFile_id(UUID.randomUUID());
+            task.setFile_id(UUID.fromString("27d0e7dd-93d5-4ce2-8212-16b3fff35163"));
             task.setStatus(null); // INVALIDO
             repository.saveAndFlush(task);
         });
@@ -76,7 +76,7 @@ public class AsyncTaskTest {
     void shouldAcceptValidDataTypes() {
         assertDoesNotThrow(() -> {
             AsyncTask task = new AsyncTask();
-            task.setFile_id(UUID.randomUUID());
+            task.setFile_id(UUID.fromString("27d0e7dd-93d5-4ce2-8212-16b3fff35163"));
             task.setStatus(TaskStatus.QUEUED);
             task.setError_message("Test error");
             task.setCompleted_at(LocalDateTime.now());
@@ -92,7 +92,7 @@ public class AsyncTaskTest {
     void shouldAcceptNullableFields() {
         assertDoesNotThrow(() -> {
             AsyncTask task = new AsyncTask();
-            task.setFile_id(UUID.randomUUID());
+            task.setFile_id(UUID.fromString("27d0e7dd-93d5-4ce2-8212-16b3fff35163"));
             task.setStatus(TaskStatus.COMPLETED);
             task.setError_message(null); // Nullable
             task.setCompleted_at(null); // Nullable
@@ -108,7 +108,7 @@ public class AsyncTaskTest {
     void shouldAutoSetCreatedAt() {
         assertDoesNotThrow(() -> {
             AsyncTask task = new AsyncTask();
-            task.setFile_id(UUID.randomUUID());
+            task.setFile_id(UUID.fromString("27d0e7dd-93d5-4ce2-8212-16b3fff35163"));
             task.setStatus(TaskStatus.PROCESSING);
 
             AsyncTask saved = repository.saveAndFlush(task);

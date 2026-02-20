@@ -55,7 +55,7 @@ public class DataRecordTest {
         // Tenta di inserire un amount non numerico
         DataRecord record = new DataRecord();
 
-        record.setFile_id(UUID.randomUUID());
+        record.setFile_id(UUID.fromString("27d0e7dd-93d5-4ce2-8212-16b3fff35163"));
         record.setOriginal_id("TEST-001");
         // amount è BigDecimal, quindi questo compila ma potrebbe fallire
         record.setAmount(null); // NULL non permesso se NOT NULL
@@ -70,7 +70,7 @@ public class DataRecordTest {
     @Test
     void shouldRejectInvalidDateType() {
         DataRecord record = new DataRecord();
-        record.setFile_id(UUID.randomUUID());
+        record.setFile_id(UUID.fromString("27d0e7dd-93d5-4ce2-8212-16b3fff35163"));
         record.setOriginal_id("TEST-002");
         record.setAmount(new BigDecimal("100.00"));
         record.setCategory("Test");
@@ -98,7 +98,7 @@ public class DataRecordTest {
     @Test
     void shouldAcceptValidDataTypes() {
         DataRecord record = new DataRecord();
-        record.setFile_id(UUID.randomUUID());
+        record.setFile_id(UUID.fromString("27d0e7dd-93d5-4ce2-8212-16b3fff35163"));
         record.setOriginal_id("TEST-004");
         record.setAmount(new BigDecimal("100.00"));
         record.setCategory("Test");

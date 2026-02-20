@@ -63,7 +63,7 @@ public class AnalysisResultTest     {
         // Test 2: createdAt null (NOT NULL)
         assertThrows(Exception.class, () -> {
             AnalysisResult result = new AnalysisResult();
-            result.setFile_id(UUID.randomUUID());
+            result.setFile_id(UUID.fromString("27d0e7dd-93d5-4ce2-8212-16b3fff35163"));
             result.setTotal_amount(new BigDecimal("1000"));
             result.setRecord_count(10);
             result.setCreated_at(null); // INVALIDO
@@ -75,7 +75,7 @@ public class AnalysisResultTest     {
     void shouldAcceptValidDataTypes() {
         assertDoesNotThrow(() -> {
             AnalysisResult result = new AnalysisResult();
-            result.setFile_id(UUID.randomUUID());
+            result.setFile_id(UUID.fromString("27d0e7dd-93d5-4ce2-8212-16b3fff35163"));
             result.setTotal_amount(new BigDecimal("5000.50"));
             result.setRecord_count(100);
             result.setAverage_amount(new BigDecimal("50.00"));
@@ -93,7 +93,7 @@ public class AnalysisResultTest     {
     void shouldAcceptNullableFields() {
         assertDoesNotThrow(() -> {
             AnalysisResult result = new AnalysisResult();
-            result.setFile_id(UUID.randomUUID());
+            result.setFile_id(UUID.fromString("27d0e7dd-93d5-4ce2-8212-16b3fff35163"));
             // Tutti gli altri campi sono nullable, quindi null è ok
             result.setTotal_amount(null);
             result.setRecord_count(null);

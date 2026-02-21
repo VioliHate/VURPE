@@ -45,7 +45,7 @@ public class BusinessRuleTest {
     }
 
     @Test
-    void shouldRejectInvalidRuleNameTypes() {
+    void shouldRejectInvalidRuleNameType() {
         // Test 1: rule_name null (NOT NULL)
         BusinessRule businessRule = createBusinessRule("HIGH", 1);
         businessRule.setRule_name(null);
@@ -55,7 +55,7 @@ public class BusinessRuleTest {
     }
 
     @Test
-    void shouldRejectInvalidRuleConditionTypes() {
+    void shouldRejectInvalidRuleConditionType() {
         // Test 2: rule_condition null (NOT NULL)
         BusinessRule businessRule = createBusinessRule("HIGH", 2);
         businessRule.setRule_condition(null);
@@ -65,7 +65,7 @@ public class BusinessRuleTest {
     }
 
     @Test
-    void shouldRejectInvalidRiskFlagTypes() {
+    void shouldRejectInvalidRiskFlagType() {
         // Test 3: risk_flag null (NOT NULL)
         BusinessRule businessRule = createBusinessRule("MEDIUM", 3);
         businessRule.setRisk_flag(null);
@@ -75,7 +75,7 @@ public class BusinessRuleTest {
     }
 
     @Test
-    void shouldRejectInvalidSeverityTypes() {
+    void shouldRejectInvalidSeverityType() {
         // Test 4: severity null (NOT NULL)
         BusinessRule businessRule = createBusinessRule("LOW", 3);
         businessRule.setSeverity(null);
@@ -85,7 +85,7 @@ public class BusinessRuleTest {
     }
 
     @Test
-    void shouldAcceptValidDataTypes() {
+    void shouldAcceptValidDataType() {
         assertDoesNotThrow(() -> {
             BusinessRule rule = createBusinessRule("HIGH", 5);
             rule.setRule_name("High Amount Alert");

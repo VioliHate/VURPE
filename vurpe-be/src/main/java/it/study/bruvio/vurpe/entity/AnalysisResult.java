@@ -1,6 +1,7 @@
 package it.study.bruvio.vurpe.entity;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -23,6 +24,7 @@ public class AnalysisResult {
     @GeneratedValue(strategy = GenerationType.UUID)
     private UUID id;
 
+    @NotNull
     @Column(name = "file_id", nullable = false)
     private UUID file_id;
 
@@ -47,6 +49,7 @@ public class AnalysisResult {
     @Column(name = "time_series_by_date", columnDefinition = "jsonb")
     private Map<String, BigDecimal> time_series_by_date;
 
+    @NotNull
     @Column(name = "created_at", nullable = false, updatable = false)
     private LocalDateTime created_at;
 

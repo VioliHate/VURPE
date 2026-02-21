@@ -55,7 +55,7 @@ public class AsyncTaskTest {
 
     }
     @Test
-    void shouldRejectInvalidFileIdTypes() {
+    void shouldRejectInvalidFileIdType() {
         // Test 1: file_id null (NOT NULL)
         AsyncTask testAsyncTask = creatAsyncTask(TaskStatus.QUEUED, null);
         testAsyncTask.setFile_id(null);
@@ -65,7 +65,7 @@ public class AsyncTaskTest {
         });
     }
     @Test
-    void shouldRejectInvalidStatusTypes() {
+    void shouldRejectInvalidStatusType() {
         // Test 2: status null (NOT NULL)
         AsyncTask testAsyncTask = creatAsyncTask(TaskStatus.COMPLETED, null);
         testAsyncTask.setStatus(null);
@@ -76,7 +76,7 @@ public class AsyncTaskTest {
     }
 
     @Test
-    void shouldRejectInvalidCreatedAtTypes() {
+    void shouldRejectInvalidCreatedAtType() {
         // Test 3: Validation Test for created_at null
         AsyncTask testAsyncTask = creatAsyncTask(TaskStatus.PROCESSING, null);
         testAsyncTask.setCreated_at(null);
@@ -84,7 +84,6 @@ public class AsyncTaskTest {
 
 
         try (ValidatorFactory factory = Validation.buildDefaultValidatorFactory()) {
-            System.out.println("STAMPO: "+ testAsyncTask.toString());
             Validator validator = factory.getValidator();
             Set<ConstraintViolation<AsyncTask>> violations = validator.validate(testAsyncTask);
             assertThat(violations)

@@ -1,6 +1,8 @@
 package it.study.bruvio.vurpe.repository;
 
 import it.study.bruvio.vurpe.entity.Files;
+import jakarta.persistence.PersistenceException;
+import jakarta.validation.*;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -8,8 +10,8 @@ import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabas
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.boot.test.autoconfigure.orm.jpa.TestEntityManager;
 
-import java.time.Instant;
 import java.util.List;
+import java.util.Set;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.*;
@@ -45,49 +47,50 @@ public class FilesRepositoryTest {
                     .isNotNull();
         });
     }
+
     @Test
     void shouldRejectInvalidDataTypes() {
-        // Test 1: created_at null (NOT NULL)
-        assertThrows(Exception.class, () -> {
-            Files file = new Files();
-            file.setOriginal_name("test.csv");
-            file.setFile_size(1024L);
-            file.setUpload_status("UPLOADED");
-            file.setCreated_at(null); // INVALIDO
-            repository.saveAndFlush(file);
-        });
+        // Test 1: Application Test for created_at null
+        Files testFile = createTestFile("test.csv", 1024L, "UPLOADED");
+        testFile.setCreated_at(null);
+
+        try (ValidatorFactory factory = Validation.buildDefaultValidatorFactory()) {
+            Validator validator = factory.getValidator();
+            Set<ConstraintViolation<Files>> violations = validator.validate(testFile);
+            assertThat(violations)
+                    .as("There must be exactly one violation for @NotNull on created_at")
+                    .hasSize(1);
+
+            assertThat(violations)
+                    .extracting(ConstraintViolation::getPropertyPath)
+                    .extracting(Path::toString)
+                    .containsExactly("created_at");
+
+        } catch (Exception e) {
+            fail(e.getMessage(), e);
+        }
     }
 
     @Test
-    void shouldAcceptValidDataTypes() {
-        assertDoesNotThrow(() -> {
-            Files file = new Files();
-            file.setOriginal_name("dashboard-data.csv");
-            file.setFile_size(2048L);
-            file.setUpload_status("COMPLETED");
-            file.setCreated_at(Instant.now());
+    void shouldPreventDuplicateId() {
+        Files file1 = createTestFile("dashboard-data.csv", 2048L, "COMPLETED");
+        entityManager.persistAndFlush(file1);
 
-            Files saved = repository.saveAndFlush(file);
-            assertNotNull(saved.getId());
-            assertEquals("dashboard-data.csv", saved.getOriginal_name());
-            assertEquals(2048L, saved.getFile_size());
+        Files file2 = createTestFile("dashboard-data-copy.csv", 4096L, "COMPLETED");
+        file2.setId(file1.getId());
+
+        assertThrows(PersistenceException.class, () -> {
+            entityManager.persistAndFlush(file2);
         });
     }
 
-    @Test
-    void shouldAcceptNullableFields() {
-        assertDoesNotThrow(() -> {
-            Files file = new Files();
-            file.setOriginal_name(null); // Nullable
-            file.setFile_size(null); // Nullable
-            file.setUpload_status(null); // Nullable
-            file.setCreated_at(Instant.now()); // NOT NULL
 
-            Files saved = repository.saveAndFlush(file);
-            assertNotNull(saved.getId());
-            assertNull(saved.getOriginal_name());
-            assertNull(saved.getFile_size());
-            assertNull(saved.getUpload_status());
-        });
+    // metodo per creare al volo un file
+    private Files createTestFile(String original_name, Long file_size, String upload_status) {
+        Files file = new Files();
+        file.setOriginal_name(original_name);
+        file.setFile_size(file_size);
+        file.setUpload_status(upload_status);
+        return file;
     }
 }

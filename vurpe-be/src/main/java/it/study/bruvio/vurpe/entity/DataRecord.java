@@ -21,7 +21,7 @@ public class DataRecord {
     private UUID id;
 
 
-    @Column(name="file_id",nullable=false)
+    @Column(name="file_id",nullable = false)
     private UUID file_id;
 
     @Column(name = "original_id", nullable = false)

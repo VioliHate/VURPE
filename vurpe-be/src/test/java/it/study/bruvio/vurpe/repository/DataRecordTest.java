@@ -9,6 +9,7 @@ import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabas
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.boot.test.autoconfigure.orm.jpa.TestEntityManager;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.dao.DataIntegrityViolationException;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
@@ -18,9 +19,8 @@ import java.util.UUID;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.*;
 
-@SpringBootTest
 @DataJpaTest
-@DisplayName("Test FILES repo")
+@DisplayName("Test DATA RECORD repo")
 @AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE)
 public class DataRecordTest {
 
@@ -50,56 +50,72 @@ public class DataRecordTest {
                     .isNotNull();
         });
     }
+
     @Test
     void shouldRejectInvalidAmountType() {
-        // Tenta di inserire un amount non numerico
-        DataRecord record = new DataRecord();
-
-        record.setFile_id(UUID.fromString("27d0e7dd-93d5-4ce2-8212-16b3fff35163"));
-        record.setOriginal_id("TEST-001");
-        // amount è BigDecimal, quindi questo compila ma potrebbe fallire
-        record.setAmount(null); // NULL non permesso se NOT NULL
-        record.setCategory("Test");
+        // Amount not null
+        DataRecord record = createDataRecord("27d0e7dd-93d5-4ce2-8212-16b3fff35163", "TEST-001",
+                "TEST","data record di test", "HIGHT");
         record.setDate(LocalDateTime.now());
-
-        assertThrows(Exception.class, () -> {
+        record.setAmount(null);
+        assertThrows(DataIntegrityViolationException.class, () -> {
             repository.saveAndFlush(record);
         });
     }
 
     @Test
     void shouldRejectInvalidDateType() {
-        DataRecord record = new DataRecord();
-        record.setFile_id(UUID.fromString("27d0e7dd-93d5-4ce2-8212-16b3fff35163"));
-        record.setOriginal_id("TEST-002");
-        record.setAmount(new BigDecimal("100.00"));
-        record.setCategory("Test");
-        record.setDate(null); // NULL non permesso
-
-        assertThrows(Exception.class, () -> {
+        // Date not null
+        DataRecord record = createDataRecord("27d0e7dd-93d5-4ce2-8212-16b3fff35163", "TEST-002",
+                "TEST","data record di test", "HIGHT");
+        record.setDate(null);
+        record.setAmount(BigDecimal.valueOf(1000L));
+        assertThrows(DataIntegrityViolationException.class, () -> {
             repository.saveAndFlush(record);
         });
     }
 
     @Test
     void shouldRejectInvalidUUIDType() {
-        DataRecord record = new DataRecord();
-        record.setFile_id(null); // UUID NULL non permesso
-        record.setOriginal_id("TEST-003");
-        record.setAmount(new BigDecimal("100.00"));
-        record.setCategory("Test");
+        // UUID not null
+        DataRecord record = createDataRecord("27d0e7dd-93d5-4ce2-8212-16b3fff35163", "TEST-003",
+                "TEST","data record di test", "HIGHT");
+        record.setFile_id(null);
         record.setDate(LocalDateTime.now());
+        record.setAmount(BigDecimal.valueOf(1000L));
+        assertThrows(DataIntegrityViolationException.class, () -> {
+            repository.saveAndFlush(record);
+        });
+    }
 
-        assertThrows(Exception.class, () -> {
+    @Test
+    void shouldRejectInvalidCategoryType() {
+        DataRecord record = createDataRecord("27d0e7dd-93d5-4ce2-8212-16b3fff35163", "TEST-004",
+                "TEST","data record di test", "HIGHT");
+        record.setCategory(null);
+        record.setDate(LocalDateTime.now());
+        record.setAmount(BigDecimal.valueOf(1000L));
+        assertThrows(DataIntegrityViolationException.class, () -> {
+            repository.saveAndFlush(record);
+        });
+    }
+    @Test
+    void shouldRejectInvalidOriginalIdType() {
+        DataRecord record = createDataRecord("27d0e7dd-93d5-4ce2-8212-16b3fff35163", "TEST-005",
+                "TEST","data record di test", "HIGHT");
+        record.setOriginal_id(null);
+        record.setDate(LocalDateTime.now());
+        record.setAmount(BigDecimal.valueOf(1000L));
+        assertThrows(DataIntegrityViolationException.class, () -> {
             repository.saveAndFlush(record);
         });
     }
 
     @Test
     void shouldAcceptValidDataTypes() {
-        DataRecord record = new DataRecord();
-        record.setFile_id(UUID.fromString("27d0e7dd-93d5-4ce2-8212-16b3fff35163"));
-        record.setOriginal_id("TEST-004");
+        // check insert
+        DataRecord record = createDataRecord("27d0e7dd-93d5-4ce2-8212-16b3fff35163", "TEST-006",
+                "TEST","data record di test", "HIGHT");
         record.setAmount(new BigDecimal("100.00"));
         record.setCategory("Test");
         record.setDate(LocalDateTime.now());
@@ -108,5 +124,18 @@ public class DataRecordTest {
             DataRecord saved = repository.saveAndFlush(record);
             assertNotNull(saved.getId());
         });
+    }
+
+    //metodo creazione DataRecord di test
+    private DataRecord createDataRecord(String file_id, String original_id,
+                                        String category,
+                                        String description, String risk_flag) {
+        DataRecord record = new DataRecord();
+        record.setFile_id(UUID.fromString(file_id));
+        record.setOriginal_id(original_id);
+        record.setCategory(category);
+        record.setDescription(description);
+        record.setRisk_flag(risk_flag);
+        return record;
     }
 }

@@ -31,7 +31,7 @@ public class DataRecordTest {
     private DataRecordRepository repository;
 
     @Test
-    @DisplayName("All records must have non-null IDs and create_at")
+    @DisplayName("All records must have non-null ID and create_at")
     void everyRecordMustHaveNonNullIdAndCreatedAt() {
         // take all record
         List<DataRecord> allRecords = repository.findAll();

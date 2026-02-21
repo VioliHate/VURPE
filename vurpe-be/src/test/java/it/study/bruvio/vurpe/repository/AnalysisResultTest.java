@@ -30,21 +30,21 @@ public class AnalysisResultTest     {
     private AnalysisResultRepository repository;
 
     @Test
-    @DisplayName("Tutti i record id e create_at devono essere NON nulli")
+    @DisplayName("All records must have non-null ID and create_at")
     void everyRecordMustHaveNonNullIdAndCreatedAt() {
         List<AnalysisResult> allRecords=repository.findAll();
 
         assertThat(allRecords)
-                .as("non devono esserci id o record_at nulli ")
+                .as("There must be at least some test records")
                 .isNotEmpty();
 
         allRecords.forEach(AnalysisRes -> {
             assertThat(AnalysisRes.getId())
-                    .as("ID non deve essere nullo: "+AnalysisRes)
+                    .as("ID must be not null for record: "+AnalysisRes)
                     .isNotNull();
 
             assertThat(AnalysisRes.getCreated_at())
-                    .as("Created_at non deve essere nullo: "+AnalysisRes)
+                    .as("created_at must be not null for record: "+AnalysisRes)
                     .isNotNull();
 
         });

@@ -1,16 +1,20 @@
 package it.study.bruvio.vurpe.repository;
 
 import it.study.bruvio.vurpe.entity.AsyncTask;
+import it.study.bruvio.vurpe.entity.Files;
 import it.study.bruvio.vurpe.entity.TaskStatus;
+import jakarta.validation.*;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.boot.test.autoconfigure.orm.jpa.TestEntityManager;
+import org.springframework.dao.DataIntegrityViolationException;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Set;
 import java.util.UUID;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -27,21 +31,21 @@ public class AsyncTaskTest {
     private AsyncTaskRepository repository;
 
     @Test
-    @DisplayName("tutti i record devono avere id e create_at non nulli")
+    @DisplayName("All records must have non-null ID and create_at")
     void everyRecordMushHaveNonNullIdAndCreateAt(){
         List<AsyncTask> allRecords=repository.findAll();
 
         assertThat(allRecords)
-                .as("controllo che il db non sia vuoto")
+                .as("There must be at least some test records")
                 .isNotEmpty();
 
         allRecords.forEach(i -> {
             assertThat(i.getId())
-                    .as("ID non deve essere nullo: "+i)
+                    .as("ID must be not null for record: "+i)
             .isNotNull();
 
             assertThat(i.getCreated_at())
-                    .as("createdAt non deve essere nullo: "+i)
+                    .as("created_at must be not null for record: "+i)
                     .isNotNull();
         });
 
@@ -51,69 +55,69 @@ public class AsyncTaskTest {
 
     }
     @Test
-    void shouldRejectInvalidDataTypes() {
+    void shouldRejectInvalidFileIdTypes() {
         // Test 1: file_id null (NOT NULL)
-        assertThrows(Exception.class, () -> {
-            AsyncTask task = new AsyncTask();
-            task.setFile_id(null); // INVALIDO
-            task.setStatus(TaskStatus.QUEUED);
-            repository.saveAndFlush(task);
+        AsyncTask testAsyncTask = creatAsyncTask(TaskStatus.QUEUED, null);
+        testAsyncTask.setFile_id(null);
+        testAsyncTask.setCompleted_at(null);
+        assertThrows(ConstraintViolationException.class, () -> {
+            repository.saveAndFlush(testAsyncTask);
         });
-
+    }
+    @Test
+    void shouldRejectInvalidStatusTypes() {
         // Test 2: status null (NOT NULL)
-        assertThrows(Exception.class, () -> {
-            AsyncTask task = new AsyncTask();
-            task.setFile_id(UUID.fromString("27d0e7dd-93d5-4ce2-8212-16b3fff35163"));
-            task.setStatus(null); // INVALIDO
-            repository.saveAndFlush(task);
+        AsyncTask testAsyncTask = creatAsyncTask(TaskStatus.COMPLETED, null);
+        testAsyncTask.setStatus(null);
+        testAsyncTask.setCompleted_at(LocalDateTime.now());
+        assertThrows(ConstraintViolationException.class, () -> {
+            repository.saveAndFlush(testAsyncTask);
         });
-
-        // Test 3: created_at null (NOT NULL) - ma @PrePersist lo setta automaticamente
-        // Questo test potrebbe non fallire per via del @PrePersist
     }
 
     @Test
-    void shouldAcceptValidDataTypes() {
-        assertDoesNotThrow(() -> {
-            AsyncTask task = new AsyncTask();
-            task.setFile_id(UUID.fromString("27d0e7dd-93d5-4ce2-8212-16b3fff35163"));
-            task.setStatus(TaskStatus.QUEUED);
-            task.setError_message("Test error");
-            task.setCompleted_at(LocalDateTime.now());
-            // created_at viene settato automaticamente da @PrePersist
+    void shouldRejectInvalidCreatedAtTypes() {
+        // Test 3: Validation Test for created_at null
+        AsyncTask testAsyncTask = creatAsyncTask(TaskStatus.PROCESSING, null);
+        testAsyncTask.setCreated_at(null);
+        testAsyncTask.setCompleted_at(null);
 
-            AsyncTask saved = repository.saveAndFlush(task);
+
+        try (ValidatorFactory factory = Validation.buildDefaultValidatorFactory()) {
+            System.out.println("STAMPO: "+ testAsyncTask.toString());
+            Validator validator = factory.getValidator();
+            Set<ConstraintViolation<AsyncTask>> violations = validator.validate(testAsyncTask);
+            assertThat(violations)
+                    .as("There must be exactly one violation for @NotNull on created_at")
+                    .hasSize(1);
+            assertThat(violations)
+                    .extracting(ConstraintViolation::getPropertyPath)
+                    .extracting(Path::toString)
+                    .containsExactly("created_at");
+
+        } catch (Exception e) {
+            fail(e.getMessage(), e);
+        }
+    }
+
+    @Test
+    void shouldNotNullIdCreatedAt() {
+        AsyncTask testAsyncTask = creatAsyncTask(TaskStatus.COMPLETED, null);
+        testAsyncTask.setCompleted_at(LocalDateTime.now());
+
+        assertDoesNotThrow(() -> {
+            AsyncTask saved = repository.saveAndFlush(testAsyncTask);
             assertNotNull(saved.getId());
             assertNotNull(saved.getCreated_at()); // Verifica @PrePersist
         });
     }
 
-    @Test
-    void shouldAcceptNullableFields() {
-        assertDoesNotThrow(() -> {
-            AsyncTask task = new AsyncTask();
-            task.setFile_id(UUID.fromString("27d0e7dd-93d5-4ce2-8212-16b3fff35163"));
-            task.setStatus(TaskStatus.COMPLETED);
-            task.setError_message(null); // Nullable
-            task.setCompleted_at(null); // Nullable
-
-            AsyncTask saved = repository.saveAndFlush(task);
-            assertNotNull(saved.getId());
-            assertNull(saved.getError_message());
-            assertNull(saved.getCompleted_at());
-        });
-    }
-
-    @Test
-    void shouldAutoSetCreatedAt() {
-        assertDoesNotThrow(() -> {
-            AsyncTask task = new AsyncTask();
-            task.setFile_id(UUID.fromString("27d0e7dd-93d5-4ce2-8212-16b3fff35163"));
-            task.setStatus(TaskStatus.PROCESSING);
-
-            AsyncTask saved = repository.saveAndFlush(task);
-            assertNotNull(saved.getCreated_at()); // @PrePersist deve averlo settato
-        });
+    private AsyncTask creatAsyncTask(TaskStatus status, String error_message) {
+        AsyncTask task = new AsyncTask();
+        task.setFile_id(UUID.fromString("27d0e7dd-93d5-4ce2-8212-16b3fff35163"));
+        task.setStatus(status);
+        task.setError_message(error_message);
+        return task;
     }
 
 }

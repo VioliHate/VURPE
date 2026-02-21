@@ -50,7 +50,7 @@ public class FilesRepositoryTest {
 
     @Test
     void shouldRejectInvalidDataTypes() {
-        // Test 1: Application Test for created_at null
+        // Test 1: Validation Test for created_at null
         Files testFile = createTestFile("test.csv", 1024L, "UPLOADED");
         testFile.setCreated_at(null);
 

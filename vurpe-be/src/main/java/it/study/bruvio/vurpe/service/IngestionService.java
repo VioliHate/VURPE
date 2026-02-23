@@ -8,6 +8,7 @@ import it.study.bruvio.vurpe.repository.DataRecordRepository;
 import it.study.bruvio.vurpe.repository.FilesRepository;
 import lombok.RequiredArgsConstructor;
 import org.apache.commons.io.FilenameUtils;
+import org.jetbrains.annotations.NotNull;
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -17,6 +18,7 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.math.BigDecimal;
+import java.nio.charset.StandardCharsets;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.*;
@@ -31,26 +33,19 @@ public class IngestionService {
     public PayloadResponse<String> uploadFile(MultipartFile file) throws Exception {
 
         if (file.isEmpty()) {
-          return   PayloadResponse.error("files is empty", " ");
+            return PayloadResponse.error("files is empty", " ");
         }
         String nameFile = file.getOriginalFilename();
         if (!FilenameUtils.getExtension(nameFile).equals("csv")) {
-            return   PayloadResponse.error("extension error", " ");
+            return PayloadResponse.error("extension error", " ");
         }
         if (!validateCsvHeader(file)) {
             return PayloadResponse.error("header error", " ");
         }
-           if(!insertRows(file)){
-                  return   PayloadResponse.error("row error", " ");
-           }
-
-
-
-
-
-
-
-                return   PayloadResponse.success("Successo default"," ");
+        if (!insertRows(file)) {
+            return PayloadResponse.error("row error", " ");
+        }
+        return PayloadResponse.success("Successo default", " ");
     }
 
     private boolean validateCsvHeader(MultipartFile file) throws IOException {
@@ -79,49 +74,37 @@ public class IngestionService {
                 }
 
             }
-
-
         }
-
-
         return true;
     }
 
 
     private boolean insertRows(MultipartFile file) throws Exception {
 
-        int count = 2;
-        try (BufferedReader br = new BufferedReader(new InputStreamReader(file.getInputStream()))) {
+        int count = 1;
+        try (BufferedReader br = new BufferedReader(new InputStreamReader(file.getInputStream(), StandardCharsets.UTF_8))) {
             Files f = new Files();
             f.setOriginal_name(file.getOriginalFilename());
             f.setFile_size(file.getSize());
             f.setUpload_status("COMPLETED");
-
             repoFiles.save(f);
 
-            String row = br.readLine();
+            String row;
+            boolean isHeader = true;
 
             DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
             List<DataRecord> dtList = new ArrayList<>();
-            while (!(row = br.readLine()).equals( ";;;;;;")) {
-
+            while ((row = br.readLine()) != null) {
+                if(isHeader) {
+                    isHeader = false;
+                    continue;
+                }
+                if(dataSplitter(row).length == 0){
+                    continue;
+                }
                 try {
-                    String[] data = row.split(";");
-                    if (data.length < 5) {
-                        throw new Exception("Numero di colonne insufficiente");
-                    }
-                    DataRecord dt = new DataRecord(
-                            f.getId(),//file_id
-                            data[0],//original_id
-
-                            new BigDecimal(data[1].trim()),
-                            data[2],//category
-                            LocalDateTime.parse(data[3].trim(), formatter),//date
-                            data[4]//description
-                    );
+                    DataRecord dt = getDataRecord(row, f, formatter);
                     dtList.add(dt);
-
-
                 } catch (Exception e) {
                     throw new Exception("errore riga: " + count + " colonna:", e);
                 }
@@ -135,5 +118,24 @@ public class IngestionService {
             throw new Exception("errore riga: " + count, e);
         }
         return true;
+    }
+
+    private @NotNull DataRecord getDataRecord(String row, Files f, DateTimeFormatter formatter) throws Exception {
+        String[] data = dataSplitter(row);
+        if (data.length < 5) {
+            throw new Exception("Numero di colonne insufficiente");
+        }
+        return new DataRecord(
+                f.getId(),//file_id
+                data[0],//original_id
+                new BigDecimal(data[1].trim()), //amount
+                data[2],//category
+                LocalDateTime.parse(data[3].trim(), formatter),//date
+                data[4]//description
+        );
+    }
+
+    private String[] dataSplitter(String row){
+        return row.split(";");
     }
 }

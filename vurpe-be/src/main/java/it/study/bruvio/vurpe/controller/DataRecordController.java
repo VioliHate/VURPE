@@ -35,4 +35,5 @@ public class DataRecordController {
 
         return ResponseEntity.ok(response);
     }
+
 }

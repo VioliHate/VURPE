@@ -49,6 +49,17 @@ public class DataRecord {
     @Column(name = "updated_at")
     private LocalDateTime updated_at;
 
+    public DataRecord(UUID idFIle, String id, BigDecimal bigDecimal, String s1, LocalDateTime parse, String s2) {
+        this.setFile_id(idFIle);
+        this.setOriginal_id(id);
+        this.setAmount(bigDecimal);
+        this.setCategory(s1);
+        this.setDate(parse);
+        this.setDescription(s2);
+
+    }
+
+
     @PrePersist
     protected void onCreate() {
         created_at = LocalDateTime.now();

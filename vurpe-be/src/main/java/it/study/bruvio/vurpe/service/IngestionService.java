@@ -1,0 +1,139 @@
+package it.study.bruvio.vurpe.service;
+
+import it.study.bruvio.vurpe.dto.response.FilesResponse;
+import it.study.bruvio.vurpe.dto.response.PayloadResponse;
+import it.study.bruvio.vurpe.entity.DataRecord;
+import it.study.bruvio.vurpe.entity.Files;
+import it.study.bruvio.vurpe.repository.DataRecordRepository;
+import it.study.bruvio.vurpe.repository.FilesRepository;
+import lombok.RequiredArgsConstructor;
+import org.apache.commons.io.FilenameUtils;
+import org.springframework.data.domain.Page;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
+
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.math.BigDecimal;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+import java.util.*;
+
+@Service
+@RequiredArgsConstructor
+public class IngestionService {
+    private final FilesRepository repoFiles;
+    private final DataRecordRepository repoData;
+
+    @Transactional(rollbackFor = Exception.class)
+    public PayloadResponse<String> uploadFile(MultipartFile file) throws Exception {
+
+        if (file.isEmpty()) {
+          return   PayloadResponse.error("files is empty", " ");
+        }
+        String nameFile = file.getOriginalFilename();
+        if (!FilenameUtils.getExtension(nameFile).equals("csv")) {
+            return   PayloadResponse.error("extension error", " ");
+        }
+        if (!validateCsvHeader(file)) {
+            return PayloadResponse.error("header error", " ");
+        }
+           if(!insertRows(file)){
+                  return   PayloadResponse.error("row error", " ");
+           }
+
+
+
+
+
+
+
+                return   PayloadResponse.success("Successo default"," ");
+    }
+
+    private boolean validateCsvHeader(MultipartFile file) throws IOException {
+        List<String> expectedColumn = new ArrayList<>(List.of("id", "amount", "category", "date", "description"));
+
+        try (
+                BufferedReader reader = new BufferedReader(new InputStreamReader(file.getInputStream()))) {
+
+            String header = reader.readLine();
+            if (header == null) {
+                throw new IllegalArgumentException("Header not found");
+            }
+
+            String[] headerColumns = header.split(";");
+            Set<String> setHeaderColumns = new HashSet<>(List.of(headerColumns));
+
+
+            if (setHeaderColumns.size() != expectedColumn.size()) {
+                throw new IllegalArgumentException("Number of columns is different");
+
+            }
+
+            for (String el : setHeaderColumns) {
+                if (!expectedColumn.contains(el)) {
+                    throw new IllegalArgumentException("missing column: " + el);
+                }
+
+            }
+
+
+        }
+
+
+        return true;
+    }
+
+
+    private boolean insertRows(MultipartFile file) throws Exception {
+
+        int count = 2;
+        try (BufferedReader br = new BufferedReader(new InputStreamReader(file.getInputStream()))) {
+            Files f = new Files();
+            f.setOriginal_name(file.getOriginalFilename());
+            f.setFile_size(file.getSize());
+            f.setUpload_status("COMPLETED");
+
+            repoFiles.save(f);
+
+            String row = br.readLine();
+
+            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+            List<DataRecord> dtList = new ArrayList<>();
+            while (!(row = br.readLine()).equals( ";;;;;;")) {
+
+                try {
+                    String[] data = row.split(";");
+                    if (data.length < 5) {
+                        throw new Exception("Numero di colonne insufficiente");
+                    }
+                    DataRecord dt = new DataRecord(
+                            f.getId(),//file_id
+                            data[0],//original_id
+
+                            new BigDecimal(data[1].trim()),
+                            data[2],//category
+                            LocalDateTime.parse(data[3].trim(), formatter),//date
+                            data[4]//description
+                    );
+                    dtList.add(dt);
+
+
+                } catch (Exception e) {
+                    throw new Exception("errore riga: " + count + " colonna:", e);
+                }
+                count++;
+            }
+
+            repoData.saveAll(dtList);
+
+
+        } catch (Exception e) {
+            throw new Exception("errore riga: " + count, e);
+        }
+        return true;
+    }
+}

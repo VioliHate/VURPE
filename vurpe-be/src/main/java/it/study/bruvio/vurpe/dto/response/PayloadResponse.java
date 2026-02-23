@@ -1,18 +1,15 @@
 package it.study.bruvio.vurpe.dto.response;
 
-import lombok.AllArgsConstructor;
-import lombok.Getter;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 
 
-public record PayloadResponse<T> (
-    Status status,
-    Object payload,
-    String message,
-    String errorCode
-){
-
+public record PayloadResponse<T>(
+        Status status,
+        Object payload,
+        String message,
+        String errorCode
+) {
 
 
     public static <T> PayloadResponse<T> success(T data, String message) {
@@ -28,8 +25,3 @@ public record PayloadResponse<T> (
     }
 }
 
-
-enum Status {
-    OK,
-    ERROR
-}

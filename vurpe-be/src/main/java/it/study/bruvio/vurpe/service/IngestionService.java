@@ -45,7 +45,7 @@ public class IngestionService {
         if (!insertRows(file)) {
             return PayloadResponse.error("row error", " ");
         }
-        return PayloadResponse.success("Successo default", " ");
+        return PayloadResponse.success("Success", "success ok");
     }
 
     private boolean validateCsvHeader(MultipartFile file) throws IOException {

@@ -22,4 +22,8 @@ public record DataRecordFilter(
                category == null && date == null && risk_flag == null && updated_at == null;
 
     }
+    public static DataRecordFilter withFileId(UUID fileId){
+        return new DataRecordFilter(null, fileId, null, null, null, null, null, null, null, null);
+
+    }
 }

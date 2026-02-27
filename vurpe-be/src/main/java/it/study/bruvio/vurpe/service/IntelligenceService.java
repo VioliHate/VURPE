@@ -1,16 +1,21 @@
 package it.study.bruvio.vurpe.service;
 
+import it.study.bruvio.vurpe.dto.criteria.DataRecordFilter;
 import it.study.bruvio.vurpe.entity.BusinessRule;
 import it.study.bruvio.vurpe.entity.DataRecord;
 import it.study.bruvio.vurpe.repository.BusinessRuleRepository;
 import it.study.bruvio.vurpe.repository.DataRecordRepository;
+import it.study.bruvio.vurpe.specifications.DataRecordSpecifications;
+import it.study.bruvio.vurpe.specifications.FilesSpecifications;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
 import java.util.List;
 import java.util.UUID;
+import java.util.logging.Filter;
 
 @Service
 @RequiredArgsConstructor
@@ -21,25 +26,24 @@ public class IntelligenceService {
     @Transactional
     public void applyBusinessRulesToFile(UUID fileId) {
         // 1. Recupera tutti i record del file
-        List<DataRecord> records = dataRecordRepository.findAllByFile_id(fileId);
+        DataRecordFilter filter = DataRecordFilter.withFileId(fileId);
+        Specification<DataRecord> spec = DataRecordSpecifications.fromFilter(filter);
+        List<DataRecord> records = dataRecordRepository.findAll(spec);
         try {
 
             // 2. Applica le regole a tutti i record
             applyBusinessRules(records);
-        }
-        catch(Exception e){
-          throw new RuntimeException(e);
+        } catch (Exception e) {
+            throw new RuntimeException(e);
         }
     }
+
     @Transactional
     protected void applyBusinessRules(List<DataRecord> records) {
         List<BusinessRule> allRules = businessRuleRepository.findAll();
         try {
             for (DataRecord record : records) {
-
                 BusinessRule matchedRule = findBestMatchingRule(record, allRules);
-
-
                 if (matchedRule != null) {
                     record.setRisk_flag(matchedRule.getRisk_flag());
 
@@ -54,7 +58,6 @@ public class IntelligenceService {
     }
 
     private BusinessRule findBestMatchingRule(DataRecord record, List<BusinessRule> allRules) {
-
 
 
         BusinessRule bestRule = null;

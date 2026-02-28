@@ -47,25 +47,28 @@ public class IntelligenceService {
             } catch (Exception e) {
                 // Ora l'errore su una regola non blocca le altre perché la transazione padre è salva
                 System.err.println("Errore applicando regola ID " + rule.getId() + ": " + e.getMessage());
-                // Opzionale: loggare l'errore su DB o file di log serio
             }
         }
+        this.setNoMatches(fileId);
     }
 
     // REQUIRES_NEW ora funzionerà perché chiamato tramite proxy
     @Transactional(propagation = Propagation.REQUIRES_NEW)
     public void applyRule(UUID fileId, BusinessRule rule) {
 
+        this.setRiskFlag(fileId, rule);
+    }
+
+
+    private void setRiskFlag(UUID fileId, BusinessRule rule) {
+
         // FIX SINTASSI: Sostituisco le virgolette doppie con singole per Postgres
         // (L'ideale sarebbe correggerle nel DB, ma questo protegge il codice)
         String safeCondition = rule.getRule_condition().replace("\"", "'");
 
         String sql = "SELECT * FROM data_records " +
-                "WHERE file_id = :fileId " + // Uso parametro nominativo, più pulito
+                "WHERE file_id = :fileId " +
                 "AND (" + safeCondition + ")";
-
-        // LOGGARE LA QUERY aiuta a capire cosa sta girando
-        // System.out.println("Executing Rule SQL: " + sql);
 
         Query query = entityManager.createNativeQuery(sql, DataRecord.class);
         query.setParameter("fileId", fileId);
@@ -84,4 +87,23 @@ public class IntelligenceService {
             dataRecordRepository.saveAll(matchingRecords);
         }
     }
+
+
+    private void setNoMatches(UUID fileId){
+            String takeNoMatchesSQL = "SELECT * FROM data_records " +
+                    "WHERE file_id = :fileId " +
+                    "AND risk_flag is NULL";
+            Query takeNoMatchesQuery = entityManager.createNativeQuery(takeNoMatchesSQL, DataRecord.class);
+            takeNoMatchesQuery.setParameter("fileId", fileId);
+
+            @SuppressWarnings("unchecked")
+            List<DataRecord> notMatchingRecords = takeNoMatchesQuery.getResultList();
+            for(DataRecord record : notMatchingRecords) {
+                record.setRisk_flag("NO_MATCHES");
+            }
+            if (!notMatchingRecords.isEmpty()) {
+                dataRecordRepository.saveAll(notMatchingRecords);
+            }
+        }
+
 }

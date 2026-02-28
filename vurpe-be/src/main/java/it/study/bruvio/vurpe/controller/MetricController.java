@@ -14,7 +14,14 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 @RequestMapping("/api")
 @RequiredArgsConstructor
-
+//esempio json da postman
+// {
+//    "field": "amount",
+//    "operation": "SUM",
+//    "groupBy": "category",
+//    "limit": 10,
+//    "filters": []
+//}
 public class MetricController {
 
     private final MetricService srv;

@@ -17,6 +17,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.List;
 import java.util.UUID;
 
+
 @Service
 @RequiredArgsConstructor
 public class IntelligenceService {
@@ -53,8 +54,9 @@ public class IntelligenceService {
     }
 
     // REQUIRES_NEW ora funzionerà perché chiamato tramite proxy
+    // da disabilitare per testing IntelligenceServiceTest
     @Transactional(propagation = Propagation.REQUIRES_NEW)
-    public void applyRule(UUID fileId, BusinessRule rule) {
+    protected void applyRule(UUID fileId, BusinessRule rule) {
 
         this.setRiskFlag(fileId, rule);
     }
@@ -69,7 +71,7 @@ public class IntelligenceService {
         String sql = "SELECT * FROM data_records " +
                 "WHERE file_id = :fileId " +
                 "AND (" + safeCondition + ")";
-
+        System.out.println("Eseguo query con condizione: " + sql);
         Query query = entityManager.createNativeQuery(sql, DataRecord.class);
         query.setParameter("fileId", fileId);
 

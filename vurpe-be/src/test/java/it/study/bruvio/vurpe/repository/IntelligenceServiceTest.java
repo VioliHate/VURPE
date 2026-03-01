@@ -48,7 +48,7 @@ public class IntelligenceServiceTest {
     @Commit
     //per testare commentare  @Transactional(propagation = Propagation.REQUIRES_NEW) in IntelligenceService
     void shouldDataRecordMustHaveRiskFlag() {
-        BusinessRule ruleTest = createBusinessRule("amount > 10000 AND category = 'transfer'","LOW", 3);
+        BusinessRule ruleTest = createBusinessRule("amount > 10000 AND category = 'transfer'","HIGH", 7);
         entityManager.persistAndFlush(ruleTest);
         Files testFile = createFile();
         UUID fileId = filesRepository.saveAndFlush(testFile).getId();
@@ -60,7 +60,7 @@ public class IntelligenceServiceTest {
         service.applyBusinessRulesToFile(fileId);
         DataRecord updated = dataRecordRepository.findByFileId(fileId).getFirst();
         assertNotNull(updated.getRisk_flag(), "Il flag di rischio dovrebbe essere stato impostato");
-        assertEquals("LOW", updated.getRisk_flag(), "Flag sbagliato");
+        assertEquals("HIGH", updated.getRisk_flag(), "Flag sbagliato");
         assertNotNull(dataRecordTest.getRisk_flag());
     }
 

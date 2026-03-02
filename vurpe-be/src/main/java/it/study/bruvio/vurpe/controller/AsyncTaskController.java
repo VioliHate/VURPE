@@ -54,26 +54,29 @@ public class AsyncTaskController {
             if(f.getUpload_status().equals("completed")){
                 PayloadResponse<String> response = PayloadResponse.success("Analisi già avvenuta " ,"Success");
                 return ResponseEntity.ok(response);
-            };
+            }
 
 
+            else if(f.getUpload_status().equals("uploaded")) {
+            try {
+                UUID taskAsyncUUID = asyncTaskService.queueAnalysisTask(UUIDid);
+                f.setUpload_status("working");
+                filesRepo.save(f);
+                asyncTaskService.processAnalysisTask(taskAsyncUUID);
+                f.setUpload_status("completed");
+                filesRepo.save(f);
+                PayloadResponse<String> response = PayloadResponse.success("Analisi avvenuta", "Success");
+                return ResponseEntity.ok(response);
 
-        try{
-            UUID taskAsyncUUID=asyncTaskService.queueAnalysisTask(UUIDid);
-            f.setUpload_status("working");
-            filesRepo.save(f);
-            asyncTaskService.processAnalysisTask(taskAsyncUUID);
-            f.setUpload_status("completed");
-            filesRepo.save(f);
-            PayloadResponse<String> response = PayloadResponse.success("Analisi avvenuta","Success");
-            return ResponseEntity.ok(response);
+            } catch (Exception e) {
+                f.setUpload_status("error-in-working");
+                filesRepo.save(f);
+                PayloadResponse<String> response = PayloadResponse.error("errore durante l analisi", e.getMessage());
+                return ResponseEntity.badRequest().body(response);
 
-        } catch (Exception e) {
-            f.setUpload_status("error-in-working");
-            filesRepo.save(f);
-            PayloadResponse<String> response = PayloadResponse.error("errore durante l analisi", e.getMessage());
-            return ResponseEntity.badRequest().body(response);
-
+            }
         }
+        PayloadResponse<String> response = PayloadResponse.error("errrore",null );
+        return ResponseEntity.badRequest().body(response);
     }
 }

@@ -1,6 +1,5 @@
 package it.study.bruvio.vurpe.service;
 
-import it.study.bruvio.vurpe.dto.response.FilesResponse;
 import it.study.bruvio.vurpe.dto.response.PayloadResponse;
 import it.study.bruvio.vurpe.entity.DataRecord;
 import it.study.bruvio.vurpe.entity.Files;
@@ -9,7 +8,6 @@ import it.study.bruvio.vurpe.repository.FilesRepository;
 import lombok.RequiredArgsConstructor;
 import org.apache.commons.io.FilenameUtils;
 import org.jetbrains.annotations.NotNull;
-import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
@@ -36,7 +34,7 @@ public class IngestionService {
             return PayloadResponse.error("files is empty", " ");
         }
         String nameFile = file.getOriginalFilename();
-        if (!FilenameUtils.getExtension(nameFile).equals("csv")) {
+        if (!Objects.equals(FilenameUtils.getExtension(nameFile), "csv")) {
             return PayloadResponse.error("extension error", " ");
         }
         if (!validateCsvHeader(file)) {
@@ -45,6 +43,7 @@ public class IngestionService {
         if (!insertRows(file)) {
             return PayloadResponse.error("row error", " ");
         }
+
         return PayloadResponse.success("Success", "success ok");
     }
 
@@ -80,13 +79,13 @@ public class IngestionService {
 
 
     private boolean insertRows(MultipartFile file) throws Exception {
-
+        Files f = new Files();
         int count = 1;
         try (BufferedReader br = new BufferedReader(new InputStreamReader(file.getInputStream(), StandardCharsets.UTF_8))) {
-            Files f = new Files();
+
             f.setOriginal_name(file.getOriginalFilename());
             f.setFile_size(file.getSize());
-            f.setUpload_status("uploaded");
+            f.setUpload_status("uploading");
             repoFiles.save(f);
 
             String row;
@@ -117,6 +116,8 @@ public class IngestionService {
         } catch (Exception e) {
             throw new Exception("errore riga: " + count, e);
         }
+        f.setUpload_status("uploaded");
+        repoFiles.save(f);
         return true;
     }
 

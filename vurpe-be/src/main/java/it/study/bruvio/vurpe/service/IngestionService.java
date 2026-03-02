@@ -86,7 +86,7 @@ public class IngestionService {
             Files f = new Files();
             f.setOriginal_name(file.getOriginalFilename());
             f.setFile_size(file.getSize());
-            f.setUpload_status("COMPLETED");
+            f.setUpload_status("uploaded");
             repoFiles.save(f);
 
             String row;

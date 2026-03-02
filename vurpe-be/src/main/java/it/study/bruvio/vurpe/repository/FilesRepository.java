@@ -10,4 +10,6 @@ import java.util.UUID;
 @Repository
 public interface FilesRepository extends JpaRepository<Files, Integer>, JpaSpecificationExecutor<Files> {
     boolean existsById(UUID fileId);
+
+    Files getReferenceById(UUID uuiDid);
 }

@@ -4,6 +4,7 @@ package it.study.bruvio.vurpe.controller;
 import it.study.bruvio.vurpe.dto.criteria.AsyncTaskFilter;
 import it.study.bruvio.vurpe.dto.response.AsyncTaskResponse;
 import it.study.bruvio.vurpe.dto.response.PayloadResponse;
+import it.study.bruvio.vurpe.entity.Files;
 import it.study.bruvio.vurpe.repository.FilesRepository;
 import it.study.bruvio.vurpe.service.AsyncTaskService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -49,14 +50,27 @@ public class AsyncTaskController {
             return ResponseEntity.badRequest().body(response);
 
         }
+        Files f=filesRepo.getReferenceById(UUIDid);
+            if(f.getUpload_status().equals("completed")){
+                PayloadResponse<String> response = PayloadResponse.success("Analisi già avvenuta " ,"Success");
+                return ResponseEntity.ok(response);
+            };
+
+
 
         try{
             UUID taskAsyncUUID=asyncTaskService.queueAnalysisTask(UUIDid);
+            f.setUpload_status("working");
+            filesRepo.save(f);
             asyncTaskService.processAnalysisTask(taskAsyncUUID);
+            f.setUpload_status("completed");
+            filesRepo.save(f);
             PayloadResponse<String> response = PayloadResponse.success("Analisi avvenuta","Success");
             return ResponseEntity.ok(response);
 
         } catch (Exception e) {
+            f.setUpload_status("error-in-working");
+            filesRepo.save(f);
             PayloadResponse<String> response = PayloadResponse.error("errore durante l analisi", e.getMessage());
             return ResponseEntity.badRequest().body(response);
 

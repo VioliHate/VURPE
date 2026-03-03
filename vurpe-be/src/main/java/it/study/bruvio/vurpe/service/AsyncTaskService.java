@@ -76,12 +76,14 @@ public class AsyncTaskService {
                 asyncTask.setStatus(TaskStatus.FAILED);
                 asyncTask.setCompleted_at(LocalDateTime.now());
                 asyncTask.setError_message(e.getMessage());
-                repoAsyncTask.save(asyncTask);
+                repoAsyncTask.saveAndFlush(asyncTask);
+                file.setStatus(FileStatusEnum.ERROR);
+                reposFiles.save(file);
                 throw new RuntimeException(e);
             }
         }
 
-        return CompletableFuture.completedFuture(PayloadResponse.error("unprocessed file", "KO"));
+        return CompletableFuture.completedFuture(PayloadResponse.error("unprocessed file: status is " + file.getStatus().name(), "KO"));
 
     }
 }

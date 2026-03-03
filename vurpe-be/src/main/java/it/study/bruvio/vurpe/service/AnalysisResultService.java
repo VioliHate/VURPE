@@ -2,7 +2,10 @@ package it.study.bruvio.vurpe.service;
 
 import it.study.bruvio.vurpe.dto.criteria.AnalysisResultFilter;
 import it.study.bruvio.vurpe.entity.AnalysisResult;
+import it.study.bruvio.vurpe.entity.DataRecord;
 import it.study.bruvio.vurpe.repository.AnalysisResultRepository;
+import it.study.bruvio.vurpe.repository.DataRecordRepository;
+import it.study.bruvio.vurpe.repository.FilesRepository;
 import it.study.bruvio.vurpe.specifications.AnalysisResultSpecifications;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -10,15 +13,66 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
+import java.math.BigDecimal;
+import java.util.*;
+import java.util.stream.Collectors;
+
 @Service
 @RequiredArgsConstructor
 public class AnalysisResultService {
 
-    private final AnalysisResultRepository repository;
+    private final AnalysisResultRepository repoAnalysis;
+
+    private final DataRecordRepository repoDataRecord;
+
+    private final FilesRepository repoFiles;
+
+
 
     public Page<AnalysisResult> search(AnalysisResultFilter filter, Pageable pageable) {
 
         Specification<AnalysisResult> spec = AnalysisResultSpecifications.fromFilter(filter);
-        return repository.findAll(spec, pageable);
+        return repoAnalysis.findAll(spec, pageable);
+    }
+
+    public void saveAnalysisResult(UUID fileID) throws Exception {
+
+        AnalysisResult analysisResult = new AnalysisResult();
+        if(!repoFiles.existsById(fileID)) {
+            throw new Exception("File not exists!");
+        }
+        try {
+            analysisResult.setFile_id(fileID);
+            analysisResult.setTotal_amount(repoDataRecord.sumAmountByFileId(fileID));
+            analysisResult.setRecord_count(repoDataRecord.countByFileId(fileID));
+            analysisResult.setAverage_amount(repoDataRecord.avgAmountByFileId(fileID));
+            analysisResult.setDistribution_by_category(this.mapToCount(repoDataRecord.countByCategoryRaw(fileID)));
+            analysisResult.setDistribution_by_risk_flag(this.mapToCount(repoDataRecord.countByRiskFlagRaw(fileID)));
+            analysisResult.setTime_series_by_date(this.mapToDailySum(repoDataRecord.sumAmountTimeSeriesByDate(fileID)));
+            repoAnalysis.save(analysisResult);
+        }catch (Exception e){
+            throw new Exception("Error to create analysis record", e);
+        }
+    }
+
+
+
+    //utility mapper
+    protected Map<String, Integer> mapToCount(List<Object[]> rows) {
+        return rows.stream().collect(Collectors.toMap(
+                r -> (String) r[0],
+                r -> ((Integer) r[1]),
+                (o,n) -> o,
+                LinkedHashMap::new
+        ));
+    }
+
+    protected Map<String, BigDecimal> mapToDailySum(List<Object[]> rows) {
+        return rows.stream().collect(Collectors.toMap(
+                r -> (String) r[0],
+                r -> (BigDecimal) r[1],
+                (o,n) -> o,
+                LinkedHashMap::new
+        ));
     }
 }

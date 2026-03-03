@@ -10,10 +10,9 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.UUID;
 
 @RestController
 @RequestMapping(path = "/call")
@@ -33,4 +32,16 @@ public class AnalysisResultController {
         return ResponseEntity.ok(response);
     }
 
+    @PostMapping()
+    public ResponseEntity<PayloadResponse<String>> saveAnalysisResult(
+            @RequestParam("fileId") String fileId) throws Exception {
+        UUID id = UUID.fromString(fileId);
+        try {
+            service.saveAnalysisResult(id);
+            PayloadResponse<String> response = PayloadResponse.success("OK", "Save completed");
+            return ResponseEntity.ok(response);
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body(PayloadResponse.error(e.getMessage(), "SAVE_ERROR_ANALYSIS_RESULT"));
+        }
+    }
 }

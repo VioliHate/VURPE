@@ -1,8 +1,6 @@
 -- V11__Insert_valid_test_rules_and_records.sql
 
 -- Prima cancella le regole vecchie con condizioni invalide
-DELETE FROM data_records;
-
 -- Inserisci regole VALIDE con colonne che esistono in data_records
 INSERT INTO business_rules (
     id,

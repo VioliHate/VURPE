@@ -13,7 +13,6 @@ import org.springframework.data.jpa.domain.Specification;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 
-import java.io.FileNotFoundException;
 import java.time.LocalDateTime;
 import java.util.UUID;
 
@@ -34,8 +33,6 @@ public class AsyncTaskService {
 
     public UUID queueAnalysisTask(UUID fileId)  {
 
-
-
         AsyncTask asyncTask=new AsyncTask();
         asyncTask.setFile_id(fileId);
         asyncTask.setStatus(TaskStatus.QUEUED);
@@ -47,8 +44,6 @@ public class AsyncTaskService {
     public void  processAnalysisTask(UUID taskId){
         AsyncTask asyncTask = repository.getReferenceById(taskId);
         try {
-
-
 
             asyncTask.setStatus(TaskStatus.PROCESSING);
             repository.save(asyncTask);

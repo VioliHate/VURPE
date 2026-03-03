@@ -29,8 +29,8 @@ public class Files {
     @Column(name = "file_size")
     private Long file_size;
 
-    @Column (name = "upload_status")
-    private String upload_status;
+    @Column (name = "status")
+    private FileStatusEnum status;
 
     @NotNull
     @Column (name= "created_at",nullable = false)

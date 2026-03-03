@@ -2,11 +2,11 @@ package it.study.bruvio.vurpe.repository;
 
 import it.study.bruvio.vurpe.entity.BusinessRule;
 import it.study.bruvio.vurpe.entity.DataRecord;
+import it.study.bruvio.vurpe.entity.FileStatusEnum;
 import it.study.bruvio.vurpe.entity.Files;
 import it.study.bruvio.vurpe.service.IntelligenceService;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import org.mockito.InjectMocks;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
@@ -91,7 +91,7 @@ public class IntelligenceServiceTest {
         Files file = new Files();
         file.setOriginal_name("file-test");
         file.setFile_size(100L);
-        file.setUpload_status("LOADED");
+        file.setStatus(FileStatusEnum.UPLOADED);
         return file;
     }
 }

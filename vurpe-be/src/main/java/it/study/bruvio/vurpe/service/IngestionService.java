@@ -2,6 +2,7 @@ package it.study.bruvio.vurpe.service;
 
 import it.study.bruvio.vurpe.dto.response.PayloadResponse;
 import it.study.bruvio.vurpe.entity.DataRecord;
+import it.study.bruvio.vurpe.entity.FileStatusEnum;
 import it.study.bruvio.vurpe.entity.Files;
 import it.study.bruvio.vurpe.repository.DataRecordRepository;
 import it.study.bruvio.vurpe.repository.FilesRepository;
@@ -85,8 +86,8 @@ public class IngestionService {
 
             f.setOriginal_name(file.getOriginalFilename());
             f.setFile_size(file.getSize());
-            f.setUpload_status("uploading");
-            repoFiles.save(f);
+            f.setStatus(FileStatusEnum.UPLOADING);
+            repoFiles.saveAndFlush(f);
 
             String row;
             boolean isHeader = true;
@@ -116,7 +117,7 @@ public class IngestionService {
         } catch (Exception e) {
             throw new Exception("errore riga: " + count, e);
         }
-        f.setUpload_status("uploaded");
+        f.setStatus(FileStatusEnum.UPLOADED);
         repoFiles.save(f);
         return true;
     }

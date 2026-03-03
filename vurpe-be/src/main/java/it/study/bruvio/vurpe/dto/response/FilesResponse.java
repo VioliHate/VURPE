@@ -9,7 +9,7 @@ public record FilesResponse(
         UUID id,
         String original_name,
         Long file_size,
-        String upload_status,
+        String status,
         Instant created_at
 ) {
     public static FilesResponse fromEntity(Files entity) {
@@ -17,7 +17,7 @@ public record FilesResponse(
                 entity.getId(),
                 entity.getOriginal_name(),
                 entity.getFile_size(),
-                entity.getUpload_status(),
+                entity.getStatus().name(),
                 entity.getCreated_at()
         );
     }

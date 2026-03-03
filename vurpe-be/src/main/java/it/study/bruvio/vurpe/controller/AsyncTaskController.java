@@ -4,6 +4,7 @@ package it.study.bruvio.vurpe.controller;
 import it.study.bruvio.vurpe.dto.criteria.AsyncTaskFilter;
 import it.study.bruvio.vurpe.dto.response.AsyncTaskResponse;
 import it.study.bruvio.vurpe.dto.response.PayloadResponse;
+import it.study.bruvio.vurpe.entity.FileStatusEnum;
 import it.study.bruvio.vurpe.entity.Files;
 import it.study.bruvio.vurpe.repository.FilesRepository;
 import it.study.bruvio.vurpe.service.AsyncTaskService;
@@ -51,32 +52,30 @@ public class AsyncTaskController {
 
         }
         Files f=filesRepo.getReferenceById(UUIDid);
-            if(f.getUpload_status().equals("completed")){
+            if(f.getStatus().equals(FileStatusEnum.COMPLETED)){
                 PayloadResponse<String> response = PayloadResponse.success("Analisi già avvenuta " ,"Success");
                 return ResponseEntity.ok(response);
             }
-
-
-            else if(f.getUpload_status().equals("uploaded")) {
+            else if(f.getStatus().equals(FileStatusEnum.UPLOADED)) {
             try {
                 UUID taskAsyncUUID = asyncTaskService.queueAnalysisTask(UUIDid);
-                f.setUpload_status("working");
-                filesRepo.save(f);
+                f.setStatus(FileStatusEnum.WORKING);
+                filesRepo.saveAndFlush(f);
                 asyncTaskService.processAnalysisTask(taskAsyncUUID);
-                f.setUpload_status("completed");
+                f.setStatus(FileStatusEnum.COMPLETED);
                 filesRepo.save(f);
                 PayloadResponse<String> response = PayloadResponse.success("Analisi avvenuta", "Success");
                 return ResponseEntity.ok(response);
 
             } catch (Exception e) {
-                f.setUpload_status("error-in-working");
+                f.setStatus(FileStatusEnum.ERROR);
                 filesRepo.save(f);
                 PayloadResponse<String> response = PayloadResponse.error("errore durante l analisi", e.getMessage());
                 return ResponseEntity.badRequest().body(response);
 
             }
         }
-        PayloadResponse<String> response = PayloadResponse.error("errrore",null );
+        PayloadResponse<String> response = PayloadResponse.error("errore",null );
         return ResponseEntity.badRequest().body(response);
     }
 }

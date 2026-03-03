@@ -1,5 +1,6 @@
 package it.study.bruvio.vurpe.repository;
 
+import it.study.bruvio.vurpe.entity.FileStatusEnum;
 import it.study.bruvio.vurpe.entity.Files;
 import jakarta.persistence.PersistenceException;
 import jakarta.validation.*;
@@ -51,7 +52,7 @@ public class FilesRepositoryTest {
     @Test
     void shouldRejectInvalidDataType() {
         // Test 1: Validation Test for created_at null
-        Files testFile = createTestFile("test.csv", 1024L, "UPLOADED");
+        Files testFile = createTestFile("test.csv", 1024L, FileStatusEnum.UPLOADED);
         testFile.setCreated_at(null);
 
         try (ValidatorFactory factory = Validation.buildDefaultValidatorFactory()) {
@@ -73,10 +74,10 @@ public class FilesRepositoryTest {
 
     @Test
     void shouldPreventDuplicateId() {
-        Files file1 = createTestFile("dashboard-data.csv", 2048L, "COMPLETED");
+        Files file1 = createTestFile("dashboard-data.csv", 2048L, FileStatusEnum.COMPLETED);
         entityManager.persistAndFlush(file1);
 
-        Files file2 = createTestFile("dashboard-data-copy.csv", 4096L, "COMPLETED");
+        Files file2 = createTestFile("dashboard-data-copy.csv", 4096L, FileStatusEnum.COMPLETED);
         file2.setId(file1.getId());
 
         assertThrows(PersistenceException.class, () -> {
@@ -86,11 +87,11 @@ public class FilesRepositoryTest {
 
 
     // metodo per creare al volo un file
-    private Files createTestFile(String original_name, Long file_size, String upload_status) {
+    private Files createTestFile(String original_name, Long file_size, FileStatusEnum status) {
         Files file = new Files();
         file.setOriginal_name(original_name);
         file.setFile_size(file_size);
-        file.setUpload_status(upload_status);
+        file.setStatus(status);
         return file;
     }
 }

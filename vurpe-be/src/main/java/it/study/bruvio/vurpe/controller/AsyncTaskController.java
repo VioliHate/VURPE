@@ -26,8 +26,6 @@ public class AsyncTaskController {
     @Autowired
     private AsyncTaskService asyncTaskService;
 
-    @Autowired
-    private FilesRepository filesRepo;
 
     @GetMapping("/async-tasks")
     public ResponseEntity<PayloadResponse<Page<AsyncTaskResponse>>> search(
@@ -44,38 +42,8 @@ public class AsyncTaskController {
     @GetMapping("/start-async-analyzer")
     public ResponseEntity<PayloadResponse<String>> analyzer(
             @RequestParam("id") String id
-    ){
-        UUID UUIDid = UUID.fromString(id);
-        if(!filesRepo.existsById(UUIDid)){
-            PayloadResponse<String> response = PayloadResponse.error("file non esiste",null );
-            return ResponseEntity.badRequest().body(response);
-
-        }
-        Files f=filesRepo.getReferenceById(UUIDid);
-            if(f.getStatus().equals(FileStatusEnum.COMPLETED)){
-                PayloadResponse<String> response = PayloadResponse.success("Analisi già avvenuta " ,"Success");
-                return ResponseEntity.ok(response);
-            }
-            else if(f.getStatus().equals(FileStatusEnum.UPLOADED)) {
-            try {
-                UUID taskAsyncUUID = asyncTaskService.queueAnalysisTask(UUIDid);
-                f.setStatus(FileStatusEnum.WORKING);
-                filesRepo.saveAndFlush(f);
-                asyncTaskService.processAnalysisTask(taskAsyncUUID);
-                f.setStatus(FileStatusEnum.COMPLETED);
-                filesRepo.save(f);
-                PayloadResponse<String> response = PayloadResponse.success("Analisi avvenuta", "Success");
-                return ResponseEntity.ok(response);
-
-            } catch (Exception e) {
-                f.setStatus(FileStatusEnum.ERROR);
-                filesRepo.save(f);
-                PayloadResponse<String> response = PayloadResponse.error("errore durante l analisi", e.getMessage());
-                return ResponseEntity.badRequest().body(response);
-
-            }
-        }
-        PayloadResponse<String> response = PayloadResponse.error("errore",null );
-        return ResponseEntity.badRequest().body(response);
+    ) throws Exception {
+        UUID fileId = UUID.fromString(id);
+        return ResponseEntity.ok(asyncTaskService.processAnalysisTask(fileId).get())  ;
     }
 }

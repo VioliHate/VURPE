@@ -61,7 +61,13 @@ public class AnalysisResultService {
     protected Map<String, Integer> mapToCount(List<Object[]> rows) {
         return rows.stream().collect(Collectors.toMap(
                 r -> (String) r[0],
-                r -> ((Integer) r[1]),
+                r  -> {
+                    Long cnt = (Long) r[1];
+                    if (cnt > Integer.MAX_VALUE || cnt < Integer.MIN_VALUE) {
+                        throw new ArithmeticException("COUNT to big for: " + cnt);
+                    }
+                    return cnt.intValue();
+                },
                 (o,n) -> o,
                 LinkedHashMap::new
         ));
@@ -69,7 +75,7 @@ public class AnalysisResultService {
 
     protected Map<String, BigDecimal> mapToDailySum(List<Object[]> rows) {
         return rows.stream().collect(Collectors.toMap(
-                r -> (String) r[0],
+                r ->  r[0].toString(),
                 r -> (BigDecimal) r[1],
                 (o,n) -> o,
                 LinkedHashMap::new

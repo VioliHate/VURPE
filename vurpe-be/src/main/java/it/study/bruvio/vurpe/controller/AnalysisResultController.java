@@ -32,7 +32,7 @@ public class AnalysisResultController {
         return ResponseEntity.ok(response);
     }
 
-    @PostMapping()
+    @PostMapping("/save-analysis")
     public ResponseEntity<PayloadResponse<String>> saveAnalysisResult(
             @RequestParam("fileId") String fileId) throws Exception {
         UUID id = UUID.fromString(fileId);

@@ -17,7 +17,9 @@ public record DataRecordFilter(
         UUID id,
         LocalDateTime exact_date,
         LocalDateTime created_at_from,
-        LocalDateTime created_at_to
+        LocalDateTime created_at_to,
+        LocalDateTime updated_at_from,
+        LocalDateTime updated_at_to
 )
 
 {
@@ -25,10 +27,14 @@ public record DataRecordFilter(
         return file_id == null && category == null && risk_flag == null &&
                search == null && min_amount == null && max_amount == null &&
                date_from == null && date_to == null && id == null &&
-               exact_date == null && created_at_from == null && created_at_to == null;
+               exact_date == null && created_at_from == null && created_at_to == null &&
+                updated_at_from == null && updated_at_to == null;
 
     }
     public static DataRecordFilter withFileId(UUID fileId){
-        return new DataRecordFilter(fileId,null, null, null, null, null, null, null, null, null, null, null);
+        return new DataRecordFilter(fileId,null, null, null,
+                null, null, null,
+                null, null, null,
+                null, null, null, null);
     }
 }

@@ -3,6 +3,7 @@ package it.study.bruvio.vurpe.controller;
 import it.study.bruvio.vurpe.dto.criteria.FilesFilter;
 import it.study.bruvio.vurpe.dto.response.FilesResponse;
 import it.study.bruvio.vurpe.dto.response.PayloadResponse;
+import it.study.bruvio.vurpe.entity.FileStatusEnum;
 import it.study.bruvio.vurpe.service.FilesService;
 import it.study.bruvio.vurpe.service.IngestionService;
 import jakarta.validation.Payload;
@@ -10,11 +11,14 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
+import org.springframework.data.repository.query.Param;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
+
+import java.util.UUID;
 
 @RestController
 @RequestMapping(path="/call")
@@ -38,19 +42,18 @@ public class FilesController {
     @PostMapping("/uploadCSV")
     public ResponseEntity<PayloadResponse<String>> uploadFile(
             @RequestParam("file") MultipartFile file) {
-        //logica di controllo tramite service
         try {
             PayloadResponse<String> pr = ingServ.uploadFile(file);
-
             return ResponseEntity.ok(pr);
-
-
         } catch (Exception e) {
-
             return ResponseEntity.badRequest().body(PayloadResponse.error(e.getMessage(), "CSV_PARSE_ERROR"));
-
-
         }
+    }
+
+    @GetMapping("upload/{fileId}/status")
+    public ResponseEntity<PayloadResponse<FileStatusEnum>> getFilesStatus(@PathVariable String fileId) {
+        PayloadResponse<FileStatusEnum> response = PayloadResponse.success(filesService.getFileStatus(fileId), "success response status file");
+        return ResponseEntity.ok(response);
     }
 }
 

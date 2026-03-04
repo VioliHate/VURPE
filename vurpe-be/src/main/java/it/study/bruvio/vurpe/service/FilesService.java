@@ -1,6 +1,7 @@
 package it.study.bruvio.vurpe.service;
 
 import it.study.bruvio.vurpe.dto.criteria.FilesFilter;
+import it.study.bruvio.vurpe.entity.FileStatusEnum;
 import it.study.bruvio.vurpe.entity.Files;
 import it.study.bruvio.vurpe.repository.FilesRepository;
 import it.study.bruvio.vurpe.specifications.FilesSpecifications;
@@ -10,6 +11,8 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
+import java.util.UUID;
+
 @Service
 @RequiredArgsConstructor
 public class FilesService {
@@ -18,5 +21,9 @@ public class FilesService {
     public Page<Files> search(FilesFilter filter, Pageable pageable) {
         Specification<Files> spec = FilesSpecifications.fromFilter(filter);
         return filesRepository.findAll(spec, pageable);
+    }
+
+    public FileStatusEnum getFileStatus(String fileId) {
+        return filesRepository.getFileStatusById(UUID.fromString(fileId));
     }
 }

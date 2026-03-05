@@ -49,7 +49,7 @@ public class AsyncTaskController {
             @PathVariable String taskId) {
         UUID taskUUID = UUID.fromString(taskId);
         try {
-            return ResponseEntity.ok().body(PayloadResponse.success(asyncTaskService.getTask(taskUUID), "TAKE_TASK_ERROR"));
+            return ResponseEntity.ok().body(PayloadResponse.success(asyncTaskService.getTask(taskUUID), "SUCCESS_TAKE_TASK"));
         } catch (Exception e) {
             return ResponseEntity.badRequest().body(PayloadResponse.error(e.getMessage(), "TAKE_TASK_ERROR"));
         }

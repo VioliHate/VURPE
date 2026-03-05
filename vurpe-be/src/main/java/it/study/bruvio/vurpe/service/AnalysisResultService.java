@@ -1,6 +1,7 @@
 package it.study.bruvio.vurpe.service;
 
 import it.study.bruvio.vurpe.dto.criteria.AnalysisResultFilter;
+import it.study.bruvio.vurpe.dto.response.MetricsResponse;
 import it.study.bruvio.vurpe.entity.AnalysisResult;
 import it.study.bruvio.vurpe.repository.AnalysisResultRepository;
 import it.study.bruvio.vurpe.repository.DataRecordRepository;
@@ -55,6 +56,15 @@ public class AnalysisResultService {
     }
 
 
+    public MetricsResponse getMetrics(UUID analysisId) throws Exception {
+        try {
+            Optional<AnalysisResult> result = repoAnalysis.findById(analysisId);
+            return result.map(MetricsResponse::from).orElse(null);
+        } catch (Exception e) {
+            throw new Exception("metrics not exists!",e);
+        }
+
+    }
 
     //utility mapper
     protected Map<String, Integer> mapToCount(List<Object[]> rows) {
@@ -80,4 +90,5 @@ public class AnalysisResultService {
                 LinkedHashMap::new
         ));
     }
+
 }

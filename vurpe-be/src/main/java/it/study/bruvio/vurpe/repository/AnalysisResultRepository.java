@@ -13,5 +13,5 @@ import java.util.UUID;
 public interface AnalysisResultRepository extends JpaRepository<AnalysisResult, Integer> ,
         JpaSpecificationExecutor<AnalysisResult> {
 
-    Optional<AnalysisResult> findTopByFileId(UUID fileId);
+    Optional<AnalysisResult> findById(UUID analysisResultId);
 }

@@ -2,6 +2,7 @@ package it.study.bruvio.vurpe.controller;
 
 import it.study.bruvio.vurpe.dto.criteria.AnalysisResultFilter;
 import it.study.bruvio.vurpe.dto.response.AnalysisResultResponse;
+import it.study.bruvio.vurpe.dto.response.MetricsResponse;
 import it.study.bruvio.vurpe.dto.response.PayloadResponse;
 import it.study.bruvio.vurpe.service.AnalysisResultService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -33,15 +34,15 @@ public class AnalysisResultController {
     }
 
     @PostMapping("/save-analysis")
-    public ResponseEntity<PayloadResponse<String>> saveAnalysisResult(
+    public ResponseEntity<PayloadResponse<MetricsResponse>> saveAnalysisResult(
             @RequestParam("fileId") String fileId) throws Exception {
         UUID id = UUID.fromString(fileId);
         try {
-            service.saveAnalysisResult(id);
-            PayloadResponse<String> response = PayloadResponse.success("OK", "Save completed");
+            MetricsResponse metrics = MetricsResponse.from(service.saveAnalysisResult(id));
+            PayloadResponse<MetricsResponse> response = PayloadResponse.success(metrics, "Save completed");
             return ResponseEntity.ok(response);
         } catch (Exception e) {
-            return ResponseEntity.badRequest().body(PayloadResponse.error(e.getMessage(), "SAVE_ERROR_ANALYSIS_RESULT"));
+            return ResponseEntity.badRequest().body(PayloadResponse.error(e.getMessage(), "SAVE_ANALYSIS_ERROR"));
         }
     }
 }

@@ -34,7 +34,7 @@ public class AnalysisResultService {
         return repoAnalysis.findAll(spec, pageable);
     }
 
-    public void saveAnalysisResult(UUID fileID) throws Exception {
+    public AnalysisResult saveAnalysisResult(UUID fileID) throws Exception {
 
         AnalysisResult analysisResult = new AnalysisResult();
         if(!repoFiles.existsById(fileID)) {
@@ -48,7 +48,7 @@ public class AnalysisResultService {
             analysisResult.setDistribution_by_category(this.mapToCount(repoDataRecord.countByCategoryRaw(fileID)));
             analysisResult.setDistribution_by_risk_flag(this.mapToCount(repoDataRecord.countByRiskFlagRaw(fileID)));
             analysisResult.setTime_series_by_date(this.mapToDailySum(repoDataRecord.sumAmountTimeSeriesByDate(fileID)));
-            repoAnalysis.save(analysisResult);
+            return repoAnalysis.save(analysisResult);
         }catch (Exception e){
             throw new Exception("Error to create analysis record", e);
         }

@@ -2,7 +2,6 @@ package it.study.bruvio.vurpe.service;
 
 import it.study.bruvio.vurpe.dto.criteria.AnalysisResultFilter;
 import it.study.bruvio.vurpe.entity.AnalysisResult;
-import it.study.bruvio.vurpe.entity.DataRecord;
 import it.study.bruvio.vurpe.repository.AnalysisResultRepository;
 import it.study.bruvio.vurpe.repository.DataRecordRepository;
 import it.study.bruvio.vurpe.repository.FilesRepository;

@@ -6,13 +6,13 @@ import java.math.BigDecimal;
 import java.util.Map;
 
 public record MetricsResponse(
-        String fileId,
-        BigDecimal totalAmount,
-        Integer recordCount,
-        BigDecimal averageAmount,
-        Map<String, Integer> distributionByCategory,
-        Map<String, Integer> distributionByRiskFlag,
-        Map<String, BigDecimal> timeSeriesByDate
+        String file_id,
+        BigDecimal total_amount,
+        Integer record_count,
+        BigDecimal average_amount,
+        Map<String, Integer> distribution_by_category,
+        Map<String, Integer> distribution_by_risk_flag,
+        Map<String, BigDecimal> time_series_by_date
 ) {
 
     public static MetricsResponse from(AnalysisResult entity) {

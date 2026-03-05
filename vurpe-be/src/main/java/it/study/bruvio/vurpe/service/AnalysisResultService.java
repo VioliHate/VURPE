@@ -59,11 +59,10 @@ public class AnalysisResultService {
     public MetricsResponse getMetrics(UUID analysisId) throws Exception {
         try {
             Optional<AnalysisResult> result = repoAnalysis.findById(analysisId);
-            return result.map(MetricsResponse::from).orElse(null);
+            return result.map(MetricsResponse::from).get();
         } catch (Exception e) {
             throw new Exception("metrics not exists!",e);
         }
-
     }
 
     //utility mapper

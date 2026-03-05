@@ -1,11 +1,10 @@
 package it.study.bruvio.vurpe.service;
 
 import it.study.bruvio.vurpe.dto.criteria.AsyncTaskFilter;
+import it.study.bruvio.vurpe.dto.response.AsyncTaskResponse;
+import it.study.bruvio.vurpe.dto.response.MetricsResponse;
 import it.study.bruvio.vurpe.dto.response.PayloadResponse;
-import it.study.bruvio.vurpe.entity.AsyncTask;
-import it.study.bruvio.vurpe.entity.FileStatusEnum;
-import it.study.bruvio.vurpe.entity.Files;
-import it.study.bruvio.vurpe.entity.TaskStatus;
+import it.study.bruvio.vurpe.entity.*;
 import it.study.bruvio.vurpe.repository.AsyncTaskRepository;
 import it.study.bruvio.vurpe.repository.FilesRepository;
 import it.study.bruvio.vurpe.specifications.AsyncTaskSpecifications;
@@ -33,6 +32,15 @@ public class AsyncTaskService {
 
         Specification<AsyncTask> spec = AsyncTaskSpecifications.fromFilter(filter);
         return repoAsyncTask.findAll(spec, pageable);
+    }
+
+    public AsyncTaskResponse getTask(UUID taskUUID) throws Exception {
+        try {
+            AsyncTask result = repoAsyncTask.getReferenceById(taskUUID);
+                return AsyncTaskResponse.fromEntity(result);
+        } catch (Exception e) {
+           throw new Exception("task not exists!",e);
+        }
     }
 
     protected UUID queueAnalysisTask(UUID fileId)  {
@@ -86,4 +94,5 @@ public class AsyncTaskService {
         return CompletableFuture.completedFuture(PayloadResponse.error("unprocessed file: status is " + file.getStatus().name(), "KO"));
 
     }
+
 }

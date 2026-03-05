@@ -61,7 +61,8 @@ public class AnalysisResultController {
             MetricsResponse result = service.getMetrics(UUID.fromString(analysisId));
             return ResponseEntity.ok(PayloadResponse.success(result, "Get Metrics Completed"));
         } catch (Exception e) {
-            throw new RuntimeException(e.getMessage());
+            return ResponseEntity.badRequest().body(PayloadResponse.error(e.getMessage(), "TAKE_ANALYSIS_ERROR"));
+
         }
     }
 }

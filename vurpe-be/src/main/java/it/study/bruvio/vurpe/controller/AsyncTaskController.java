@@ -11,10 +11,8 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.http.ResponseEntity;
-import org.springframework.messaging.handler.annotation.DestinationVariable;
 import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.messaging.handler.annotation.Payload;
-import org.springframework.messaging.handler.annotation.SendTo;
 import org.springframework.web.bind.annotation.*;
 
 
@@ -47,11 +45,11 @@ public class AsyncTaskController {
         System.out.println(">>> START-ASYNC-ANALYZER invoked for id: " + id.trim());
 
         asyncTaskService.sendUpdate(id, PayloadResponse.success(
-                "ANALYZER STARTED FOR FILE ID: " + id,
+                "ANALYZER STARTED FOR FILE ID: " + id.trim(),
                 "ANALYSIS_TASK_QUEUED"
         ));
 
-         asyncTaskService.processAnalysisTask(id);
+         asyncTaskService.processAnalysisTask(id.trim());
     }
 
     @GetMapping("/analysis/{taskId}")

@@ -50,12 +50,12 @@ public class AsyncTaskService {
     public void processAnalysisTask(String fileId) throws Exception {
 
         // check id
-        if (fileId == null || fileId.trim().isEmpty()) {
+        if (fileId == null || fileId.isEmpty()) {
             throw new IllegalArgumentException("Missing file ID");
         }
         UUID fileUUID;
         try {
-            fileUUID = UUID.fromString(fileId.trim());
+            fileUUID = UUID.fromString(fileId);
         } catch (IllegalArgumentException e) {
             this.sendUpdate(fileId, PayloadResponse.error("File ID not valid", "FILE_ID_NOT_VALID"));
             throw new IllegalArgumentException("UUID not valid: " + fileId);
@@ -69,14 +69,14 @@ public class AsyncTaskService {
         }
         if (!file.getStatus().equals(FileStatusEnum.UPLOADED)) {
             this.sendUpdate(fileId, PayloadResponse.error(
-                    "Unable to start analysis: current status = " + file.getStatus(),
+                    "Unable to start analysis on file: "+ file.getId() +": current status = " + file.getStatus(),
                     "INVALID_FILE_STATUS"
             ));
         } else {
             file.setStatus(FileStatusEnum.WORKING);
             reposFiles.saveAndFlush(file);
             this.sendUpdate(fileId, PayloadResponse.success(
-                    "Processing Analysis for file: " + file.getOriginal_name(),
+                    "Processing Analysis for file: " + file.getId(),
                     "WORKING_ON_FILE"
             ));
             UUID taskId = this.queueAnalysisTask(fileUUID);
@@ -92,11 +92,15 @@ public class AsyncTaskService {
                 asyncTask.setStatus(TaskStatus.COMPLETED);
                 asyncTask.setCompleted_at(LocalDateTime.now());
                 repoAsyncTask.saveAndFlush(asyncTask);
+                sendUpdate(fileId, PayloadResponse.success(
+                        "Completed Analysis Task (taskId: " + taskId + ")",
+                        "COMPLETED_TASK"
+                ));
                 file.setStatus(FileStatusEnum.COMPLETED);
                 reposFiles.save(file);
 
                 this.sendUpdate(fileId, PayloadResponse.success(
-                        "Analysis Complete for file: " + file.getOriginal_name(),
+                        "Analysis Complete for file: " + file.getId(),
                         "COMPLETED_ANALYSIS"
                 ));
             } catch (Exception e) {
@@ -123,7 +127,7 @@ public class AsyncTaskService {
     }
 
     public void sendUpdate(String fileId, PayloadResponse<String> response) {
-        String destination = "/topic/analysis-task/" + fileId.trim();
+        String destination = "/topic/analysis-task/" + fileId;
         log.info(">>> INVIO SU DESTINATION: [{}]", destination);
         messagingTemplate.convertAndSend(
                 destination,

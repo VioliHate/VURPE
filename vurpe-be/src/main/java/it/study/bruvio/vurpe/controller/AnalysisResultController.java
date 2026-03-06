@@ -5,10 +5,7 @@ import it.study.bruvio.vurpe.dto.response.AnalysisResultResponse;
 import it.study.bruvio.vurpe.dto.response.AnalysisSaveResponse;
 import it.study.bruvio.vurpe.dto.response.MetricsResponse;
 import it.study.bruvio.vurpe.dto.response.PayloadResponse;
-import it.study.bruvio.vurpe.entity.AnalysisResult;
-import it.study.bruvio.vurpe.repository.AnalysisResultRepository;
 import it.study.bruvio.vurpe.service.AnalysisResultService;
-import jakarta.persistence.EntityNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -17,7 +14,6 @@ import org.springframework.data.web.PageableDefault;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.Optional;
 import java.util.UUID;
 
 @RestController

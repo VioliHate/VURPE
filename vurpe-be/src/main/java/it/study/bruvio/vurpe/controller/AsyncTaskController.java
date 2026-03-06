@@ -11,6 +11,10 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.http.ResponseEntity;
+import org.springframework.messaging.handler.annotation.DestinationVariable;
+import org.springframework.messaging.handler.annotation.MessageMapping;
+import org.springframework.messaging.handler.annotation.Payload;
+import org.springframework.messaging.handler.annotation.SendTo;
 import org.springframework.web.bind.annotation.*;
 
 
@@ -36,12 +40,22 @@ public class AsyncTaskController {
 
     }
 
-    @GetMapping("/start-async-analyzer")
-    public ResponseEntity<PayloadResponse<String>> analyzer(
-            @RequestParam("id") String id
+    @MessageMapping("/start-async-analyzer")
+    @SendTo("/topic/analysis-task")
+    public PayloadResponse<String> analyzer(
+            @Payload String id
     ) throws Exception {
-        UUID fileId = UUID.fromString(id);
-        return ResponseEntity.ok(asyncTaskService.processAnalysisTask(fileId).get());
+        System.out.println(">>> START-ASYNC-ANALYZER invocato con id: " + id);
+        if (id == null || id.trim().isEmpty()) {
+            throw new IllegalArgumentException("ID file mancante");
+        }
+        UUID fileId;
+        try {
+            fileId = UUID.fromString(id.trim());
+        } catch (IllegalArgumentException e) {
+            throw new IllegalArgumentException("Formato UUID non valido: " + id);
+        }
+        return asyncTaskService.processAnalysisTask(fileId).get();
     }
 
     @GetMapping("/analysis/{taskId}")

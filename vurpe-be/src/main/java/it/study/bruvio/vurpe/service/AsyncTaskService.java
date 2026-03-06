@@ -44,6 +44,70 @@ public class AsyncTaskService {
         }
     }
 
+    public PayloadResponse<String> requestAnalysis(UUID fileId) {
+
+        Files file = reposFiles.getReferenceById(fileId);
+
+        if (file == null) {
+            return PayloadResponse.error("file not exist", "FILE_NOT_FOUND");
+        }
+
+        if (!file.getStatus().equals(FileStatusEnum.UPLOADED)) {
+            return PayloadResponse.error(
+                    "Unable to start analysis: current status = " + file.getStatus(),
+                    "INVALID_FILE_STATUS"
+            );
+        }
+
+        // Se arriviamo qui → possiamo avviare
+        queueAnalysisAsync(fileId);
+
+        return PayloadResponse.success(
+                "Queued analysis for files: " + fileId,
+                "ANALYSIS_TASK_QUEUED"
+        );
+    }
+    @Async("taskExecutor")
+    public void queueAnalysisAsync(UUID fileId) {
+        try {
+            Files file = reposFiles.getReferenceById(fileId);
+            UUID taskId = queueAnalysisTask(fileId);
+
+            file.setStatus(FileStatusEnum.WORKING);
+            reposFiles.saveAndFlush(file);
+
+            AsyncTask task = repoAsyncTask.getReferenceById(taskId);
+            task.setStatus(TaskStatus.PROCESSING);
+            repoAsyncTask.saveAndFlush(task);
+
+            servInt.applyBusinessRulesToFile(fileId);
+
+            task.setStatus(TaskStatus.COMPLETED);
+            task.setCompleted_at(LocalDateTime.now());
+            repoAsyncTask.saveAndFlush(task);
+
+            file.setStatus(FileStatusEnum.COMPLETED);
+            reposFiles.saveAndFlush(file);
+
+            sendUpdate(fileId, PayloadResponse.success(
+                    "Analysis completed",
+                    "ANALYSIS_COMPLETED"
+            ));
+
+        } catch (Exception e) {
+            Files file = reposFiles.getReferenceById(fileId);
+            file.setStatus(FileStatusEnum.ERROR);
+            reposFiles.saveAndFlush(file);
+
+            sendUpdate(fileId, PayloadResponse.error(
+                    "Error while parsing analysis: " + e.getMessage(),
+                    "ANALYSIS_FAILED"
+            ));
+        }
+    }
+
+
+
     protected UUID queueAnalysisTask(UUID fileId)  {
 
         AsyncTask asyncTask=new AsyncTask();
@@ -53,7 +117,7 @@ public class AsyncTaskService {
         return saved.getId();
     }
 
-    @Async("taskExecutor")
+  /*  @Async("taskExecutor")
     public void processAnalysisTask(UUID fileId) throws Exception {
 
         if(!reposFiles.existsById(fileId)) {
@@ -106,6 +170,13 @@ public class AsyncTaskService {
 
         CompletableFuture.completedFuture(PayloadResponse.error("unprocessed file: status is " + file.getStatus().name(), "KO"));
 
+    }*/
+
+    private void sendUpdate(UUID fileId, PayloadResponse<String> response) {
+        messagingTemplate.convertAndSend(
+                "/topic/analysis-task/" + fileId,
+                response
+        );
     }
 
 }

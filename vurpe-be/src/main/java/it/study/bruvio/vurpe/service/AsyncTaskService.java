@@ -84,6 +84,10 @@ public class AsyncTaskService {
             try {
                 asyncTask.setStatus(TaskStatus.PROCESSING);
                 repoAsyncTask.saveAndFlush(asyncTask);
+                sendUpdate(fileId, PayloadResponse.success(
+                        "Processing Analysis Task (taskId: " + taskId + ")",
+                        "PROCESSING_TASK"
+                ));
                 servInt.applyBusinessRulesToFile(asyncTask.getFile_id());
                 asyncTask.setStatus(TaskStatus.COMPLETED);
                 asyncTask.setCompleted_at(LocalDateTime.now());
@@ -109,21 +113,21 @@ public class AsyncTaskService {
     }
 
 
-protected UUID queueAnalysisTask(UUID fileId) {
+    protected UUID queueAnalysisTask(UUID fileId) {
 
-    AsyncTask asyncTask = new AsyncTask();
-    asyncTask.setFile_id(fileId);
-    asyncTask.setStatus(TaskStatus.QUEUED);
-    AsyncTask saved = repoAsyncTask.saveAndFlush(asyncTask);
-    return saved.getId();
-}
+        AsyncTask asyncTask = new AsyncTask();
+        asyncTask.setFile_id(fileId);
+        asyncTask.setStatus(TaskStatus.QUEUED);
+        AsyncTask saved = repoAsyncTask.saveAndFlush(asyncTask);
+        return saved.getId();
+    }
 
-private void sendUpdate(String fileId, PayloadResponse<String> response) {
-    String destination = "/topic/analysis-task/" + fileId.trim();
-    log.info(">>> INVIO SU DESTINATION: [{}]", destination);
-    messagingTemplate.convertAndSend(
-            destination,
-            response
-    );
-}
+    public void sendUpdate(String fileId, PayloadResponse<String> response) {
+        String destination = "/topic/analysis-task/" + fileId.trim();
+        log.info(">>> INVIO SU DESTINATION: [{}]", destination);
+        messagingTemplate.convertAndSend(
+                destination,
+                response
+        );
+    }
 }

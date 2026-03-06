@@ -41,14 +41,17 @@ public class AsyncTaskController {
     }
 
     @MessageMapping("/start-async-analyzer")
-    public PayloadResponse<String> analyzer(
+    public void analyzer(
             @Payload String id
     ) throws Exception {
         System.out.println(">>> START-ASYNC-ANALYZER invoked for id: " + id.trim());
-         asyncTaskService.processAnalysisTask(id);
-        return PayloadResponse.success("ANALYZER STARTED FOR FILE ID: " + id.trim(),
+
+        asyncTaskService.sendUpdate(id, PayloadResponse.success(
+                "ANALYZER STARTED FOR FILE ID: " + id,
                 "ANALYSIS_TASK_QUEUED"
-        );
+        ));
+
+         asyncTaskService.processAnalysisTask(id);
     }
 
     @GetMapping("/analysis/{taskId}")

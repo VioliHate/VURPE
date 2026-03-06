@@ -2,7 +2,6 @@ package it.study.bruvio.vurpe.service;
 
 import it.study.bruvio.vurpe.dto.criteria.AsyncTaskFilter;
 import it.study.bruvio.vurpe.dto.response.AsyncTaskResponse;
-import it.study.bruvio.vurpe.dto.response.MetricsResponse;
 import it.study.bruvio.vurpe.dto.response.PayloadResponse;
 import it.study.bruvio.vurpe.entity.*;
 import it.study.bruvio.vurpe.repository.AsyncTaskRepository;
@@ -12,6 +11,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
+import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 
@@ -26,6 +26,7 @@ public class AsyncTaskService {
     private final AsyncTaskRepository repoAsyncTask;
     private final IntelligenceService servInt;
     private final FilesRepository reposFiles;
+    private final SimpMessagingTemplate messagingTemplate;
 
 
     public Page<AsyncTask> search(AsyncTaskFilter filter, Pageable pageable) {
@@ -53,7 +54,7 @@ public class AsyncTaskService {
     }
 
     @Async("taskExecutor")
-    public CompletableFuture<PayloadResponse<String>> processAnalysisTask(UUID fileId) throws Exception {
+    public void processAnalysisTask(UUID fileId) throws Exception {
 
         if(!reposFiles.existsById(fileId)) {
             throw new Exception("File not exists!");
@@ -62,7 +63,8 @@ public class AsyncTaskService {
         Files file = reposFiles.getReferenceById(fileId);
 
         if(file.getStatus().equals(FileStatusEnum.COMPLETED)){
-            return CompletableFuture.completedFuture(PayloadResponse.success("analysis is already completed!", "OK"));
+            CompletableFuture.completedFuture(PayloadResponse.success("analysis is already completed!", "OK"));
+            return;
         }
 
         if(file.getStatus().equals(FileStatusEnum.UPLOADED)) {
@@ -79,7 +81,14 @@ public class AsyncTaskService {
                 repoAsyncTask.saveAndFlush(asyncTask);
                 file.setStatus(FileStatusEnum.COMPLETED);
                 reposFiles.save(file);
-                return CompletableFuture.completedFuture(PayloadResponse.success("analysis completed!", "OK"));
+
+                messagingTemplate.convertAndSend(
+                        "/topic/analysis-task",
+                        PayloadResponse.success("analysis completed for file: " + fileId, "COMPLETED")
+                );
+
+                CompletableFuture.completedFuture(PayloadResponse.success("analysis completed!", "OK"));
+                return;
             } catch (Exception e) {
                 asyncTask.setStatus(TaskStatus.FAILED);
                 asyncTask.setCompleted_at(LocalDateTime.now());
@@ -87,11 +96,15 @@ public class AsyncTaskService {
                 repoAsyncTask.saveAndFlush(asyncTask);
                 file.setStatus(FileStatusEnum.ERROR);
                 reposFiles.save(file);
+                messagingTemplate.convertAndSend(
+                        "/topic/analysis-task",
+                        PayloadResponse.error("Error: " + e.getMessage(), "FAILED")
+                );
                 throw new RuntimeException(e);
             }
         }
 
-        return CompletableFuture.completedFuture(PayloadResponse.error("unprocessed file: status is " + file.getStatus().name(), "KO"));
+        CompletableFuture.completedFuture(PayloadResponse.error("unprocessed file: status is " + file.getStatus().name(), "KO"));
 
     }
 

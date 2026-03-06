@@ -55,7 +55,11 @@ public class AsyncTaskController {
         } catch (IllegalArgumentException e) {
             throw new IllegalArgumentException("Formato UUID non valido: " + id);
         }
-        return asyncTaskService.processAnalysisTask(fileId).get();
+        asyncTaskService.processAnalysisTask(fileId);
+        return PayloadResponse.success(
+                "Analysis queued for ID file: " + fileId,
+                "ANALYSIS_TASK_QUEUED"
+        );
     }
 
     @GetMapping("/analysis/{taskId}")

@@ -47,16 +47,20 @@ public class AsyncTaskController {
     ) throws Exception {
         System.out.println(">>> START-ASYNC-ANALYZER invocato con id: " + id);
         if (id == null || id.trim().isEmpty()) {
-            throw new IllegalArgumentException("ID file mancante");
+            throw new IllegalArgumentException("Missing file ID");
         }
         UUID fileId;
         try {
             fileId = UUID.fromString(id.trim());
         } catch (IllegalArgumentException e) {
-            throw new IllegalArgumentException("Formato UUID non valido: " + id);
+            throw new IllegalArgumentException("UUID not valid: " + id);
         }
 
-        return asyncTaskService.requestAnalysis(fileId);
+         asyncTaskService.processAnalysisTask(fileId);
+
+        return PayloadResponse.success("ANALYZER STARTED FOR FILE ID: " + id,
+                "ANALYSIS_TASK_QUEUED"
+        );
     }
 
     @GetMapping("/analysis/{taskId}")

@@ -44,7 +44,7 @@ public class AsyncTaskController {
     ) throws Exception {
         System.out.println(">>> START-ASYNC-ANALYZER invoked for id: " + id.trim());
 
-        asyncTaskService.sendUpdate(id, PayloadResponse.success(
+        asyncTaskService.sendUpdate(id.trim(), PayloadResponse.success(
                 "ANALYZER STARTED FOR FILE ID: " + id.trim(),
                 "ANALYSIS_TASK_QUEUED"
         ));

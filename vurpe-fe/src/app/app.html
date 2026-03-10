@@ -1,14 +1,12 @@
 <mat-sidenav-container class="sidenav-container" autosize>
 
   <mat-sidenav
-    #sidenav
     mode="side"
     opened="true"
     [class.expanded]="expanded"
     class="main-sidenav"
   >
 
-    <!-- Pulsante per espandere/comprimere (in alto) -->
     <button mat-icon-button class="expand-toggle" (click)="toggleExpand()">
       <mat-icon>
         {{ expanded ? 'chevron_left' : 'chevron_right' }}
@@ -27,7 +25,7 @@
   </mat-sidenav>
 
   <mat-sidenav-content class="content">
-    <!-- Qui va il contenuto principale -->
+    <!-- main page -->
     <router-outlet></router-outlet>
 
     <div class="page-content">

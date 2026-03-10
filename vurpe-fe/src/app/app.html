@@ -1,4 +1,4 @@
-<mat-sidenav-container class="sidenav-container" autosize>
+<mat-sidenav-container class="sidenav-container bg-light" autosize>
 
   <mat-sidenav
     mode="side"
@@ -17,7 +17,8 @@
       @for(element of listMenu;track element){
       <a mat-list-item routerLink="{{element.route}}">
         <mat-icon>{{element.icon}}</mat-icon>
-        <span class="p-lg-3 pb-4 opacity-100">{{ element.title }}</span>
+        <span class="nav-link-text p-lg-3"
+        [hidden]="!expanded">{{ element.title }}</span>
       </a>
       }
     </mat-nav-list>

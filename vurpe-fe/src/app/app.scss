@@ -1,0 +1,27 @@
+.sidenav-container {
+  height: 100vh;
+}
+
+.sidenav {
+  transition: width 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  overflow-x: hidden;
+  background-color: cornflowerblue;
+  border-right: 1px solid #ddd;
+
+}
+
+.menu-text {
+  margin-left: 10px;
+  white-space: nowrap;
+  opacity: 1;
+  transition: opacity 0.2s;
+}
+
+.mat-nav-list .mat-mdc-list-item {
+  overflow: hidden;
+}
+
+.content {
+  padding: 20px;
+  background-color: beige;
+}

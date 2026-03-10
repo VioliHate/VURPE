@@ -1,1 +1,49 @@
-<router-outlet />
+<mat-sidenav-container class="sidenav-container" autosize>
+
+  <mat-sidenav
+    #sidenav
+    mode="side"
+    opened="true"
+    [class.expanded]="expanded"
+    class="main-sidenav"
+  >
+
+    <!-- Pulsante per espandere/comprimere (in alto) -->
+    <button mat-icon-button class="expand-toggle" (click)="toggleExpand()">
+      <mat-icon>
+        {{ expanded ? 'chevron_left' : 'chevron_right' }}
+      </mat-icon>
+    </button>
+
+    <mat-nav-list>
+      <a mat-list-item [class.mini]="!expanded" routerLink="/dashboard">
+        <mat-icon>dashboard</mat-icon>
+        <span class="item-text">Dashboard</span>
+      </a>
+
+      <a mat-list-item [class.mini]="!expanded" routerLink="/users">
+        <mat-icon>people</mat-icon>
+        <span class="item-text">Utenti</span>
+      </a>
+
+      <a mat-list-item [class.mini]="!expanded" routerLink="/settings">
+        <mat-icon>settings</mat-icon>
+        <span class="item-text">Impostazioni</span>
+      </a>
+
+      <!-- altri item ... -->
+    </mat-nav-list>
+
+  </mat-sidenav>
+
+  <mat-sidenav-content class="content">
+    <!-- Qui va il contenuto principale -->
+    <router-outlet></router-outlet>
+
+    <div class="page-content">
+      <h1>Contenuto principale</h1>
+      <p>Il sidenav è {{ expanded ? 'espanso' : 'mini' }}.</p>
+    </div>
+  </mat-sidenav-content>
+
+</mat-sidenav-container>

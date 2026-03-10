@@ -1,0 +1,67 @@
+.sidenav-container {
+  height: 100vh;
+}
+
+.main-sidenav {
+  transition: width 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  overflow-x: hidden;
+  background: #f8f9fa;
+  border-right: 1px solid #e0e0e0;
+
+  // Mini mode (default / chiuso)
+  width: 68px;
+
+  &.expanded {
+    width: 260px;   // ← larghezza menu completo
+  }
+
+  .expand-toggle {
+    width: 100%;
+    border-radius: 0;
+    justify-content: center;
+    margin-bottom: 8px;
+  }
+
+  .mat-mdc-list-item {
+    height: 48px;
+
+    .mat-mdc-list-item-icon {
+      margin-right: 16px;
+    }
+
+    .item-text {
+      opacity: 0;
+      transition: opacity 0.25s 0.1s;
+      white-space: nowrap;
+    }
+
+    &.mini {
+      .item-text {
+        opacity: 0;
+        width: 0;
+        overflow: hidden;
+      }
+      .mat-mdc-list-item-icon {
+        margin: 0 auto;
+      }
+    }
+  }
+
+  // Quando espanso → mostriamo il testo
+  &.expanded {
+    .item-text {
+      opacity: 1;
+    }
+  }
+}
+
+.content {
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+}
+
+.page-content {
+  padding: 24px;
+  flex: 1;
+}

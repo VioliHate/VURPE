@@ -16,22 +16,12 @@
     </button>
 
     <mat-nav-list>
-      <a mat-list-item [class.mini]="!expanded" routerLink="/dashboard">
-        <mat-icon>dashboard</mat-icon>
-        <span class="item-text">Dashboard</span>
+      @for(element of listMenu;track element){
+      <a mat-list-item routerLink="{{element.route}}">
+        <mat-icon>{{element.icon}}</mat-icon>
+        <span class="p-lg-3 pb-4 opacity-100">{{ element.title }}</span>
       </a>
-
-      <a mat-list-item [class.mini]="!expanded" routerLink="/users">
-        <mat-icon>people</mat-icon>
-        <span class="item-text">Utenti</span>
-      </a>
-
-      <a mat-list-item [class.mini]="!expanded" routerLink="/settings">
-        <mat-icon>settings</mat-icon>
-        <span class="item-text">Impostazioni</span>
-      </a>
-
-      <!-- altri item ... -->
+      }
     </mat-nav-list>
 
   </mat-sidenav>

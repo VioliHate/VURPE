@@ -29,25 +29,8 @@
       margin-right: 16px;
     }
 
-    .item-text {
-      opacity: 0;
-      transition: opacity 0.25s 0.1s;
-      white-space: nowrap;
-    }
-
-    &.mini {
-      .item-text {
-        opacity: 0;
-        width: 0;
-        overflow: hidden;
-      }
-      .mat-mdc-list-item-icon {
-        margin: 0 auto;
-      }
-    }
   }
 
-  // Quando espanso → mostriamo il testo
   &.expanded {
     .item-text {
       opacity: 1;

@@ -1,0 +1,6 @@
+@if(dataResource.error()) {
+  <div class="error">Errore di caricamento </div>
+}
+@else {
+  <app-dynamic-table [data]="dataResource.value()"></app-dynamic-table>
+}

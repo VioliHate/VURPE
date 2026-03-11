@@ -17,7 +17,7 @@ export class App {
 
   listMenu = [
     {route: '/dashboard', title: 'Dashboard', icon: 'dashboard'},
-    {route: '/dummy', title: 'File', icon: 'insert_drive_file'},
+    {route: '/files', title: 'File', icon: 'insert_drive_file'},
     {route: '/rules', title: 'Rules', icon: 'rule'},
   ];
 

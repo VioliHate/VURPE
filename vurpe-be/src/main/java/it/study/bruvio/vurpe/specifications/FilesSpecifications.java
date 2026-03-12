@@ -22,20 +22,20 @@ public class FilesSpecifications {
                 predicates.add(cb.equal(root.get("id"), filter.id()
                 ));
             }
-            if(filter.original_name() != null){
-                predicates.add(cb.equal(root.get("original_name"), filter.original_name()
+            if(filter.originalName() != null){
+                predicates.add(cb.equal(root.get("original_name"), filter.originalName()
                 ));
             }
-            if(filter.file_size() != null){
-                predicates.add(cb.equal(root.get("file_size"), filter.file_size()
+            if(filter.fileSize() != null){
+                predicates.add(cb.equal(root.get("file_size"), filter.fileSize()
                 ));
             }
-            if(filter.upload_status() != null){
-                predicates.add(cb.equal(root.get("upload_status"), filter.upload_status()
+            if(filter.status() != null){
+                predicates.add(cb.equal(root.get("upload_status"), filter.status()
                 ));
             }
-            if(filter.created_at() != null){
-                predicates.add(cb.equal(root.get("created_at"), filter.created_at()
+            if(filter.createdAt() != null){
+                predicates.add(cb.equal(root.get("createdAt"), filter.createdAt()
                 ));
             }
 

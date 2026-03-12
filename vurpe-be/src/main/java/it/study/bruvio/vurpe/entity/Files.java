@@ -23,21 +23,21 @@ public class Files {
 
     @Size(max = 100)
     @Column(name = "original_filename")
-    private String original_name;
+    private String originalName;
 
     @Column(name = "file_size")
-    private Long file_size;
+    private Long fileSize;
 
     @Column (name = "status")
     private FileStatusEnum status;
 
     @NotNull
     @Column (name= "created_at",nullable = false)
-    private Instant created_at;
+    private Instant createdAt;
 
     @PrePersist
     protected void onCreate() {
-        created_at = Instant.now();
+        createdAt = Instant.now();
     }
 
 }

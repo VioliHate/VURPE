@@ -7,18 +7,18 @@ import java.util.UUID;
 
 public record FilesResponse(
         UUID id,
-        String original_name,
-        Long file_size,
+        String originalName,
+        Long fileSize,
         String status,
-        Instant created_at
+        Instant createdAt
 ) {
     public static FilesResponse fromEntity(Files entity) {
         return new FilesResponse(
                 entity.getId(),
-                entity.getOriginal_name(),
-                entity.getFile_size(),
+                entity.getOriginalName(),
+                entity.getFileSize(),
                 entity.getStatus().name(),
-                entity.getCreated_at()
+                entity.getCreatedAt()
         );
     }
 }

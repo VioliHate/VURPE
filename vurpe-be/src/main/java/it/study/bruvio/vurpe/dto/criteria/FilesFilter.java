@@ -5,13 +5,13 @@ import java.util.UUID;
 
 public record FilesFilter(
         UUID id,
-        String original_name,
-        Long file_size,
-        String upload_status,
-        Instant created_at
+        String originalName,
+        Long fileSize,
+        String status,
+        Instant createdAt
 ) {
     public boolean isEmpty() {
-        return id ==null && original_name == null && file_size == null && upload_status == null &&
-                created_at == null;
+        return id ==null && originalName == null && fileSize == null && status == null &&
+                createdAt == null;
     }
 }

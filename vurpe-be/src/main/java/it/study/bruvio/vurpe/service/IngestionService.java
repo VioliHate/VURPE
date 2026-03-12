@@ -84,8 +84,8 @@ public class IngestionService {
         int count = 1;
         try (BufferedReader br = new BufferedReader(new InputStreamReader(file.getInputStream(), StandardCharsets.UTF_8))) {
 
-            f.setOriginal_name(file.getOriginalFilename());
-            f.setFile_size(file.getSize());
+            f.setOriginalName(file.getOriginalFilename());
+            f.setFileSize(file.getSize());
             f.setStatus(FileStatusEnum.UPLOADING);
             repoFiles.saveAndFlush(f);
 

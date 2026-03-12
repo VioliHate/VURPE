@@ -17,8 +17,8 @@ export class App {
 
   listMenu = [
     {route: '/dashboard', title: 'Dashboard', icon: 'dashboard'},
-    {route: '/users', title: 'Utenti', icon: 'people'},
-    {route: '/settings', title: 'Impostazioni', icon: 'settings'},
+    {route: '/files', title: 'File', icon: 'insert_drive_file'},
+    {route: '/rules', title: 'Rules', icon: 'rule'},
   ];
 
   toggleExpand() {

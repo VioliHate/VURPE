@@ -15,7 +15,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
-
+@CrossOrigin(origins = "http://localhost:4200")
 @RestController
 @RequestMapping(path="/call")
 public class FilesController {

@@ -1,5 +1,7 @@
 import { Routes } from '@angular/router';
 import {Dashboard} from './pages/dashboard/dashboard';
+import {Dummy} from './pages/dummy/dummy';
+import {Files} from './pages/files/files';
 
 export const routes: Routes = [
   {
@@ -11,5 +13,16 @@ export const routes: Routes = [
     path: 'dashboard',
     component:Dashboard,
     title:'Vurpe - Dashboard'
+  },
+  {
+    path: 'dummy',
+    component:Dummy,
+    title:'Vurpe - Dummy'
+  },
+  {
+    path: 'files',
+    component:Files,
+    title:'Vurpe - Files'
   }
+
 ];

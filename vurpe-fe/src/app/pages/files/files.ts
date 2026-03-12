@@ -5,7 +5,9 @@ import {DynamicTable} from '../../component/dynamic-table/dynamic-table';
 
 import {ApiResponse} from '../../entities/ApiResponse';
 import {PageEvent} from '@angular/material/paginator';
+import {SortUrl} from '../../utils/sort';
 import {Sort} from '@angular/material/sort';
+
 
 @Component({
   selector: 'app-files',
@@ -37,11 +39,11 @@ export class Files {
 
     stream: ({params}) => {
 
+      let sort=new SortUrl(params.sortField,params.sortDir);
       let httpParams: any = new HttpParams()
         .set('page', params.page)
         .set('size', params.size)
-      .set('sort',params.sortField)
-        .set('direction',params.sortDir)
+        .set('sort',sort.toString())
 
 
       return this.http.get<ApiResponse<any>>('http://localhost:8080/call/files', {params: httpParams});
@@ -64,5 +66,10 @@ export class Files {
       }
        this.pageIndex.set(0);
      }
+
+  private snakeToCamel(str: string): string {
+    if (!str) return '';
+    return str.replace(/_([a-z0-9])/gi, (match, letter) => letter.toUpperCase());
+  }
 
 }

@@ -4,6 +4,7 @@ import { MatTableDataSource, MatTableModule } from '@angular/material/table';
 import {MatSort, MatSortModule, Sort} from '@angular/material/sort';
 import {MatPaginator, MatPaginatorModule, PageEvent} from '@angular/material/paginator';
 import {PageInfo} from '../../entities/PageInfo';
+import {CamelToTitlePipe} from '../../pipe/CamelToTitlePipe';
 
 
 @Component({
@@ -13,7 +14,7 @@ import {PageInfo} from '../../entities/PageInfo';
     MatTableModule,
     MatSortModule,
     MatPaginatorModule,
-    TitleCasePipe
+    CamelToTitlePipe
   ],
   templateUrl: './dynamic-table.html',
   styleUrl: './dynamic-table.scss',

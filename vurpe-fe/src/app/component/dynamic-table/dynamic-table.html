@@ -32,5 +32,12 @@
   </table>
 
   <!-- Paginatore (Opzionale, ma consigliato) -->
-  <mat-paginator [pageSizeOptions]="[5, 10, 25, 100]" showFirstLastButtons></mat-paginator>
+  <mat-paginator
+    [length]="pageInfo()?.totalElements|| 0"
+    [pageSize]="pageInfo()?.size || 10"
+    [pageIndex]="pageInfo()?.number || 0"
+    [pageSizeOptions]="[5, 10, 25, 100]"
+    (page)="onPageChange($event)"
+    aria-label="Seleziona pagina">
+  </mat-paginator>
 </div>

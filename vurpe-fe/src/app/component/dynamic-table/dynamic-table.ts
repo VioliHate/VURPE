@@ -1,9 +1,10 @@
-import {Component, effect, input, computed, ViewChild, viewChild} from '@angular/core';
+import {Component, effect, input, computed, ViewChild, output} from '@angular/core';
 import { CommonModule, TitleCasePipe } from '@angular/common';
 import { MatTableDataSource, MatTableModule } from '@angular/material/table';
 import { MatSort, MatSortModule } from '@angular/material/sort';
-import { MatPaginator, MatPaginatorModule } from '@angular/material/paginator';
-import {ApiResponse} from '../../entities/ApiResponse';
+import {MatPaginator, MatPaginatorModule, PageEvent} from '@angular/material/paginator';
+import {PageInfo} from '../../entities/PageInfo';
+
 
 @Component({
   selector: 'app-dynamic-table',
@@ -13,13 +14,19 @@ import {ApiResponse} from '../../entities/ApiResponse';
     MatSortModule,
     MatPaginatorModule,
     TitleCasePipe
-    ],
+  ],
   templateUrl: './dynamic-table.html',
   styleUrl: './dynamic-table.scss',
+  standalone: true
 })
 export class DynamicTable {
 
-  data=input.required<ApiResponse<any>>();
+  data=input.required<any>();
+  pageInfo = computed<PageInfo | undefined>(() => {
+    return this.data().payload?.page;
+  });
+  pageChanged = output<PageEvent>();
+  sortChanged = output<any>();
 
   customColumns = input<string[]>([]);
   columns = computed(()=>{
@@ -38,13 +45,16 @@ export class DynamicTable {
   constructor(){
     effect(()=>{
       this.DataSource.data = this.data().payload.content;
-      console.log("ciaooooo");
-      console.log(this.DataSource.data);
 
       if(this.sort) this.DataSource.sort = this.sort;
       if(this.paginator) this.DataSource.paginator = this.paginator;
 
-    })
+    }
+    )
+
+  }
+  onPageChange(event: PageEvent) {
+    this.pageChanged.emit(event); // Il componente padre ascolterà questo evento per fare la chiamata HTTP
   }
 
 

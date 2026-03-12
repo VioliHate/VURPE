@@ -1,6 +1,15 @@
-@if(dataResource.error()) {
-  <div class="error">Errore di caricamento </div>
+@if (dataResource.error()) {
+  <div class="error">Errore di caricamento: {{ dataResource.error() }}</div>
+}
+@else if (dataResource.hasValue()) {
+  <!-- Passiamo i dati e ascoltiamo l'evento del paginatore -->
+    <!-- Mettiamo il "!" dopo value() per rassicurare TypeScript che il dato c'è -->
+  <app-dynamic-table
+    [data]="dataResource.value()!"
+    (pageChanged)="onPageChange($event)">
+  </app-dynamic-table>
 }
 @else {
-  <app-dynamic-table [data]="dataResource.value()"></app-dynamic-table>
+  <!-- Qui potresti mettere uno spinner o skeleton loader -->
+  <div class="loading">Caricamento in corso...</div>
 }

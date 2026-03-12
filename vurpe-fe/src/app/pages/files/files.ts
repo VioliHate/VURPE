@@ -1,59 +1,64 @@
-import {Component, inject, signal} from '@angular/core';
-import {HttpClient, HttpParams} from '@angular/common/http';
-import {rxResource} from '@angular/core/rxjs-interop';
-import {DynamicTable} from '../../component/dynamic-table/dynamic-table';
+import { Component, inject, signal } from '@angular/core';
+import { HttpClient, HttpParams } from '@angular/common/http';
+import { rxResource } from '@angular/core/rxjs-interop';
+import { DynamicTable } from '../../components/dynamic-table/dynamic-table';
 
-import {ApiResponse} from '../../entities/ApiResponse';
-import {PageEvent} from '@angular/material/paginator';
-import {SortUrl} from '../../utils/sort';
-import {Sort} from '@angular/material/sort';
-import {DynamicFilters} from '../../component/dynamic-filters/dynamic-filters';
-
+import { ApiResponse } from '../../entities/ApiResponse';
+import { PageEvent } from '@angular/material/paginator';
+import { SortUrl } from '../../utils/sort';
+import { Sort } from '@angular/material/sort';
+import { DynamicFilters } from '../../components/dynamic-filters/dynamic-filters';
 
 @Component({
   selector: 'app-files',
-  imports: [
-    DynamicTable,
-    DynamicFilters
-  ],
+  imports: [DynamicTable, DynamicFilters],
   templateUrl: './files.html',
   styleUrl: './files.scss',
-  standalone: true
+  standalone: true,
 })
 export class Files {
   private http = inject(HttpClient);
 
   pageIndex = signal(0);
   pageSize = signal(20);
-  sortField=signal("id");
-    sortDir=signal("ASC");
-    filter=signal(null);
-
+  sortField = signal('id');
+  sortDir = signal('ASC');
+  filter = signal(null);
 
   dataResource = rxResource<any, any>({
-
     params: () => ({
       page: this.pageIndex(),
       size: this.pageSize(),
-      sortField:this.sortField(),
-      sortDir:this.sortDir(),
-      criteria:this.filter()
-
+      sortField: this.sortField(),
+      sortDir: this.sortDir(),
+      criteria: this.filter(),
     }),
 
-    stream: ({params}) => {
+    stream: ({ params }) => {
+      let httpParams: any = this.buildParams(params);
 
-      let sort=new SortUrl(params.sortField,params.sortDir);
-      let httpParams: any = new HttpParams()
-        .set('page', params.page)
-        .set('size', params.size)
-        .set('sort',sort.toString())
-        .set('FilesFilter', JSON.stringify(params.criteria));
-
-
-      return this.http.get<ApiResponse<any>>('http://localhost:8080/call/files', {params: httpParams});
-    }
+      return this.http.get<ApiResponse<any>>('http://localhost:8080/call/files', {
+        params: httpParams,
+      });
+    },
   });
+
+  private buildParams(params: any) {
+    let sort = new SortUrl(params.sortField, params.sortDir);
+    let httpParams: any = new HttpParams()
+      .set('page', params.page)
+      .set('size', params.size)
+      .set('sort', sort.toString());
+
+    if (params.criteria != null) {
+      for (let iter of Object.keys(params.criteria)) {
+        console.log('patate->', iter, ' ', params.criteria[iter]);
+        httpParams = httpParams.set(iter, params.criteria[iter]);
+      }
+      console.log(httpParams);
+    }
+    return httpParams;
+  }
 
   onPageChange(event: PageEvent) {
     this.pageIndex.set(event.pageIndex);
@@ -61,25 +66,22 @@ export class Files {
   }
 
   onSortChange(event: Sort) {
+    if (!event.active || event.direction === '') {
+      this.sortField.set('id');
+      this.sortDir.set('asc');
+    } else {
+      this.sortField.set(event.active);
+      this.sortDir.set(event.direction);
+    }
+    this.pageIndex.set(0);
+  }
 
-      if (!event.active || event.direction === '') {
-         this.sortField.set('id');
-         this.sortDir.set('asc');
-      } else {
-         this.sortField.set(event.active);
-         this.sortDir.set(event.direction);
-      }
-       this.pageIndex.set(0);
-     }
-
-     sendFilters(event: any ){
+  sendFilters(event: any) {
     this.filter.set(event);
-
-     }
+  }
 
   private snakeToCamel(str: string): string {
     if (!str) return '';
     return str.replace(/_([a-z0-9])/gi, (match, letter) => letter.toUpperCase());
   }
-
 }

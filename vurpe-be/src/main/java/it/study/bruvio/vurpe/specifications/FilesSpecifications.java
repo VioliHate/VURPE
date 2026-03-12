@@ -23,15 +23,15 @@ public class FilesSpecifications {
                 ));
             }
             if(filter.originalName() != null){
-                predicates.add(cb.equal(root.get("original_name"), filter.originalName()
+                predicates.add(cb.equal(root.get("originalName"), filter.originalName()
                 ));
             }
             if(filter.fileSize() != null){
-                predicates.add(cb.equal(root.get("file_size"), filter.fileSize()
+                predicates.add(cb.equal(root.get("fileSize"), filter.fileSize()
                 ));
             }
             if(filter.status() != null){
-                predicates.add(cb.equal(root.get("upload_status"), filter.status()
+                predicates.add(cb.equal(root.get("Status"), filter.status()
                 ));
             }
             if(filter.createdAt() != null){

@@ -4,8 +4,9 @@
 @else if (dataResource.hasValue()) {
   <!-- Passiamo i dati e ascoltiamo l'evento del paginatore -->
     <!-- Mettiamo il "!" dopo value() per rassicurare TypeScript che il dato c'è -->
+  <app-dynamic-filters [list2]="dataResource.value()" (MapOutput)="sendFilters($event)"></app-dynamic-filters>
   <app-dynamic-table
-    [data]="dataResource.value()!"
+    [data]="dataResource.value()"
     (pageChanged)="onPageChange($event)"
     (sortChanged)="onSortChange($event)">
   </app-dynamic-table>

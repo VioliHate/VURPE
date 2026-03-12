@@ -7,12 +7,14 @@ import {ApiResponse} from '../../entities/ApiResponse';
 import {PageEvent} from '@angular/material/paginator';
 import {SortUrl} from '../../utils/sort';
 import {Sort} from '@angular/material/sort';
+import {DynamicFilters} from '../../component/dynamic-filters/dynamic-filters';
 
 
 @Component({
   selector: 'app-files',
   imports: [
-    DynamicTable
+    DynamicTable,
+    DynamicFilters
   ],
   templateUrl: './files.html',
   styleUrl: './files.scss',
@@ -25,6 +27,7 @@ export class Files {
   pageSize = signal(20);
   sortField=signal("id");
     sortDir=signal("ASC");
+    filter=signal(null);
 
 
   dataResource = rxResource<any, any>({
@@ -33,7 +36,8 @@ export class Files {
       page: this.pageIndex(),
       size: this.pageSize(),
       sortField:this.sortField(),
-      sortDir:this.sortDir()
+      sortDir:this.sortDir(),
+      criteria:this.filter()
 
     }),
 
@@ -44,6 +48,7 @@ export class Files {
         .set('page', params.page)
         .set('size', params.size)
         .set('sort',sort.toString())
+        .set('FilesFilter', JSON.stringify(params.criteria));
 
 
       return this.http.get<ApiResponse<any>>('http://localhost:8080/call/files', {params: httpParams});
@@ -56,7 +61,7 @@ export class Files {
   }
 
   onSortChange(event: Sort) {
-    console.log("event in file:",event)
+
       if (!event.active || event.direction === '') {
          this.sortField.set('id');
          this.sortDir.set('asc');
@@ -65,6 +70,11 @@ export class Files {
          this.sortDir.set(event.direction);
       }
        this.pageIndex.set(0);
+     }
+
+     sendFilters(event: any ){
+    this.filter.set(event);
+
      }
 
   private snakeToCamel(str: string): string {

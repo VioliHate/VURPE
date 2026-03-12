@@ -5,6 +5,7 @@ import {MatSort, MatSortModule, Sort} from '@angular/material/sort';
 import {MatPaginator, MatPaginatorModule, PageEvent} from '@angular/material/paginator';
 import {PageInfo} from '../../entities/PageInfo';
 import {CamelToTitlePipe} from '../../pipe/CamelToTitlePipe';
+import {DynamicFilters} from '../dynamic-filters/dynamic-filters';
 
 
 @Component({
@@ -14,7 +15,8 @@ import {CamelToTitlePipe} from '../../pipe/CamelToTitlePipe';
     MatTableModule,
     MatSortModule,
     MatPaginatorModule,
-    CamelToTitlePipe
+    CamelToTitlePipe,
+    DynamicFilters
   ],
   templateUrl: './dynamic-table.html',
   styleUrl: './dynamic-table.scss',
@@ -58,7 +60,7 @@ export class DynamicTable {
     this.pageChanged.emit(event); // Il componente padre ascolterà questo evento per fare la chiamata HTTP
   }
   onSortChange(event: Sort){
-    console.log("evento sort:",event);
+
     this.sortChanged.emit(event);
   }
 

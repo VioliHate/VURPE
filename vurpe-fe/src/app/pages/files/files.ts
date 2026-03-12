@@ -8,10 +8,11 @@ import { PageEvent } from '@angular/material/paginator';
 import { SortUrl } from '../../utils/sort';
 import { Sort } from '@angular/material/sort';
 import { DynamicFilters } from '../../components/dynamic-filters/dynamic-filters';
+import { MatButton } from '@angular/material/button';
 
 @Component({
   selector: 'app-files',
-  imports: [DynamicTable, DynamicFilters],
+  imports: [DynamicTable, DynamicFilters, MatButton],
   templateUrl: './files.html',
   styleUrl: './files.scss',
   standalone: true,
@@ -83,5 +84,12 @@ export class Files {
   private snakeToCamel(str: string): string {
     if (!str) return '';
     return str.replace(/_([a-z0-9])/gi, (match, letter) => letter.toUpperCase());
+  }
+  refresh() {
+    this.pageIndex.set(0);
+    this.pageSize.set(20);
+    this.sortField.set('id');
+    this.sortDir.set('ASC');
+    this.filter.set(null);
   }
 }

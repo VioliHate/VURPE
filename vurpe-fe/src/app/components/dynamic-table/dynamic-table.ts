@@ -21,6 +21,7 @@ export class DynamicTable {
   });
   pageChanged = output<PageEvent>();
   sortChanged = output<any>();
+  refreshCall = output<any>();
 
   customColumns = input<string[]>([]);
   columns = computed(() => {

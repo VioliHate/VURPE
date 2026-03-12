@@ -1,7 +1,7 @@
 import {Component, effect, input, computed, ViewChild, output} from '@angular/core';
 import { CommonModule, TitleCasePipe } from '@angular/common';
 import { MatTableDataSource, MatTableModule } from '@angular/material/table';
-import { MatSort, MatSortModule } from '@angular/material/sort';
+import {MatSort, MatSortModule, Sort} from '@angular/material/sort';
 import {MatPaginator, MatPaginatorModule, PageEvent} from '@angular/material/paginator';
 import {PageInfo} from '../../entities/PageInfo';
 
@@ -55,6 +55,10 @@ export class DynamicTable {
   }
   onPageChange(event: PageEvent) {
     this.pageChanged.emit(event); // Il componente padre ascolterà questo evento per fare la chiamata HTTP
+  }
+  onSortChange(event: Sort){
+    console.log("evento sort:",event);
+    this.sortChanged.emit(event);
   }
 
 

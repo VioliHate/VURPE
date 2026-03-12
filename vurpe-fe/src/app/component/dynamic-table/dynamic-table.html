@@ -1,17 +1,17 @@
 <div class="mat-elevation-z8">
-  <table mat-table [dataSource]="DataSource" matSort>
+  <table mat-table [dataSource]="DataSource" matSort (matSortChange)="onSortChange($event)">
 
-    <!-- Generazione Dinamica delle Colonne -->
+
     @for (col of columns(); track col) {
       <ng-container [matColumnDef]="col">
 
-        <!-- Intestazione Colonna -->
-        <th mat-header-cell *matHeaderCellDef mat-sort-header>
-          <!-- Usiamo TitleCasePipe per rendere 'nomeUtente' -> 'Nome Utente' -->
+
+        <th mat-header-cell *matHeaderCellDef mat-sort-header >
+
           {{ col | titlecase }}
         </th>
 
-        <!-- Cella dei Dati -->
+
         <td mat-cell *matCellDef="let element">
           {{ element[col] }}
         </td>
@@ -19,11 +19,11 @@
       </ng-container>
     }
 
-    <!-- Definizione delle Righe di Intestazione e di Dato -->
-    <tr mat-header-row *matHeaderRowDef="columns()"></tr>
+
+    <tr mat-header-row *matHeaderRowDef="columns()" ></tr>
     <tr mat-row *matRowDef="let row; columns: columns();"></tr>
 
-    <!-- Nessun dato da mostrare -->
+
     <tr class="mat-row" *matNoDataRow>
       <td class="mat-cell" [attr.colspan]="columns().length" style="text-align: center; padding: 20px;">
         Nessun dato disponibile.
@@ -31,7 +31,7 @@
     </tr>
   </table>
 
-  <!-- Paginatore (Opzionale, ma consigliato) -->
+
   <mat-paginator
     [length]="pageInfo()?.totalElements|| 0"
     [pageSize]="pageInfo()?.size || 10"

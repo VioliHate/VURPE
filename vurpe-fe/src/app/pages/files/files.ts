@@ -20,7 +20,9 @@ export class Files {
   private http = inject(HttpClient);
 
   pageIndex = signal(0);
-  pageSize = signal(10);
+  pageSize = signal(20);
+  sortField=signal("id");
+    sortDir=signal("ASC");
 
 
   dataResource = rxResource<any, any>({
@@ -28,6 +30,8 @@ export class Files {
     params: () => ({
       page: this.pageIndex(),
       size: this.pageSize(),
+      sortField:this.sortField(),
+      sortDir:this.sortDir()
 
     }),
 
@@ -35,7 +39,9 @@ export class Files {
 
       let httpParams: any = new HttpParams()
         .set('page', params.page)
-        .set('size', params.size);
+        .set('size', params.size)
+      .set('sort',params.sortField)
+        .set('direction',params.sortDir)
 
 
       return this.http.get<ApiResponse<any>>('http://localhost:8080/call/files', {params: httpParams});
@@ -48,14 +54,15 @@ export class Files {
   }
 
   onSortChange(event: Sort) {
-    //   if (!event.active || event.direction === '') {
-    //     this.sortField.set('id');
-    //     this.sortDir.set('asc');
-    //   } else {
-    //     this.sortField.set(event.active);
-    //     this.sortDir.set(event.direction);
-    //   }
-    //   this.pageIndex.set(0);
-    // }
-  }
+    console.log("event in file:",event)
+      if (!event.active || event.direction === '') {
+         this.sortField.set('id');
+         this.sortDir.set('asc');
+      } else {
+         this.sortField.set(event.active);
+         this.sortDir.set(event.direction);
+      }
+       this.pageIndex.set(0);
+     }
+
 }

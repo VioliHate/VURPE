@@ -6,7 +6,8 @@
     <!-- Mettiamo il "!" dopo value() per rassicurare TypeScript che il dato c'è -->
   <app-dynamic-table
     [data]="dataResource.value()!"
-    (pageChanged)="onPageChange($event)">
+    (pageChanged)="onPageChange($event)"
+    (sortChanged)="onSortChange($event)">
   </app-dynamic-table>
 }
 @else {

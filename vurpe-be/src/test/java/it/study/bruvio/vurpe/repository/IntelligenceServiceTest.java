@@ -92,8 +92,8 @@ public class IntelligenceServiceTest {
 
     private Files createFile() {
         Files file = new Files();
-        file.setOriginal_name("file-test");
-        file.setFile_size(100L);
+        file.setOriginalName("file-test");
+        file.setFileSize(100L);
         file.setStatus(FileStatusEnum.UPLOADED);
         return file;
     }

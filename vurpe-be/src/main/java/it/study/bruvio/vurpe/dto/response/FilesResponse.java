@@ -3,7 +3,6 @@ package it.study.bruvio.vurpe.dto.response;
 import it.study.bruvio.vurpe.entity.Files;
 
 import java.time.Instant;
-import java.util.UUID;
 
 public record FilesResponse(
         String originalName,

@@ -6,7 +6,6 @@ import java.time.Instant;
 import java.util.UUID;
 
 public record FilesResponse(
-        UUID id,
         String originalName,
         Long fileSize,
         String status,
@@ -14,7 +13,6 @@ public record FilesResponse(
 ) {
     public static FilesResponse fromEntity(Files entity) {
         return new FilesResponse(
-                entity.getId(),
                 entity.getOriginalName(),
                 entity.getFileSize(),
                 entity.getStatus().name(),

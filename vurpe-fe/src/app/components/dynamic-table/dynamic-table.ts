@@ -7,10 +7,14 @@ import { PageInfo } from '../../entities/PageInfo';
 import { CamelToTitlePipe } from '../../pipe/CamelToTitlePipe';
 import { DynamicFilters } from '../dynamic-filters/dynamic-filters';
 import { MatIcon } from "@angular/material/icon";
+import { MatButton } from '@angular/material/button';
+import {MatMenuModule} from '@angular/material/menu';
+import {MatButtonModule} from '@angular/material/button';
+
 
 @Component({
   selector: 'app-dynamic-table',
-  imports: [CommonModule, MatTableModule, MatSortModule, MatPaginatorModule, CamelToTitlePipe, MatIcon],
+  imports: [CommonModule,MatButtonModule, MatMenuModule,MatTableModule, MatSortModule, MatPaginatorModule, CamelToTitlePipe, MatIcon, MatButton],
   templateUrl: './dynamic-table.html',
   styleUrl: './dynamic-table.scss',
   standalone: true,

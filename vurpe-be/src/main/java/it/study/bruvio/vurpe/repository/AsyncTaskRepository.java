@@ -9,7 +9,7 @@ import org.springframework.stereotype.Repository;
 import java.util.UUID;
 
 @Repository
-public interface AsyncTaskRepository extends JpaRepository<AsyncTask, Integer>,
+public interface AsyncTaskRepository extends JpaRepository<AsyncTask, UUID>,
         JpaSpecificationExecutor<AsyncTask> {
     AsyncTask getReferenceById(UUID taskId);
 }

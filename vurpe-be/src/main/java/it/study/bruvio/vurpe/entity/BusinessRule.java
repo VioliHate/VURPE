@@ -1,6 +1,5 @@
 package it.study.bruvio.vurpe.entity;
 
-
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -19,13 +18,13 @@ public class BusinessRule {
     private UUID id;
 
     @Column(name = "rule_name", nullable = false)
-    private String rule_name;
+    private String ruleName;
 
     @Column(name = "rule_condition", nullable = false)
-    private String rule_condition;
+    private String ruleCondition;
 
     @Column(name = "risk_flag", nullable = false)
-    private String risk_flag;
+    private String riskFlag;
 
     @Column(name = "severity", nullable = false)
     private Integer severity;

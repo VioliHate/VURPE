@@ -10,9 +10,8 @@ import org.springframework.stereotype.Repository;
 import java.math.BigDecimal;
 import java.util.*;
 
-
 @Repository
-public interface DataRecordRepository extends JpaRepository<DataRecord, Integer>,
+public interface DataRecordRepository extends JpaRepository<DataRecord, UUID>,
         JpaSpecificationExecutor<DataRecord> {
 
     @Query("SELECT d FROM DataRecord d WHERE d.file_id = :fileId")
@@ -33,16 +32,14 @@ public interface DataRecordRepository extends JpaRepository<DataRecord, Integer>
     @Query("SELECT d.risk_flag,count(d) FROM DataRecord d WHERE d.file_id = :fileId GROUP BY d.risk_flag")
     List<Object[]> countByRiskFlagRaw(UUID fileId);
 
-    @Query(value= """
-        SELECT
-            date_trunc('day', d.date)::date AS day,
-            SUM(d.amount) AS total
-        FROM data_records d
-        WHERE d.file_id = :fileId
-        GROUP BY date_trunc('day', d.date)
-    """, nativeQuery = true)
+    @Query(value = """
+                SELECT
+                    date_trunc('day', d.date)::date AS day,
+                    SUM(d.amount) AS total
+                FROM data_records d
+                WHERE d.file_id = :fileId
+                GROUP BY date_trunc('day', d.date)
+            """, nativeQuery = true)
     List<Object[]> sumAmountTimeSeriesByDate(UUID fileId);
-
-
 
 }

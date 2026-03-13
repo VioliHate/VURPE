@@ -43,7 +43,7 @@ public class FilesRepositoryTest {
                     .as("ID must be not null for record: " + record)
                     .isNotNull();
 
-            assertThat(record.getCreated_at())
+            assertThat(record.getCreatedAt())
                     .as("created_at must be not null for record: " + record)
                     .isNotNull();
         });
@@ -53,7 +53,7 @@ public class FilesRepositoryTest {
     void shouldRejectInvalidDataType() {
         // Test 1: Validation Test for created_at null
         Files testFile = createTestFile("test.csv", 1024L, FileStatusEnum.UPLOADED);
-        testFile.setCreated_at(null);
+        testFile.setCreatedAt(null);
 
         try (ValidatorFactory factory = Validation.buildDefaultValidatorFactory()) {
             Validator validator = factory.getValidator();
@@ -85,12 +85,11 @@ public class FilesRepositoryTest {
         });
     }
 
-
     // metodo per creare al volo un file
     private Files createTestFile(String original_name, Long file_size, FileStatusEnum status) {
         Files file = new Files();
-        file.setOriginal_name(original_name);
-        file.setFile_size(file_size);
+        file.setOriginalName(original_name);
+        file.setFileSize(file_size);
         file.setStatus(status);
         return file;
     }

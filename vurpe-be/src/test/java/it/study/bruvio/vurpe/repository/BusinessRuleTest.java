@@ -1,6 +1,5 @@
 package it.study.bruvio.vurpe.repository;
 
-
 import it.study.bruvio.vurpe.entity.BusinessRule;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -40,7 +39,6 @@ public class BusinessRuleTest {
                     .as("ID must be not null for record: " + record)
                     .isNotNull();
 
-
         });
     }
 
@@ -48,7 +46,7 @@ public class BusinessRuleTest {
     void shouldRejectInvalidRuleNameType() {
         // Test 1: rule_name null (NOT NULL)
         BusinessRule businessRule = createBusinessRule("HIGH", 1);
-        businessRule.setRule_name(null);
+        businessRule.setRuleName(null);
         assertThrows(Exception.class, () -> {
             repository.saveAndFlush(businessRule);
         });
@@ -58,7 +56,7 @@ public class BusinessRuleTest {
     void shouldRejectInvalidRuleConditionType() {
         // Test 2: rule_condition null (NOT NULL)
         BusinessRule businessRule = createBusinessRule("HIGH", 2);
-        businessRule.setRule_condition(null);
+        businessRule.setRuleCondition(null);
         assertThrows(Exception.class, () -> {
             repository.saveAndFlush(businessRule);
         });
@@ -68,7 +66,7 @@ public class BusinessRuleTest {
     void shouldRejectInvalidRiskFlagType() {
         // Test 3: risk_flag null (NOT NULL)
         BusinessRule businessRule = createBusinessRule("MEDIUM", 3);
-        businessRule.setRisk_flag(null);
+        businessRule.setRiskFlag(null);
         assertThrows(Exception.class, () -> {
             repository.saveAndFlush(businessRule);
         });
@@ -88,19 +86,19 @@ public class BusinessRuleTest {
     void shouldAcceptValidDataType() {
         assertDoesNotThrow(() -> {
             BusinessRule rule = createBusinessRule("HIGH", 5);
-            rule.setRule_name("High Amount Alert");
+            rule.setRuleName("High Amount Alert");
             BusinessRule saved = repository.saveAndFlush(rule);
             assertNotNull(saved.getId());
-            assertEquals("High Amount Alert", saved.getRule_name());
+            assertEquals("High Amount Alert", saved.getRuleName());
             assertEquals(5, saved.getSeverity());
         });
     }
 
     private BusinessRule createBusinessRule(String risk_flag, int severity) {
         BusinessRule rule = new BusinessRule();
-        rule.setRule_name("rule-test");
-        rule.setRule_condition("amount >1000");
-        rule.setRisk_flag(risk_flag);
+        rule.setRuleName("rule-test");
+        rule.setRuleCondition("amount >1000");
+        rule.setRiskFlag(risk_flag);
         rule.setSeverity(severity);
 
         return rule;

@@ -17,7 +17,6 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.List;
 import java.util.UUID;
 
-
 @Service
 @RequiredArgsConstructor
 public class IntelligenceService {
@@ -46,7 +45,8 @@ public class IntelligenceService {
                 // Questo attiva REQUIRES_NEW creando una transazione separata per ogni regola
                 self.applyRule(fileId, rule);
             } catch (Exception e) {
-                // Ora l'errore su una regola non blocca le altre perché la transazione padre è salva
+                // Ora l'errore su una regola non blocca le altre perché la transazione padre è
+                // salva
                 System.err.println("Errore applicando regola ID " + rule.getId() + ": " + e.getMessage());
             }
         }
@@ -61,12 +61,11 @@ public class IntelligenceService {
         this.setRiskFlag(fileId, rule);
     }
 
-
     private void setRiskFlag(UUID fileId, BusinessRule rule) {
 
         // FIX SINTASSI: Sostituisco le virgolette doppie con singole per Postgres
         // (L'ideale sarebbe correggerle nel DB, ma questo protegge il codice)
-        String safeCondition = rule.getRule_condition().replace("\"", "'");
+        String safeCondition = rule.getRuleCondition().replace("\"", "'");
 
         String sql = "SELECT * FROM data_records " +
                 "WHERE file_id = :fileId " +
@@ -81,7 +80,7 @@ public class IntelligenceService {
         for (DataRecord record : matchingRecords) {
             // Logica di sovrascrittura flag
             if (record.getRisk_flag() == null || record.getRisk_flag().isEmpty()) {
-                record.setRisk_flag(rule.getRisk_flag());
+                record.setRisk_flag(rule.getRiskFlag());
             }
         }
 
@@ -90,22 +89,21 @@ public class IntelligenceService {
         }
     }
 
+    private void setNoMatches(UUID fileId) {
+        String takeNoMatchesSQL = "SELECT * FROM data_records " +
+                "WHERE file_id = :fileId " +
+                "AND risk_flag is NULL";
+        Query takeNoMatchesQuery = entityManager.createNativeQuery(takeNoMatchesSQL, DataRecord.class);
+        takeNoMatchesQuery.setParameter("fileId", fileId);
 
-    private void setNoMatches(UUID fileId){
-            String takeNoMatchesSQL = "SELECT * FROM data_records " +
-                    "WHERE file_id = :fileId " +
-                    "AND risk_flag is NULL";
-            Query takeNoMatchesQuery = entityManager.createNativeQuery(takeNoMatchesSQL, DataRecord.class);
-            takeNoMatchesQuery.setParameter("fileId", fileId);
-
-            @SuppressWarnings("unchecked")
-            List<DataRecord> notMatchingRecords = takeNoMatchesQuery.getResultList();
-            for(DataRecord record : notMatchingRecords) {
-                record.setRisk_flag("NO_MATCHES");
-            }
-            if (!notMatchingRecords.isEmpty()) {
-                dataRecordRepository.saveAll(notMatchingRecords);
-            }
+        @SuppressWarnings("unchecked")
+        List<DataRecord> notMatchingRecords = takeNoMatchesQuery.getResultList();
+        for (DataRecord record : notMatchingRecords) {
+            record.setRisk_flag("NO_MATCHES");
         }
+        if (!notMatchingRecords.isEmpty()) {
+            dataRecordRepository.saveAll(notMatchingRecords);
+        }
+    }
 
 }

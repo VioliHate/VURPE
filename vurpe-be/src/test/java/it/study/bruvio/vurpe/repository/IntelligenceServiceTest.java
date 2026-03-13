@@ -46,35 +46,37 @@ public class IntelligenceServiceTest {
     @DisplayName("Apply Risk Rule Correctness")
     @Rollback(false)
     @Commit
-    //per testare commentare  @Transactional(propagation = Propagation.REQUIRES_NEW) in IntelligenceService
+    // per testare commentare @Transactional(propagation = Propagation.REQUIRES_NEW)
+    // in IntelligenceService
     void shouldDataRecordMustHaveRiskFlag() {
         BusinessRule ruleTest = createBusinessRule();
         entityManager.persistAndFlush(ruleTest);
         Files testFile = createFile();
         UUID fileId = filesRepository.saveAndFlush(testFile).getId();
-        DataRecord dataRecordTest = createDataRecord(fileId
-        );
+        DataRecord dataRecordTest = createDataRecord(fileId);
         dataRecordTest.setAmount(BigDecimal.valueOf(11000L));
         entityManager.persistAndFlush(dataRecordTest);
-        
+
         service.applyBusinessRulesToFile(fileId);
         DataRecord updated = dataRecordRepository.findByFileId(fileId).getFirst();
         assertNotNull(updated.getRisk_flag(), "Il flag di rischio dovrebbe essere stato impostato");
-        //assertEquals("HIGH", updated.getRisk_flag(), "Flag sbagliato");
+        // assertEquals("HIGH", updated.getRisk_flag(), "Flag sbagliato");
 
-        /* usare "NO_MATCHES" nel caso
-         @Transactional(propagation = Propagation.REQUIRES_NEW) in IntelligenceService attivo
+        /*
+         * usare "NO_MATCHES" nel caso
+         * 
+         * @Transactional(propagation = Propagation.REQUIRES_NEW) in IntelligenceService
+         * attivo
          */
         assertEquals("NO_MATCHES", updated.getRisk_flag(), "Flag sbagliato");
         assertNotNull(dataRecordTest.getRisk_flag());
     }
 
-
     private BusinessRule createBusinessRule() {
         BusinessRule rule = new BusinessRule();
-        rule.setRule_name("rule-test");
-        rule.setRule_condition("amount > 10.000 AND category = 'transfer'");
-        rule.setRisk_flag("HIGH");
+        rule.setRuleName("rule-test");
+        rule.setRuleCondition("amount > 10.000 AND category = 'transfer'");
+        rule.setRiskFlag("HIGH");
         rule.setSeverity(7);
         return rule;
     }

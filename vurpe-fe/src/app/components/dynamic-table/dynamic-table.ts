@@ -1,4 +1,4 @@
-import { Component, effect, input, computed, ViewChild, output } from '@angular/core';
+import { Component, effect, input, computed, ViewChild, output, signal } from '@angular/core';
 import { CommonModule, TitleCasePipe } from '@angular/common';
 import { MatTableDataSource, MatTableModule } from '@angular/material/table';
 import { MatSort, MatSortModule, Sort } from '@angular/material/sort';
@@ -6,16 +6,18 @@ import { MatPaginator, MatPaginatorModule, PageEvent } from '@angular/material/p
 import { PageInfo } from '../../entities/PageInfo';
 import { CamelToTitlePipe } from '../../pipe/CamelToTitlePipe';
 import { DynamicFilters } from '../dynamic-filters/dynamic-filters';
+import { MatIcon } from "@angular/material/icon";
 
 @Component({
   selector: 'app-dynamic-table',
-  imports: [CommonModule, MatTableModule, MatSortModule, MatPaginatorModule, CamelToTitlePipe],
+  imports: [CommonModule, MatTableModule, MatSortModule, MatPaginatorModule, CamelToTitlePipe, MatIcon],
   templateUrl: './dynamic-table.html',
   styleUrl: './dynamic-table.scss',
   standalone: true,
 })
 export class DynamicTable {
   data = input.required<any>();
+  plainDisplayedColumns = signal<string[]>([]);
   pageInfo = computed<PageInfo | undefined>(() => {
     return this.data().payload?.page;
   });
@@ -34,6 +36,9 @@ export class DynamicTable {
     }
     return [];
   });
+  displayedColumns = computed(() => ['edit',...this.columns() ]);
+  
+  
 
   DataSource = new MatTableDataSource<any>();
 
@@ -46,6 +51,7 @@ export class DynamicTable {
 
       if (this.sort) this.DataSource.sort = this.sort;
       if (this.paginator) this.DataSource.paginator = this.paginator;
+      this.plainDisplayedColumns.set(this.displayedColumns());
     });
   }
   onPageChange(event: PageEvent) {

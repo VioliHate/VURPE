@@ -22,7 +22,14 @@ export const routes: Routes = [
   {
     path: 'files',
     component:Files,
-    title:'Vurpe - Files'
+    title:'Vurpe - Files',
+    data: { api: 'http://localhost:8080/call/files'}
+  },
+   {
+    path: 'rules',
+    component:Files,
+    title:'Vurpe - rules',
+    data: { api: 'http://localhost:8080/call/rules'}
   }
 
 ];

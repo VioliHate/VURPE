@@ -23,10 +23,11 @@ public class BusinessRuleSpecification {
                 predicates.add(cb.equal(root.get("id"), filter.id()));
             }
             if (filter.ruleName() != null) {
-                predicates.add(cb.equal(root.get("ruleName"), filter.ruleName()));
+                predicates.add(cb.like(cb.lower(root.get("ruleName")), "%" + filter.ruleName().toLowerCase() + "%"));
             }
             if (filter.ruleCondition() != null) {
-                predicates.add(cb.equal(root.get("ruleCondition"), filter.ruleCondition()));
+                predicates.add(
+                        cb.like(cb.lower(root.get("ruleCondition")), "%" + filter.ruleCondition().toLowerCase() + "%"));
             }
             if (filter.riskFlag() != null) {
                 predicates.add(cb.equal(root.get("riskFlag"), filter.riskFlag()));

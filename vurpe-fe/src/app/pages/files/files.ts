@@ -1,4 +1,4 @@
-import { Component, inject, signal } from '@angular/core';
+import { Component, inject, input, signal } from '@angular/core';
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { rxResource } from '@angular/core/rxjs-interop';
 import { DynamicTable } from '../../components/dynamic-table/dynamic-table';
@@ -19,6 +19,7 @@ import { MatButton } from '@angular/material/button';
 })
 export class Files {
   private http = inject(HttpClient);
+  api=input.required<string>();
 
   pageIndex = signal(0);
   pageSize = signal(20);
@@ -27,18 +28,20 @@ export class Files {
   filter = signal(null);
 
   dataResource = rxResource<any, any>({
+    
     params: () => ({
       page: this.pageIndex(),
       size: this.pageSize(),
       sortField: this.sortField(),
       sortDir: this.sortDir(),
       criteria: this.filter(),
+      api:this.api()
     }),
 
     stream: ({ params }) => {
       let httpParams: any = this.buildParams(params);
 
-      return this.http.get<ApiResponse<any>>('http://localhost:8080/call/files', {
+      return this.http.get<ApiResponse<any>>(params.api, {
         params: httpParams,
       });
     },

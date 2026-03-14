@@ -12,19 +12,19 @@ import { MatButton } from '@angular/material/button';
 import { ActivatedRoute } from '@angular/router';
 
 @Component({
-  selector: 'app-files',
+  selector: 'app-father-manager',
   imports: [DynamicTable, DynamicFilters, MatButton],
-  templateUrl: './files.html',
-  styleUrl: './files.scss',
+  templateUrl: './father-manager.html',
+  styleUrl: './father-manager.scss',
   standalone: true,
 })
-export class Files {
+export class FatherManager {
   private http = inject(HttpClient);
-  api=input.required<string>();
-   
-   private route = inject(ActivatedRoute);
+  api = input.required<string>();
+
+  private route = inject(ActivatedRoute);
   parentId = this.route.snapshot.queryParamMap.get('file_id');
-  serviceKey=input.required<string>();  
+  serviceKey = input.required<string>();
   pageIndex = signal(0);
   pageSize = signal(20);
   sortField = signal('id');
@@ -32,21 +32,18 @@ export class Files {
   filter = signal(null);
 
   dataResource = rxResource<any, any>({
-    
     params: () => ({
       page: this.pageIndex(),
       size: this.pageSize(),
       sortField: this.sortField(),
       sortDir: this.sortDir(),
       criteria: this.filter(),
-      api:this.api(),
-      parentId: this.parentId
+      api: this.api(),
+      parentId: this.parentId,
     }),
-   
 
     stream: ({ params }) => {
       let httpParams: any = this.buildParams(params);
-      
 
       return this.http.get<ApiResponse<any>>(params.api, {
         params: httpParams,
@@ -68,7 +65,7 @@ export class Files {
       }
       console.log(httpParams);
     }
-     let url = params.api;
+    let url = params.api;
     if (params.parentId) {
       httpParams = httpParams.set('file_id', params.parentId);
     }
@@ -99,11 +96,16 @@ export class Files {
     if (!str) return '';
     return str.replace(/_([a-z0-9])/gi, (match, letter) => letter.toUpperCase());
   }
+
   refresh() {
     this.pageIndex.set(0);
     this.pageSize.set(20);
     this.sortField.set('id');
     this.sortDir.set('ASC');
     this.filter.set(null);
+  }
+
+  addNew() {
+    throw new Error('Method not implemented.');
   }
 }

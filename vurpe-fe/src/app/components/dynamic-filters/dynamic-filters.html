@@ -1,44 +1,38 @@
 <h4>Filtri</h4>
 <div class="row">
-<form class="col-4" >
-<mat-form-field>
-  <mat-label>Scegli:</mat-label>
-  <mat-select  #select >
-    @for( i of list;track i){
-        <mat-option [value]=i >{{i | camelToTitle}}</mat-option>
-    }
+  <form class="col-4">
+    <mat-form-field>
+      <mat-label>Scegli:</mat-label>
+      <mat-select #select>
+        @for (i of list; track i) {
+          <mat-option [value]="i">{{ i | camelToTitle }}</mat-option>
+        }
+      </mat-select>
+    </mat-form-field>
+  </form>
 
+  <form class="col-2">
+    <mat-form-field class="example-full-width">
+      <mat-label>{{ select.value }}</mat-label>
+      <input matInput placeholder="" #Input />
+    </mat-form-field>
+  </form>
 
-  </mat-select>
-</mat-form-field>
-
-</form>
-
-<form class="col-2">
-  <mat-form-field class="example-full-width">
-    <mat-label>{{select.value}}</mat-label>
-    <input  matInput placeholder="" #Input>
-  </mat-form-field>
-</form>
-
-
-<button class="col-2" mat-button (click)="addMap(select.value,Input.value)">Aggiungi</button>
-
+  <button class="col-2" mat-button (click)="addMap(select.value, Input.value)">Aggiungi</button>
 </div>
-<br>
+<br />
 <div class="d-flex flex-row">
-  @for( j of filtersMap; track j[0]){
+  @for (j of filtersMap; track j[0]) {
     <div class="p-2">
-      <p>{{ j[0] }} → {{ j[1] }}  <button mat-button >
-        <mat-icon (click)="deleteFromMap(j[0])">delete</mat-icon>
-      </button></p>
-
+      <p>
+        {{ j[0] }} → {{ j[1] }}
+        <button mat-button>
+          <mat-icon (click)="deleteFromMap(j[0])">delete</mat-icon>
+        </button>
+      </p>
     </div>
-
   }
- @if(filtersMap.size > 0){
-<button mat-button (click)="invia()">invia</button>
- } 
-
-
+  @if (filtersMap.size > 0) {
+    <button mat-button (click)="send()">invia</button>
+  }
 </div>

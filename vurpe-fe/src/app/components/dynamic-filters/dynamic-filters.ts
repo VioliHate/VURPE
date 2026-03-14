@@ -34,13 +34,16 @@ export class DynamicFilters {
         this.list = Object.keys(this.list2().payload.content[0]);
     });
   }
+
   addMap(key: any, value: any) {
     this.filtersMap.set(key, value);
   }
+
   deleteFromMap(key: any) {
     this.filtersMap.delete(key);
   }
-  invia() {
+
+  send() {
     this.MapOutput.emit(Object.fromEntries(this.filtersMap));
   }
 }

@@ -1,18 +1,16 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { FatherManager } from './father-manager';
 
-import Files from './files';
-
-describe('Files', () => {
-  let component: Files;
-  let fixture: ComponentFixture<Files>;
+describe('FatherManager', () => {
+  let component: FatherManager;
+  let fixture: ComponentFixture<FatherManager>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [Files]
-    })
-    .compileComponents();
+      imports: [FatherManager],
+    }).compileComponents();
 
-    fixture = TestBed.createComponent(Files);
+    fixture = TestBed.createComponent(FatherManager);
     component = fixture.componentInstance;
     await fixture.whenStable();
   });

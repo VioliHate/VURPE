@@ -1,42 +1,40 @@
 import { Routes } from '@angular/router';
-import {Dashboard} from './pages/dashboard/dashboard';
-import {Dummy} from './pages/dummy/dummy';
-import {Files} from './pages/files/files';
+import { Dashboard } from './pages/dashboard/dashboard';
+import { Dummy } from './pages/dummy/dummy';
+import { FatherManager } from './pages/father-manager/father-manager';
 
 export const routes: Routes = [
   {
     path: '',
     redirectTo: '/dashboard',
-    pathMatch: 'full'
+    pathMatch: 'full',
   },
   {
     path: 'dashboard',
-    component:Dashboard,
-    title:'Vurpe - Dashboard'
+    component: Dashboard,
+    title: 'Vurpe - Dashboard',
   },
   {
     path: 'dummy',
-    component:Dummy,
-    title:'Vurpe - Dummy'
+    component: Dummy,
+    title: 'Vurpe - Dummy',
   },
   {
     path: 'files',
-    component:Files,
-    title:'Vurpe - Files',
-    data: { api: 'http://localhost:8080/call/files', serviceKey: 'files' }
+    component: FatherManager,
+    title: 'Vurpe - Files',
+    data: { api: 'http://localhost:8080/call/files', serviceKey: 'files' },
   },
-   {
-    path: 'dataRecords', 
-    component: Files,
+  {
+    path: 'dataRecords',
+    component: FatherManager,
     title: 'Vurpe - Data Records',
     data: { api: 'http://localhost:8080/call/data-records', serviceKey: 'files' },
-    
   },
-   {
+  {
     path: 'rules',
-    component:Files,
-    title:'Vurpe - rules',
-    data: { api: 'http://localhost:8080/call/rules', serviceKey: 'files'}
-  }
-
+    component: FatherManager,
+    title: 'Vurpe - rules',
+    data: { api: 'http://localhost:8080/call/rules', serviceKey: 'files' },
+  },
 ];

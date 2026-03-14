@@ -14,11 +14,8 @@ export class FileService {
     this.router.navigate(['/dataRecords'], { queryParams: { file_id: id } });
   }
 
-  public addRow() {
-    let file = this.openWindowFileCSV();
-    this.http.post('http://localhost:8080/call/uploadCSV', file).subscribe((res) => {
-      console.log(res);
-    });
+  public async addRow() {
+    return this.openWindowFileCSV();
   }
 
   private async openWindowFileCSV() {
@@ -38,13 +35,17 @@ export class FileService {
 
       const file = await fileHandle.getFile();
 
+      const formData = new FormData();
+      formData.append('file', file);
+
       //console.log('File selezionato:', file.name, file.size, file.type);
-      return file;
+      return this.http.post('http://localhost:8080/call/uploadCSV', formData);
     } catch (err: any) {
       if (err.name === 'AbortError') {
         return;
       }
       console.error('Error on opening:', err);
+      return;
     }
   }
 }

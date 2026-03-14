@@ -127,9 +127,15 @@ export class FatherManager {
     this.filter.set(null);
   }
 
-  addNewRow() {
+  async addNewRow() {
     console.log('clicked add new row');
-    this.Srv.addRow();
+    let result = await this.Srv.addRow();
+    result?.subscribe((res: any) => {
+      if (res.status == 'OK') {
+        this.sortField.set('createdAt');
+        this.sortDir.set('DESC');
+      }
+    });
   }
 
   detailsRow(el: any) {

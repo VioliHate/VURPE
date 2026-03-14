@@ -72,22 +72,6 @@ export class DynamicTable {
     });
   }
 
-  addNew() {
-    this.selectedNew.emit(null);
-  }
-
-  editRow(el: any) {
-    this.selectedEdit.emit(el);
-  }
-
-  details(el: any) {
-    this.selectedDetails.emit(el);
-  }
-
-  delete(el: any) {
-    this.selectedDelete.emit(el);
-  }
-
   onPageChange(event: PageEvent) {
     this.pageChanged.emit(event); // Il componente padre ascolterà questo evento per fare la chiamata HTTP
   }

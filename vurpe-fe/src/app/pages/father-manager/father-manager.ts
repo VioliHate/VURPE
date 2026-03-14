@@ -127,11 +127,19 @@ export class FatherManager {
     this.filter.set(null);
   }
 
-  addNew() {
-    throw new Error('Method not implemented.');
+  addNewRow() {
+    console.log('clicked add new row');
   }
 
-  details(el: any) {
+  detailsRow(el: any) {
     this.Srv.getDetails(el.id);
+  }
+
+  deleteRow(el: any) {
+    console.log('clicked delete', el);
+  }
+
+  editRow(el: any) {
+    console.log('clicked edit', el);
   }
 }

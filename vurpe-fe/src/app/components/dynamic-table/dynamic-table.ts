@@ -72,14 +72,15 @@ export class DynamicTable {
     });
   }
 
-  public addNew() {
+  addNew() {
     this.selectedNew.emit(null);
   }
-  public editRow(el: any) {
+
+  editRow(el: any) {
     this.selectedEdit.emit(el);
   }
 
-  public details(el: any) {
+  details(el: any) {
     this.selectedDetails.emit(el);
   }
 

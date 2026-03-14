@@ -15,7 +15,10 @@
     [serviceKey]="serviceKey()"
     (pageChanged)="onPageChange($event)"
     (sortChanged)="onSortChange($event)"
-    (addNew)="addNew()"
+    (selectedDelete)="deleteRow($event)"
+    (selectedDetails)="detailsRow($event)"
+    (selectedEdit)="editRow($event)"
+    (selectedNew)="addNewRow()"
   >
   </app-dynamic-table>
 } @else {

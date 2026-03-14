@@ -3,7 +3,7 @@
     <table mat-table [dataSource]="DataSource" matSort (matSortChange)="onSortChange($event)">
 <ng-container matColumnDef="edit">
   <th mat-header-cell *matHeaderCellDef class="d-sm-table-cell">
-    <button mat-button color="primary">
+    <button mat-button color="primary" (click)="addNew()">
       <mat-icon>add</mat-icon>
     </button>
   </th>
@@ -14,15 +14,16 @@
     </button>
 
     <mat-menu #menu="matMenu">
-      <button mat-menu-item>
+      <button mat-menu-item (click)="modifica(element )">
+        
         <mat-icon>edit</mat-icon>
         <span>Modifica</span>
       </button>
-      <button mat-menu-item>
+      <button mat-menu-item (click)="visualizza(element)" >
         <mat-icon>visibility</mat-icon>
         <span>Visualizza</span>
       </button>
-      <button mat-menu-item color="warn">
+      <button mat-menu-item color="warn" (click)="elimina(element)" >
         <mat-icon>delete</mat-icon>
         <span>Elimina</span>
       </button>

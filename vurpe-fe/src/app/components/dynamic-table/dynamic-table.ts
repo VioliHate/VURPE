@@ -1,4 +1,4 @@
-import { Component, effect, input, computed, ViewChild, output, signal } from '@angular/core';
+import { Component, effect, input, computed, ViewChild, output, signal, inject, Injector } from '@angular/core';
 import { CommonModule, TitleCasePipe } from '@angular/common';
 import { MatTableDataSource, MatTableModule } from '@angular/material/table';
 import { MatSort, MatSortModule, Sort } from '@angular/material/sort';
@@ -10,7 +10,11 @@ import { MatIcon } from "@angular/material/icon";
 import { MatButton } from '@angular/material/button';
 import {MatMenuModule} from '@angular/material/menu';
 import {MatButtonModule} from '@angular/material/button';
+import { FileService } from '../../servies/file-service';
 
+const SERVICE_REGISTRY: {[key:string]:any}={
+  "files":FileService
+}
 
 @Component({
   selector: 'app-dynamic-table',
@@ -20,6 +24,9 @@ import {MatButtonModule} from '@angular/material/button';
   standalone: true,
 })
 export class DynamicTable {
+  serviceKey = input.required<string>();
+  Srv:any=null;
+  private injector = inject(Injector); 
   data = input.required<any>();
   plainDisplayedColumns = signal<string[]>([]);
   pageInfo = computed<PageInfo | undefined>(() => {
@@ -52,12 +59,29 @@ export class DynamicTable {
   constructor() {
     effect(() => {
       this.DataSource.data = this.data().payload.content;
-
+      const serviceToken = SERVICE_REGISTRY[this.serviceKey()];
+      
+      // 2. MODIFICA QUESTO: Usa this.injector.get() invece di inject()
+      if (serviceToken) {
+        this.Srv = this.injector.get(serviceToken);
+      } else {
+        console.warn(`Service non trovato per la chiave: ${this.serviceKey()}`);
+      }
       if (this.sort) this.DataSource.sort = this.sort;
       if (this.paginator) this.DataSource.paginator = this.paginator;
       this.plainDisplayedColumns.set(this.displayedColumns());
     });
   }
+
+  public addNew(){
+
+  }
+  public modifica(el: any){  }
+public visualizza(el: any){
+  console.log("visualizza elemento: ", el);
+  this.Srv.getRecordData(el.id);
+  }  
+public elimina(el: any){  } 
   onPageChange(event: PageEvent) {
     this.pageChanged.emit(event); // Il componente padre ascolterà questo evento per fare la chiamata HTTP
   }

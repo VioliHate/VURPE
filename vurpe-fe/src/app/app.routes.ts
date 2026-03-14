@@ -23,13 +23,20 @@ export const routes: Routes = [
     path: 'files',
     component:Files,
     title:'Vurpe - Files',
-    data: { api: 'http://localhost:8080/call/files'}
+    data: { api: 'http://localhost:8080/call/files', serviceKey: 'files' }
+  },
+   {
+    path: 'dataRecords', 
+    component: Files,
+    title: 'Vurpe - Data Records',
+    data: { api: 'http://localhost:8080/call/data-records', serviceKey: 'files' },
+    
   },
    {
     path: 'rules',
     component:Files,
     title:'Vurpe - rules',
-    data: { api: 'http://localhost:8080/call/rules'}
+    data: { api: 'http://localhost:8080/call/rules', serviceKey: 'files'}
   }
 
 ];

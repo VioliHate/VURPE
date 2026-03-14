@@ -36,7 +36,9 @@
     </div>
 
   }
-  <button mat-button (click)="invia()">invia</button>
+ @if(filtersMap.size > 0){
+<button mat-button (click)="invia()">invia</button>
+ } 
 
 
 </div>

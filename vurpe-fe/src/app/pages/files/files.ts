@@ -9,6 +9,7 @@ import { SortUrl } from '../../utils/sort';
 import { Sort } from '@angular/material/sort';
 import { DynamicFilters } from '../../components/dynamic-filters/dynamic-filters';
 import { MatButton } from '@angular/material/button';
+import { ActivatedRoute } from '@angular/router';
 
 @Component({
   selector: 'app-files',
@@ -20,7 +21,10 @@ import { MatButton } from '@angular/material/button';
 export class Files {
   private http = inject(HttpClient);
   api=input.required<string>();
-
+   
+   private route = inject(ActivatedRoute);
+  parentId = this.route.snapshot.queryParamMap.get('file_id');
+  serviceKey=input.required<string>();  
   pageIndex = signal(0);
   pageSize = signal(20);
   sortField = signal('id');
@@ -35,11 +39,14 @@ export class Files {
       sortField: this.sortField(),
       sortDir: this.sortDir(),
       criteria: this.filter(),
-      api:this.api()
+      api:this.api(),
+      parentId: this.parentId
     }),
+   
 
     stream: ({ params }) => {
       let httpParams: any = this.buildParams(params);
+      
 
       return this.http.get<ApiResponse<any>>(params.api, {
         params: httpParams,
@@ -60,6 +67,10 @@ export class Files {
         httpParams = httpParams.set(iter, params.criteria[iter]);
       }
       console.log(httpParams);
+    }
+     let url = params.api;
+    if (params.parentId) {
+      httpParams = httpParams.set('file_id', params.parentId);
     }
     return httpParams;
   }

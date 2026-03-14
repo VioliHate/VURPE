@@ -12,6 +12,7 @@
   ></app-dynamic-filters>
   <app-dynamic-table
     [data]="dataResource.value()"
+    [serviceKey]="serviceKey()"
     (pageChanged)="onPageChange($event)"
     (sortChanged)="onSortChange($event)"
   >

@@ -1,4 +1,4 @@
-import { Component, inject, input, signal } from '@angular/core';
+import { Component, effect, inject, Injector, input, signal } from '@angular/core';
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { rxResource } from '@angular/core/rxjs-interop';
 import { DynamicTable } from '../../components/dynamic-table/dynamic-table';
@@ -10,6 +10,11 @@ import { Sort } from '@angular/material/sort';
 import { DynamicFilters } from '../../components/dynamic-filters/dynamic-filters';
 import { MatButton } from '@angular/material/button';
 import { ActivatedRoute } from '@angular/router';
+import { FileService } from '../../services/file-service';
+
+const SERVICE_REGISTRY: { [key: string]: any } = {
+  files: FileService,
+};
 
 @Component({
   selector: 'app-father-manager',
@@ -31,6 +36,11 @@ export class FatherManager {
   sortDir = signal('ASC');
   filter = signal(null);
 
+  private injector = inject(Injector);
+
+  //Services
+  Srv: any = null;
+
   dataResource = rxResource<any, any>({
     params: () => ({
       page: this.pageIndex(),
@@ -50,6 +60,18 @@ export class FatherManager {
       });
     },
   });
+
+  constructor() {
+    effect(() => {
+      const serviceToken = SERVICE_REGISTRY[this.serviceKey()];
+
+      if (serviceToken) {
+        this.Srv = this.injector.get(serviceToken);
+      } else {
+        console.warn(`Service non trovato per la chiave: ${this.serviceKey()}`);
+      }
+    });
+  }
 
   private buildParams(params: any) {
     let sort = new SortUrl(params.sortField, params.sortDir);
@@ -107,5 +129,9 @@ export class FatherManager {
 
   addNew() {
     throw new Error('Method not implemented.');
+  }
+
+  details(el: any) {
+    this.Srv.getDetails(el.id);
   }
 }

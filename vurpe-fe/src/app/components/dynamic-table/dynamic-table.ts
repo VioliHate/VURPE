@@ -1,14 +1,4 @@
-import {
-  Component,
-  effect,
-  input,
-  computed,
-  ViewChild,
-  output,
-  signal,
-  inject,
-  Injector,
-} from '@angular/core';
+import { Component, effect, input, computed, ViewChild, output, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { MatTableDataSource, MatTableModule } from '@angular/material/table';
 import { MatSort, MatSortModule, Sort } from '@angular/material/sort';
@@ -19,11 +9,6 @@ import { MatIcon } from '@angular/material/icon';
 import { MatButton } from '@angular/material/button';
 import { MatMenuModule } from '@angular/material/menu';
 import { MatButtonModule } from '@angular/material/button';
-import { FileService } from '../../services/file-service';
-
-const SERVICE_REGISTRY: { [key: string]: any } = {
-  files: FileService,
-};
 
 @Component({
   selector: 'app-dynamic-table',
@@ -44,10 +29,9 @@ const SERVICE_REGISTRY: { [key: string]: any } = {
 })
 export class DynamicTable {
   serviceKey = input.required<string>();
-  Srv: any = null;
-  private injector = inject(Injector);
   data = input.required<any>();
   plainDisplayedColumns = signal<string[]>([]);
+
   pageInfo = computed<PageInfo | undefined>(() => {
     return this.data().payload?.page;
   });
@@ -55,7 +39,11 @@ export class DynamicTable {
   pageChanged = output<PageEvent>();
   sortChanged = output<any>();
   refreshCall = output<null>();
-  clickedNew = output<null>();
+
+  selectedDetails = output<any>();
+  selectedDelete = output<any>();
+  selectedEdit = output<any>();
+  selectedNew = output<null>();
 
   customColumns = input<string[]>([]);
   columns = computed(() => {
@@ -78,14 +66,6 @@ export class DynamicTable {
   constructor() {
     effect(() => {
       this.DataSource.data = this.data().payload.content;
-      const serviceToken = SERVICE_REGISTRY[this.serviceKey()];
-
-      // 2. MODIFICA QUESTO: Usa this.injector.get() invece di inject()
-      if (serviceToken) {
-        this.Srv = this.injector.get(serviceToken);
-      } else {
-        console.warn(`Service non trovato per la chiave: ${this.serviceKey()}`);
-      }
       if (this.sort) this.DataSource.sort = this.sort;
       if (this.paginator) this.DataSource.paginator = this.paginator;
       this.plainDisplayedColumns.set(this.displayedColumns());
@@ -93,17 +73,24 @@ export class DynamicTable {
   }
 
   public addNew() {
-    this.clickedNew.emit(null);
+    this.selectedNew.emit(null);
   }
-  public editRow(el: any) {}
+  public editRow(el: any) {
+    this.selectedEdit.emit(el);
+  }
+
   public details(el: any) {
-    console.log('visualizza elemento: ', el);
-    this.Srv.getDetails(el.id);
+    this.selectedDetails.emit(el);
   }
-  public delete(el: any) {}
+
+  delete(el: any) {
+    this.selectedDelete.emit(el);
+  }
+
   onPageChange(event: PageEvent) {
     this.pageChanged.emit(event); // Il componente padre ascolterà questo evento per fare la chiamata HTTP
   }
+
   onSortChange(event: Sort) {
     this.sortChanged.emit(event);
   }

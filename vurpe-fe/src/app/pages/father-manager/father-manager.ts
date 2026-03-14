@@ -129,6 +129,7 @@ export class FatherManager {
 
   addNewRow() {
     console.log('clicked add new row');
+    this.Srv.addRow();
   }
 
   detailsRow(el: any) {

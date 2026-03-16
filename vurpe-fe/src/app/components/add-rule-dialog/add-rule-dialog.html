@@ -31,57 +31,58 @@
             </h5>
           </div>
           <div class="card-body p-4">
-            <section class="row p-2">
-              <div class="border-highlight">
-                <label class="section-label">01. Rule Identity</label>
-                <div class="field-group">
-                  <label class="field-label">Nome</label>
+            <!-- Nome regola -->
+            <div class="mb-4">
+              <label for="ruleName" class="form-label fw-semibold">Nome regola</label>
+              <input
+                id="ruleName"
+                type="text"
+                class="form-control"
+                [ngModel]="ruleName()"
+                (ngModelChange)="ruleName.set($event)"
+              />
+            </div>
+
+            <!-- Risk Assessment -->
+            <div class="mb-4">
+              <label class="form-label fw-semibold">Rischio</label>
+              <div class="btn-group w-100" role="group">
+                @for (flag of flags; track flag) {
+                  <button
+                    type="button"
+                    (click)="riskFlag.set(flag)"
+                    [class.active]="riskFlag() === flag"
+                    [ngClass]="{
+                      'btn-outline-success': flag === 'LOW',
+                      'btn-outline-warning': flag === 'MEDIUM',
+                      'btn-outline-danger': flag === 'HIGH',
+                    }"
+                    class="btn"
+                  >
+                    {{ flag }}
+                  </button>
+                }
+              </div>
+            </div>
+
+            <!-- Severity / Livello -->
+            <div class="mb-3">
+              <label class="form-label fw-semibold">Livello di severità</label>
+              <div class="d-flex align-items-center gap-3">
+                <div class="flex-grow-1">
                   <input
-                    type="text"
-                    [ngModel]="ruleName()"
-                    (ngModelChange)="ruleName.set($event)"
-                    class="input-text border-highlight"
-                    placeholder="RULE_ID_001"
+                    type="range"
+                    class="form-range"
+                    min="1"
+                    max="10"
+                    step="1"
+                    [ngModel]="severity()"
+                    (ngModelChange)="severity.set($event)"
                   />
                 </div>
+                <span class="badge bg-secondary fs-6 px-3 py-2"> {{ severity() }}/10 </span>
               </div>
-            </section>
-            <section class="row p-2">
-              <div class="border-highlight">
-                <label class="section-label">02. Risk Assessment</label>
-                <div class="field-group">
-                  <label class="field-label">Rischio</label>
-                  <div class="risk-grid">
-                    @for (flag of flags; track flag) {
-                      <button
-                        (click)="riskFlag.set(flag)"
-                        [class.active]="riskFlag() === flag"
-                        class="risk-btn border-highlight"
-                      >
-                        {{ flag }}
-                      </button>
-                    }
-                  </div>
-                </div>
-              </div>
-            </section>
-            <section class="row p-2">
-              <div class="field-group border-highlight">
-                <div class="severity-header">
-                  <label class="field-label">Livello:</label>
-                  <span class="severity-value">{{ severity() }}/10</span>
-                </div>
-                <input
-                  type="range"
-                  min="1"
-                  max="10"
-                  [ngModel]="severity()"
-                  (ngModelChange)="severity.set($event)"
-                  class="slider border-highlight"
-                  style="--thumb-color: #4f46e5; --track-color: #4f46e530"
-                />
-              </div>
-            </section>
+            </div>
           </div>
         </div>
       </div>

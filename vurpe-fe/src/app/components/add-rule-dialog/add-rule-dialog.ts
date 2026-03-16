@@ -1,6 +1,12 @@
 import { Component, computed, inject, signal } from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
-import { MatDialogTitle, MatDialogContent, MatDialogActions, MatDialogClose, MatDialogRef } from '@angular/material/dialog';
+import {
+  MatDialogTitle,
+  MatDialogContent,
+  MatDialogActions,
+  MatDialogClose,
+  MatDialogRef,
+} from '@angular/material/dialog';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatButton } from '@angular/material/button';
@@ -8,22 +14,10 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { MatIconModule } from '@angular/material/icon';
 
-import { 
-  QueryGroup, 
-  QueryRule, 
-  QueryNode, 
-  FIELDS, 
-  OPERATORS, 
-  RiskFlag, 
-  BusinessRule 
-} from '../../entities/types';
-import { generateSQL, createEmptyGroup, createEmptyRule } from   '../../entities/utils';
-
-
 @Component({
   selector: 'app-add-rule-dialog',
   imports: [
-       MatFormFieldModule,
+    MatFormFieldModule,
     MatInputModule,
     FormsModule,
     MatButtonModule,
@@ -31,113 +25,127 @@ import { generateSQL, createEmptyGroup, createEmptyRule } from   '../../entities
     MatDialogContent,
     MatDialogActions,
     MatDialogClose,
-    MatButton,CommonModule, FormsModule, MatIconModule
-    
+    MatButton,
+    CommonModule,
+    FormsModule,
+    MatIconModule,
   ],
   templateUrl: './add-rule-dialog.html',
   styleUrl: './add-rule-dialog.scss',
 })
 export class AddRuleDialog {
   private dialogRef = inject(MatDialogRef<AddRuleDialog>);
-   ruleName = signal('New Business Rule');
-  riskFlag = signal<RiskFlag>('LOW');
-  severity = signal(5);
-  query = signal<QueryGroup>(createEmptyGroup());
-  savedRules = signal<BusinessRule[]>([]);
 
-  generatedSQL = computed(() => generateSQL(this.query()));
+  fields: Field[] = [
+    { id: 'file_id', label: 'File ID', type: 'uuid' },
+    { id: 'original_id', label: 'Original ID', type: 'string' },
+    { id: 'amount', label: 'Amount', type: 'number' },
+    { id: 'category', label: 'Category', type: 'string' },
+    { id: 'date', label: 'Date', type: 'date' },
+    { id: 'description', label: 'Description', type: 'string' },
+    { id: 'risk_flag', label: 'Risk Flag', type: 'string' },
+  ];
 
-  FIELDS = FIELDS;
-  OPERATORS = Object.values(OPERATORS);
-  RISK_FLAGS: RiskFlag[] = ['LOW', 'MEDIUM', 'HIGH'];
-  createEmptyGroup = createEmptyGroup;
+  operatorsByType: Record<FieldType, { label: string; value: Operator }[]> = {
+    string: [
+      { label: 'Equals', value: 'equals' },
+      { label: 'Not Equals', value: 'not_equals' },
+      { label: 'Contains', value: 'contains' },
+      { label: 'Starts With', value: 'starts_with' },
+      { label: 'Ends With', value: 'ends_with' },
+      { label: 'Is Empty', value: 'is_null' },
+      { label: 'Is Not Empty', value: 'is_not_null' },
+    ],
+    number: [
+      { label: '=', value: 'equals' },
+      { label: '!=', value: 'not_equals' },
+      { label: '>', value: 'gt' },
+      { label: '<', value: 'lt' },
+      { label: '>=', value: 'gte' },
+      { label: '<=', value: 'lte' },
+    ],
+    date: [
+      { label: 'On', value: 'on' },
+      { label: 'Before', value: 'before' },
+      { label: 'After', value: 'after' },
+      { label: 'Is Empty', value: 'is_null' },
+    ],
+    uuid: [
+      { label: 'Equals', value: 'equals' },
+      { label: 'Not Equals', value: 'not_equals' },
+    ],
+  };
 
-  resetQuery() {
-    this.query.set(createEmptyGroup());
+  rule: RuleGroup = {
+    id: 'root',
+    conjunction: 'AND',
+    conditions: [{ id: '1', fieldId: 'category', operator: 'equals', value: 'FINANCE' }],
+  };
+
+  getOperators(fieldId: string) {
+    const field = this.fields.find((f) => f.id === fieldId);
+    return field ? this.operatorsByType[field.type] : [];
   }
 
-  onNoClick() {
-    // For now, let's just reset the form or something similar
-    this.ruleName.set('New Business Rule');
-    this.riskFlag.set('LOW');
-    this.severity.set(5);
-    this.resetQuery();
+  getFieldType(fieldId: string): string {
+    const field = this.fields.find((f) => f.id === fieldId);
+    if (!field) return 'text';
+    if (field.type === 'number') return 'number';
+    if (field.type === 'date') return 'date';
+    return 'text';
   }
 
-  addRule(groupId: string) {
-    this.updateQuery(groupId, (group) => ({
-      ...group,
-      children: [...group.children, createEmptyRule()]
-    }));
-  }
-
-  addGroup(groupId: string) {
-    this.updateQuery(groupId, (group) => ({
-      ...group,
-      children: [...group.children, createEmptyGroup()]
-    }));
-  }
-
-  removeNode(id: string) {
-    const filterGroup = (group: QueryGroup): QueryGroup => ({
-      ...group,
-      children: group.children
-        .filter(child => child.id !== id)
-        .map(child => child.type === 'group' ? filterGroup(child) : child)
+  addCondition(group: RuleGroup) {
+    group.conditions.push({
+      id: Math.random().toString(36).substr(2, 9),
+      fieldId: this.fields[0].id,
+      operator: 'equals',
+      value: '',
     });
-    this.query.set(filterGroup(this.query()));
   }
 
-  updateRule(id: string, updates: Partial<QueryRule>) {
-    const updateInGroup = (group: QueryGroup): QueryGroup => ({
-      ...group,
-      children: group.children.map(child => {
-        if (child.id === id) return { ...child, ...updates } as QueryRule;
-        if (child.type === 'group') return updateInGroup(child);
-        return child;
-      })
+  addGroup(group: RuleGroup) {
+    group.conditions.push({
+      id: Math.random().toString(36).substr(2, 9),
+      conjunction: 'AND',
+      conditions: [
+        {
+          id: Math.random().toString(36).substr(2, 9),
+          fieldId: this.fields[0].id,
+          operator: 'equals',
+          value: '',
+        },
+      ],
     });
-    this.query.set(updateInGroup(this.query()));
   }
 
-  updateGroupOperator(id: string, logicalOperator: 'AND' | 'OR') {
-    const updateInGroup = (group: QueryGroup): QueryGroup => {
-      if (group.id === id) return { ...group, logicalOperator };
-      return {
-        ...group,
-        children: group.children.map(child => 
-          child.type === 'group' ? updateInGroup(child) : child
-        )
-      };
+  removeCondition(parentGroup: RuleGroup, id: string) {
+    parentGroup.conditions = parentGroup.conditions.filter((c) => c.id !== id);
+  }
+
+  toggleConjunction(group: RuleGroup) {
+    group.conjunction = group.conjunction === 'AND' ? 'OR' : 'AND';
+  }
+
+  isGroup(item: Condition | RuleGroup): item is RuleGroup {
+    return 'conjunction' in item;
+  }
+
+  get ruleString(): string {
+    const stringify = (g: RuleGroup): string => {
+      const parts = g.conditions.map((c) => {
+        if (this.isGroup(c)) return `(${stringify(c)})`;
+        const field = this.fields.find((f) => f.id === c.fieldId)?.label;
+        const op = c.operator.replace(/_/g, ' ').toUpperCase();
+        return `${field} ${op} "${c.value}"`;
+      });
+      return parts.join(` ${g.conjunction} `);
     };
-    this.query.set(updateInGroup(this.query()));
+    return stringify(this.rule);
   }
 
-  private updateQuery(groupId: string, updater: (group: QueryGroup) => QueryGroup) {
-    const updateRecursive = (group: QueryGroup): QueryGroup => {
-      if (group.id === groupId) return updater(group);
-      return {
-        ...group,
-        children: group.children.map(child => 
-          child.type === 'group' ? updateRecursive(child) : child
-        )
-      };
-    };
-    this.query.set(updateRecursive(this.query()));
-  }
-
-  handleSave() {
-    const newRule: BusinessRule = {
-      id: crypto.randomUUID(),
-      ruleName: this.ruleName(),
-      ruleCondition: this.generatedSQL(),
-      riskFlag: this.riskFlag(),
-      severity: this.severity()
-    };
-    this.savedRules.update(rules => [newRule, ...rules]);
-  }
-
-  getOpConfig(operator: string) {
-    return Object.values(OPERATORS).find(o => o.value === operator);
+  saveRule() {
+    console.log('Saving rule:', this.rule);
+    // alert('Rule saved successfully!');
   }
 }

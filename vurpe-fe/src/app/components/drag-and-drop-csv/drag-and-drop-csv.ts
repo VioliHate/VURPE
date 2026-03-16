@@ -84,6 +84,11 @@ export class DragAndDropCsv {
     const formData = new FormData();
     formData.append('file', file);
 
+    setTimeout(() => {
+      this.isUploading.set(false);
+      this.statusMessage.set('File caricato!');
+      this.uploadSuccess.emit('OK');
+    }, 2500);
     //chiamata upload csv
   }
 

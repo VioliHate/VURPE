@@ -2,7 +2,7 @@
   class="dropzone border border-2 rounded-3 p-5 text-center position-relative"
   [class.border-primary]="isDragOver()"
   [class.bg-light]="isDragOver()"
-  [class.border-danger]="!!statusMessage() && !isUploading()"
+  [class.border-danger]="!statusMessage() && !isUploading()"
 >
   @if (!currentFile() && !isUploading()) {
     <section>
@@ -23,7 +23,7 @@
         class="alert mt-3"
         [ngClass]="{
           'alert-info': isUploading(),
-          'alert-success': statusMessage().includes('success'),
+          'alert-success': statusMessage().includes('caricato'),
           'alert-danger': statusMessage().includes('Errore'),
         }"
       >

@@ -37,6 +37,7 @@ import { RiskFlag, Field, FieldType, Operator, RuleGroup, Condition } from '../.
 export class AddRuleDialog {
   [x: string]: any;
   private dialogRef = inject(MatDialogRef<AddRuleDialog>);
+
   ruleName = signal('New Business Rule');
   riskFlag = signal<RiskFlag>(RiskFlag.LOW);
   severity = signal(5);
@@ -153,6 +154,8 @@ export class AddRuleDialog {
 
   saveRule() {
     console.log('Saving rule:', this.rule);
-    // alert('Rule saved successfully!');
+    console.log('nome', this.ruleName());
+    console.log('rischio', this.riskFlag());
+    console.log('severity', this.severity());
   }
 }

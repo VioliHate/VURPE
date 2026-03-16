@@ -1,4 +1,4 @@
-import { Component, computed, inject, signal } from '@angular/core';
+import { Component, inject, signal } from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
 import {
   MatDialogTitle,
@@ -13,6 +13,7 @@ import { MatButton } from '@angular/material/button';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { MatIconModule } from '@angular/material/icon';
+import { RiskFlag, Field, FieldType, Operator, RuleGroup, Condition } from '../../entities/types';
 
 @Component({
   selector: 'app-add-rule-dialog',
@@ -34,7 +35,13 @@ import { MatIconModule } from '@angular/material/icon';
   styleUrl: './add-rule-dialog.scss',
 })
 export class AddRuleDialog {
+  [x: string]: any;
   private dialogRef = inject(MatDialogRef<AddRuleDialog>);
+  ruleName = signal('New Business Rule');
+  riskFlag = signal<RiskFlag>(RiskFlag.LOW);
+  severity = signal(5);
+
+  readonly flags = Object.values(RiskFlag) as RiskFlag[];
 
   fields: Field[] = [
     { id: 'file_id', label: 'File ID', type: 'uuid' },

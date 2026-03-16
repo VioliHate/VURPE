@@ -1,0 +1,202 @@
+<div class="app-container">
+    <header class="header border-highlight">
+        <div class="header-logo ">
+            <div class="logo-box border-highlight">
+                <mat-icon class="!text-[20px]">shield</mat-icon>
+            </div>
+            <div>
+                <h1 class="logo-text">Rule_Engine </h1>
+            </div>
+        </div>
+
+        <div class="header-actions">
+            <button (click)="handleSave()" class="btn-save border-highlight">
+                <mat-icon class="!text-[14px] !w-[14px] !h-[14px]">save</mat-icon>
+                Save Rule
+            </button>
+            <button (click)="onNoClick()" mat-button class="border-highlight">
+                <mat-icon class="!text-[18px]">close</mat-icon>
+            </button>
+        </div>
+    </header>
+
+    <main class="main-layout">
+        <aside class="sidebar border-highlight">
+            <section class="sidebar-section separator">
+                <div class="border-highlight">
+                    <label class="section-label">01. Rule Identity</label>
+                    <div class="field-group">
+                        <label class="field-label">Name</label>
+                        <input type="text" [ngModel]="ruleName()" (ngModelChange)="ruleName.set($event)"
+                            class="input-text border-highlight" placeholder="RULE_ID_001" />
+                    </div>
+                </div>
+
+                <div class="border-highlight">
+                    <label class="section-label">02. Risk Assessment</label>
+                    <div class="field-group ">
+                        <label class="field-label">Flag</label>
+                        <div class="risk-grid">
+                            @for (flag of ['LOW', 'MEDIUM', 'HIGH']; track flag) {
+                            <button (click)="riskFlag.set(flag)" [class.active]="riskFlag() === flag"
+                                class="risk-btn border-highlight">
+                                {{flag}}
+                            </button>
+                            }
+                        </div>
+                    </div>
+                    <div class="field-group border-highlight">
+                        <div class="severity-header ">
+                            <label class="field-label">Severity</label>
+                            <span class="severity-value">{{severity()}}/10</span>
+                        </div>
+                        <input type="range" min="1" max="10" [ngModel]="severity()"
+                            (ngModelChange)="severity.set($event)" class="slider border-highlight"
+                            style="--thumb-color: #4f46e5; --track-color: #4f46e530;" />
+                    </div>
+                </div>
+
+                <div class="sidebar-section separator border-highlight">
+                    <label class="section-label">03. History</label>
+                    <div class="history-list border-highlight">
+                        @if (savedRules().length === 0) {
+                        <div class="history-empty border-highlight">No records found</div>
+                        } @else {
+                        @for (rule of savedRules(); track rule.id) {
+                        <div class="history-item border-highlight">
+                            <div class="history-item-header border-highlight">
+                                <h4 class="history-name">{{rule.ruleName}}</h4>
+                                <span class="history-flag">{{rule.riskFlag}}</span>
+                            </div>
+                            <p class="history-condition border-highlight">{{rule.ruleCondition}}</p>
+                        </div>
+                        }
+                        }
+                    </div>
+                </div>
+            </section>
+        </aside>
+
+        <div class="content-area ">
+            <div class="sql-preview-bar border-highlight">
+                <div class="sql-label ">
+                    <mat-icon class="!text-[12px] !w-[12px] !h-[12px]">code</mat-icon>
+                    <span>SQL_OUT</span>
+                </div>
+                <div class="sql-text border-highlight">
+                    @if (generatedSQL()) {
+                    {{generatedSQL()}}
+                    } @else {
+                    <span class="sql-placeholder">Waiting for input parameters...</span>
+                    }
+                </div>
+            </div>
+
+            <div class="builder-viewport border-highlight">
+                <div class="builder-container border-highlight">
+                    <div class="builder-header ">
+                        <button (click)="resetQuery()" class="btn-icon " title="Reset System">
+                            <mat-icon class="!text-[18px]">refresh</mat-icon>
+                        </button>
+                    </div>
+
+                    <div class="builder-content border-highlight">
+                        <ng-container *ngTemplateOutlet="nodeTemplate; context: { $implicit: query(), isRoot: true }">
+                        </ng-container>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+</div>
+
+<ng-template #nodeTemplate let-node let-isRoot="isRoot">
+    @if (node.type === 'rule') {
+    <div class="rule-node ">
+        <div class="node-icon-box border-highlight">
+            <mat-icon class="!text-[14px]">data_object</mat-icon>
+        </div>
+
+        <select [ngModel]="node.field" (ngModelChange)="updateRule(node.id, { field: $event })"
+            class="node-select border-highlight">
+            @for (f of FIELDS; track f.id) {
+            <option [value]="f.id">{{f.label}}</option>
+            }
+        </select>
+
+        <select [ngModel]="node.operator" (ngModelChange)="updateRule(node.id, { operator: $event })"
+            class="node-select operator-select border-highlight">
+            @for (o of OPERATORS; track o.value) {
+            <option [value]="o.value">{{o.label}}</option>
+            }
+        </select>
+
+        <div class="node-inputs border-highlight">
+            @if (getOpConfig(node.operator)?.needsValue) {
+            <input type="text" [ngModel]="node.value" (ngModelChange)="updateRule(node.id, { value: $event })"
+                placeholder="VAL_A" class="node-input border-highlight" />
+            }
+
+            @if (getOpConfig(node.operator)?.needsSecondValue) {
+            <div class="node-connector border-highlight">AND</div>
+            <input type="text" [ngModel]="node.value2" (ngModelChange)="updateRule(node.id, { value2: $event })"
+                placeholder="VAL_B" class="node-input border-highlight" />
+            }
+        </div>
+
+        <button (click)="removeNode(node.id)" class="btn-remove border-highlight">
+            <mat-icon class="!text-[14px]">close</mat-icon>
+        </button>
+    </div>
+    } @else {
+    <div class="group-node " [class.group-indent]="!isRoot">
+        @if (!isRoot) {
+        <div class="group-connector-line"></div>
+        }
+
+        <div class="group-controls ">
+            <div class="operator-toggle ">
+                <button (click)="updateGroupOperator(node.id, 'AND')" [class.active]="node.logicalOperator === 'AND'"
+                    class="toggle-btn border-highlight">
+                    AND
+                </button>
+                <button (click)="updateGroupOperator(node.id, 'OR')" [class.active]="node.logicalOperator === 'OR'"
+                    class="toggle-btn border-highlight">
+                    OR
+                </button>
+            </div>
+
+            <div class="group-children ">
+                @if (node.children.length === 0) {
+                <div class="empty-group ">
+                    <p class="empty-label">Null_Set</p>
+                </div>
+                } @else {
+                @for (child of node.children; track child.id) {
+                <ng-container *ngTemplateOutlet="nodeTemplate; context: { $implicit: child, isRoot: false }">
+                </ng-container>
+                }
+                }
+            </div>
+            <div class="group-actions flex items-center ">
+                <button (click)="addRule(node.id)"
+                    class="action-btn px-3 py-1.5 text-sm rounded  border  border-highlight bg-slate-800">
+                    <mat-icon>add</mat-icon> Add Rule
+                </button>
+
+                <button (click)="addGroup(node.id)"
+                    class="action-btn px-3 py-1.5 text-sm rounded  border  border-highlight bg-slate-800">
+                    <mat-icon>account_tree</mat-icon> Add Group
+                </button>
+
+                @if (!isRoot) {
+                <button (click)="removeNode(node.id)"
+                    class="btn-delete-group px-2.5 py-1.5 rounded  border  border-highlight bg-slate-800">
+                    <mat-icon>delete</mat-icon>
+                </button>
+                }
+            </div>
+        </div>
+    </div>
+    }
+</ng-template>

@@ -11,9 +11,11 @@ import { DynamicFilters } from '../../components/dynamic-filters/dynamic-filters
 import { MatButton } from '@angular/material/button';
 import { ActivatedRoute } from '@angular/router';
 import { FileService } from '../../services/file-service';
+import { RulesSerivce } from '../../services/rules-serivce';
 
 const SERVICE_REGISTRY: { [key: string]: any } = {
   files: FileService,
+  rules:RulesSerivce
 };
 
 @Component({

@@ -35,6 +35,6 @@ export const routes: Routes = [
     path: 'rules',
     component: FatherManager,
     title: 'Vurpe - rules',
-    data: { api: 'http://localhost:8080/call/rules', serviceKey: 'files' },
+    data: { api: 'http://localhost:8080/call/rules', serviceKey: 'rules' },
   },
 ];

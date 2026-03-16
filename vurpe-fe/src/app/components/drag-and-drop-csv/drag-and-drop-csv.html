@@ -5,10 +5,11 @@
   [class.border-danger]="!!statusMessage() && !isUploading()"
 >
   @if (!currentFile() && !isUploading()) {
-    <i class="bi bi-cloud-arrow-up fs-1 d-block mb-3 text-primary"></i>
-    <h5>Trascina qui il file CSV</h5>
-    <p class="text-muted mb-1">oppure</p>
-    <div class="small text-muted mt-3">Max {{ maxSizeMB }} MB • Solo .csv</div>
+    <section>
+      <i class="bi bi-cloud-arrow-up fs-1 d-block mb-3 text-primary"></i>
+      <h5>Drag&Drop file CSV</h5>
+      <div class="small text-muted mt-3">Solo .csv</div>
+    </section>
   } @else {
     @if (currentFile(); as file) {
       <div class="mb-3">
@@ -23,10 +24,7 @@
         [ngClass]="{
           'alert-info': isUploading(),
           'alert-success': statusMessage().includes('success'),
-          'alert-danger':
-            statusMessage().includes('Errore') ||
-            statusMessage().includes('supera') ||
-            statusMessage().includes('accettati'),
+          'alert-danger': statusMessage().includes('Errore'),
         }"
       >
         {{ statusMessage() }}
@@ -34,7 +32,7 @@
     }
     @if (!isUploading()) {
       <button mat-button class="btn btn-sm btn-outline-secondary mt-2" (click)="reset()">
-        Rimuovi e riprova
+        Rimuovi
       </button>
     }
     @if (isUploading()) {

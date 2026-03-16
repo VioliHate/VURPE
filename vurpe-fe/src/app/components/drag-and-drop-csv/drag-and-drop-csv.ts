@@ -6,6 +6,7 @@ import {
   HostBinding,
   HostListener,
   Input,
+  output,
   Output,
   signal,
 } from '@angular/core';
@@ -18,20 +19,16 @@ import { MatButton } from '@angular/material/button';
   styleUrl: './drag-and-drop-csv.scss',
 })
 export class DragAndDropCsv {
-  @Input() maxSizeMB = 10;
-  @Input() uploadUrl = '/api/upload-csv';
-  @Input() httpMethod: 'POST' | 'PUT' = 'POST';
-
-  @Output() fileProcessed = new EventEmitter<File>();
-  @Output() uploadSuccess = new EventEmitter<any>();
-  @Output() uploadError = new EventEmitter<Error | any>();
+  fileProcessed = output<File>();
+  uploadSuccess = output<any>();
+  uploadError = output<Error | any>();
 
   currentFile = signal<File | null>(null);
   isDragOver = signal(false);
   isUploading = signal(false);
   statusMessage = signal<string>('');
 
-  constructor(private http: HttpClient) {}
+  constructor() {}
 
   @HostBinding('class.drag-over') get dragOverClass() {
     return this.isDragOver();
@@ -64,21 +61,14 @@ export class DragAndDropCsv {
   }
 
   private processFile(file: File) {
-    // Sostituisci file precedente (uno alla volta)
     this.currentFile.set(file);
     this.statusMessage.set('');
 
     const isCsv = file.name.toLowerCase().endsWith('.csv') || file.type === 'text/csv';
-    const isTooBig = file.size > this.maxSizeMB * 1024 * 1024;
 
     if (!isCsv) {
-      this.statusMessage.set('Solo file .csv accettati');
-      this.currentFile.set(null);
-      return;
-    }
-
-    if (isTooBig) {
-      this.statusMessage.set(`Il file supera i ${this.maxSizeMB} MB`);
+      console.log('non è un csv');
+      this.statusMessage.set('Errore - Solo file .csv accettati');
       this.currentFile.set(null);
       return;
     }
@@ -94,19 +84,7 @@ export class DragAndDropCsv {
     const formData = new FormData();
     formData.append('file', file);
 
-    this.http[this.httpMethod.toLowerCase() as 'post' | 'put'](this.uploadUrl, formData).subscribe({
-      next: (response) => {
-        this.isUploading.set(false);
-        this.statusMessage.set('Caricamento completato con successo!');
-        this.uploadSuccess.emit(response);
-        setTimeout(() => this.reset(), 2500);
-      },
-      error: (err) => {
-        this.isUploading.set(false);
-        this.statusMessage.set('Errore durante il caricamento');
-        this.uploadError.emit(err);
-      },
-    });
+    //chiamata upload csv
   }
 
   reset() {

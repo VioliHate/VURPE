@@ -7,14 +7,13 @@
         <span>Rule Engine</span>
       </a>
       <div class="d-flex gap-2">
-        <button class="btn btn-outline-light btn-sm" type="button">Cancel</button>
+        <button class="btn btn-outline-light btn-sm" type="button" (click)="close()">Chiudi</button>
         <button
           class="btn btn-primary btn-sm d-flex align-items-center gap-2"
           type="button"
           (click)="saveRule()"
         >
-          <i class="bi bi-save"></i>
-          Save Rule
+          Salva
         </button>
       </div>
     </div>
@@ -109,13 +108,8 @@
           >
             <h6 class="card-title mb-0 text-secondary text-uppercase fw-bold small tracking-widest">
               <i class="bi bi-code-slash me-2"></i>
-              Generated Logic
+              Condizione formato testo
             </h6>
-            <button
-              class="btn btn-link btn-sm text-secondary text-decoration-none p-0 small fw-bold"
-            >
-              COPY SQL
-            </button>
           </div>
           <div class="card-body p-4">
             <div class="ps-4 mt-2 font-monospace small text-info">

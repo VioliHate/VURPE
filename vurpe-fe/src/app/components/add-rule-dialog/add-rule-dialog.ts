@@ -158,4 +158,8 @@ export class AddRuleDialog {
     console.log('rischio', this.riskFlag());
     console.log('severity', this.severity());
   }
+
+  close() {
+    this.dialogRef.close();
+  }
 }

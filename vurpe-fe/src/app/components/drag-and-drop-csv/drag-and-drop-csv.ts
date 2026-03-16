@@ -67,9 +67,8 @@ export class DragAndDropCsv {
     const isCsv = file.name.toLowerCase().endsWith('.csv') || file.type === 'text/csv';
 
     if (!isCsv) {
-      console.log('non è un csv');
       this.statusMessage.set('Errore - Solo file .csv accettati');
-      this.currentFile.set(null);
+      this.currentFile.set(file);
       return;
     }
 

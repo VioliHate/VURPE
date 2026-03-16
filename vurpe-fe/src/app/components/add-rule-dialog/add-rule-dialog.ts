@@ -145,7 +145,7 @@ export class AddRuleDialog {
         if (this.isGroup(c)) return `(${stringify(c)})`;
         const field = this.fields.find((f) => f.id === c.fieldId)?.label;
         const op = c.operator.replace(/_/g, ' ').toUpperCase();
-        return `${field} ${op} "${c.value}"`;
+        return `${field} ${op} '${c.value}'`;
       });
       return parts.join(` ${g.conjunction} `);
     };
@@ -153,7 +153,7 @@ export class AddRuleDialog {
   }
 
   saveRule() {
-    console.log('Saving rule:', this.rule);
+    console.log('Saving rule:', this.ruleString);
     console.log('nome', this.ruleName());
     console.log('rischio', this.riskFlag());
     console.log('severity', this.severity());

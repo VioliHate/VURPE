@@ -86,7 +86,7 @@ export class DragAndDropCsv {
 
     setTimeout(() => {
       this.isUploading.set(false);
-      this.statusMessage.set('File caricato!');
+      this.statusMessage.set('File caricato');
       this.uploadSuccess.emit('OK');
     }, 2500);
     //chiamata upload csv

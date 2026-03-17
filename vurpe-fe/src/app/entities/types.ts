@@ -1,4 +1,4 @@
-export type FieldType = 'string' | 'number' | 'date' | 'uuid';
+export type FieldType = 'string' | 'number' | 'date';
 
 export interface Field {
   id: string;

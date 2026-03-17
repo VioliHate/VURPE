@@ -14,6 +14,7 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { MatIconModule } from '@angular/material/icon';
 import { RiskFlag, Field, FieldType, Operator, RuleGroup, Condition } from '../../entities/types';
+import { BusinessRule } from '../../entities/BusinessRule';
 
 @Component({
   selector: 'app-add-rule-dialog',
@@ -74,10 +75,6 @@ export class AddRuleDialog {
       { label: 'Before', value: 'before' },
       { label: 'After', value: 'after' },
       { label: 'Is Empty', value: 'is_null' },
-    ],
-    uuid: [
-      { label: 'Equals', value: 'equals' },
-      { label: 'Not Equals', value: 'not_equals' },
     ],
   };
 
@@ -140,7 +137,7 @@ export class AddRuleDialog {
     const stringify = (g: RuleGroup): string => {
       const parts = g.conditions.map((c) => {
         if (this.isGroup(c)) return `(${stringify(c)})`;
-        const field = this.fields.find((f) => f.id === c.fieldId)?.label;
+        const field = this.fields.find((f) => f.id === c.fieldId)?.id;
         const op = c.operator.replace(/_/g, ' ').toUpperCase();
         return `${field} ${op} '${c.value}'`;
       });
@@ -150,10 +147,13 @@ export class AddRuleDialog {
   }
 
   saveRule() {
-    console.log('Saving rule:', this.ruleString);
-    console.log('nome', this.ruleName());
-    console.log('rischio', this.riskFlag());
-    console.log('severity', this.severity());
+    let buildedRule = new BusinessRule(
+      this.ruleName(),
+      this.ruleString,
+      this.riskFlag(),
+      this.severity(),
+    );
+    console.log('builded rule:', buildedRule);
   }
 
   close() {

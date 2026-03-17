@@ -37,9 +37,9 @@ export class RulesSerivce {
 
   sendRule(data: BusinessRule) {
     try {
-      console.log(data);
       this.http.post(`${this.apiUrl}/rules/add`, data).subscribe((resp) => {
         if (resp) {
+          //dialog success da aprire per l'utente
           console.log(resp);
         }
       });

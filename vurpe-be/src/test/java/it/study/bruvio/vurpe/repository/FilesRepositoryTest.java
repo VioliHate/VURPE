@@ -65,7 +65,7 @@ public class FilesRepositoryTest {
             assertThat(violations)
                     .extracting(ConstraintViolation::getPropertyPath)
                     .extracting(Path::toString)
-                    .containsExactly("created_at");
+                    .containsExactly("createdAt");
 
         } catch (Exception e) {
             fail(e.getMessage(), e);

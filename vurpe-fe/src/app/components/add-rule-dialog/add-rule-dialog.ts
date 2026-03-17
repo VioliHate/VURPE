@@ -45,13 +45,11 @@ export class AddRuleDialog {
   readonly flags = Object.values(RiskFlag) as RiskFlag[];
 
   fields: Field[] = [
-    { id: 'file_id', label: 'File ID', type: 'uuid' },
-    { id: 'original_id', label: 'Original ID', type: 'string' },
-    { id: 'amount', label: 'Amount', type: 'number' },
-    { id: 'category', label: 'Category', type: 'string' },
-    { id: 'date', label: 'Date', type: 'date' },
-    { id: 'description', label: 'Description', type: 'string' },
-    { id: 'risk_flag', label: 'Risk Flag', type: 'string' },
+    { id: 'amount', label: 'Importo', type: 'number' },
+    { id: 'category', label: 'Categoria', type: 'string' },
+    { id: 'date', label: 'Data', type: 'date' },
+    { id: 'description', label: 'Descrizione', type: 'string' },
+    { id: 'riskFlag', label: 'Rischio', type: 'string' },
   ];
 
   operatorsByType: Record<FieldType, { label: string; value: Operator }[]> = {

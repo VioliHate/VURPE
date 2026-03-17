@@ -26,6 +26,9 @@ public class BusinessRuleService {
         if (req.ruleName() == null || req.ruleName().isBlank()) {
             throw new IllegalArgumentException("Rule name is required");
         }
+        if (req.ruleCondition() == null || req.ruleCondition().isBlank()) {
+            throw new IllegalArgumentException("Rule condition is required");
+        }
 
         BusinessRule rule = new BusinessRule(
                 null,

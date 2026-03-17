@@ -42,7 +42,7 @@ public class BusinessRuleController {
             PayloadResponse<String> response = PayloadResponse.success("", "Business rule added successfully");
             return ResponseEntity.ok(response);
         } catch (Exception e) {
-            PayloadResponse<String> response = PayloadResponse.success("",
+            PayloadResponse<String> response = PayloadResponse.error("",
                     "Error adding business rule: " + e.getMessage());
             return ResponseEntity.badRequest().body(response);
         }

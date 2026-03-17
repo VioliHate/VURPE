@@ -37,15 +37,12 @@ export class RulesSerivce {
 
   sendRule(data: BusinessRule) {
     try {
-      this.http
-        .post(`${this.apiUrl}/rules/add`, {
-          newBusinessRuleResponse: data,
-        })
-        .subscribe((resp) => {
-          if (resp) {
-            console.log(resp);
-          }
-        });
+      console.log(data);
+      this.http.post(`${this.apiUrl}/rules/add`, data).subscribe((resp) => {
+        if (resp) {
+          console.log(resp);
+        }
+      });
     } catch (err: any) {
       console.error('Error :', err);
     }

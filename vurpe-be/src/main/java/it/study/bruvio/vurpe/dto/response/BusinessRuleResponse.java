@@ -1,5 +1,7 @@
 package it.study.bruvio.vurpe.dto.response;
 
+import it.study.bruvio.vurpe.entity.BusinessRule;
+
 import java.util.UUID;
 
 public record BusinessRuleResponse(
@@ -8,7 +10,7 @@ public record BusinessRuleResponse(
         String ruleCondition,
         String riskFlag,
         Integer severity) {
-    public static BusinessRuleResponse fromEntity(it.study.bruvio.vurpe.entity.BusinessRule entity) {
+    public static BusinessRuleResponse fromEntity(BusinessRule entity) {
         return new BusinessRuleResponse(
                 entity.getId(),
                 entity.getRuleName(),

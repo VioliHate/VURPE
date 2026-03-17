@@ -1,6 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { inject, Injectable } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
+import { environment } from '../../environments/environment';
 
 @Injectable({
   providedIn: 'root',
@@ -9,6 +10,7 @@ export class FileService {
   private router = inject(Router);
   private route = inject(ActivatedRoute);
   private http = inject(HttpClient);
+  private readonly apiUrl = `${environment.url}/call`;
 
   public getDetails(id: string) {
     this.router.navigate(['/dataRecords'], { queryParams: { file_id: id } });
@@ -39,7 +41,7 @@ export class FileService {
       formData.append('file', file);
 
       //console.log('File selezionato:', file.name, file.size, file.type);
-      return this.http.post('http://localhost:8080/call/uploadCSV', formData);
+      return this.http.post(`${this.apiUrl}/uploadCSV`, formData);
     } catch (err: any) {
       if (err.name === 'AbortError') {
         return;

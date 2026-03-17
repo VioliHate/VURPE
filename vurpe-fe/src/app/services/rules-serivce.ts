@@ -1,34 +1,20 @@
-import {
-  ChangeDetectionStrategy,
-  Component,
-  inject,
-  Injectable,
-  model,
-  signal,
-} from '@angular/core';
-import { FormsModule } from '@angular/forms';
-import { MatButtonModule } from '@angular/material/button';
-import {
-  MAT_DIALOG_DATA,
-  MatDialog,
-  MatDialogActions,
-  MatDialogClose,
-  MatDialogContent,
-  MatDialogRef,
-  MatDialogTitle,
-} from '@angular/material/dialog';
-import { MatFormFieldModule } from '@angular/material/form-field';
-import { MatInputModule } from '@angular/material/input';
+import { inject, Injectable } from '@angular/core';
+import { MatDialog } from '@angular/material/dialog';
 import { AddRuleDialog } from '../components/add-rule-dialog/add-rule-dialog';
+import { HttpClient } from '@angular/common/http';
+import { BusinessRule } from '../entities/BusinessRule';
+import { environment } from '../../environments/environment';
 
 @Injectable({
   providedIn: 'root',
 })
 export class RulesSerivce {
   readonly dialog = inject(MatDialog);
+  private http = inject(HttpClient);
+  private readonly apiUrl = `${environment.url}/call`;
 
   public addRow() {
-    console.log('apro dialogo');
+    //console.log('apro dialogo');
     this.openDialog();
   }
 
@@ -40,11 +26,28 @@ export class RulesSerivce {
       maxHeight: '100vh',
     });
 
-    dialogRef.afterClosed().subscribe((result) => {
-      console.log('The dialog was closed');
-      if (result !== undefined) {
-        console.log('Dialog result:', result);
+    dialogRef.afterClosed().subscribe((data: BusinessRule) => {
+      //console.log('The dialog was closed');
+      if (data !== undefined) {
+        //console.log('Dialog result:', data);
+        this.sendRule(data);
       }
     });
+  }
+
+  sendRule(data: BusinessRule) {
+    try {
+      this.http
+        .post(`${this.apiUrl}/rules/add`, {
+          newBusinessRuleResponse: data,
+        })
+        .subscribe((resp) => {
+          if (resp) {
+            console.log(resp);
+          }
+        });
+    } catch (err: any) {
+      console.error('Error :', err);
+    }
   }
 }

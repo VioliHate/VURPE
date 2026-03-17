@@ -154,7 +154,7 @@ export class AddRuleDialog {
       this.severity(),
     );
     //console.log('builded rule:', buildedRule);
-    this.dialogRef.close({ data: buildedRule });
+    this.dialogRef.close(buildedRule);
   }
 
   close() {

@@ -49,7 +49,6 @@ export class AddRuleDialog {
     { id: 'category', label: 'Categoria', type: 'string' },
     { id: 'date', label: 'Data', type: 'date' },
     { id: 'description', label: 'Descrizione', type: 'string' },
-    { id: 'riskFlag', label: 'Rischio', type: 'string' },
   ];
 
   operatorsByType: Record<FieldType, { label: string; value: Operator }[]> = {
@@ -103,7 +102,7 @@ export class AddRuleDialog {
 
   addCondition(group: RuleGroup) {
     group.conditions.push({
-      id: Math.random().toString(36).substr(2, 9),
+      id: Math.random().toString(36).substring(2, 9),
       fieldId: this.fields[0].id,
       operator: 'equals',
       value: '',
@@ -112,11 +111,11 @@ export class AddRuleDialog {
 
   addGroup(group: RuleGroup) {
     group.conditions.push({
-      id: Math.random().toString(36).substr(2, 9),
+      id: Math.random().toString(36).substring(2, 9),
       conjunction: 'AND',
       conditions: [
         {
-          id: Math.random().toString(36).substr(2, 9),
+          id: Math.random().toString(36).substring(2, 9),
           fieldId: this.fields[0].id,
           operator: 'equals',
           value: '',

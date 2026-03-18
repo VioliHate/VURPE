@@ -1,6 +1,7 @@
 import { Component, inject } from '@angular/core';
 import { DragAndDropCsv } from '../../components/drag-and-drop-csv/drag-and-drop-csv';
 import { FileService } from '../../services/file-service';
+import { DialogService } from '../../services/dialog-service';
 
 @Component({
   selector: 'app-dashboard',
@@ -9,6 +10,7 @@ import { FileService } from '../../services/file-service';
   styleUrl: './dashboard.scss',
 })
 export class Dashboard {
+  private dialog = inject(DialogService);
   fileService = inject(FileService);
 
   constructor() {}
@@ -16,9 +18,9 @@ export class Dashboard {
   onFileProcessed(file: File) {
     this.fileService.callUploadCSV(file)?.subscribe((res: any) => {
       if (res.status == 'OK') {
-        //success dialog di caricamento riuscito
+        this.dialog.success('File caricato correttamente');
       } else {
-        //error dialog di caricamento fallito
+        this.dialog.error('Errore nel caricamento del file');
       }
     });
   }

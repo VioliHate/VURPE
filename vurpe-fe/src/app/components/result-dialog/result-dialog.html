@@ -1,0 +1,28 @@
+<div class="border-2">
+  <div class="modal-header border-0 pb-2 pt-4 px-4 d-flex align-items-center gap-3">
+    <div
+      class="rounded-circle p-3 fs-4"
+      [ngClass]="{
+        'bg-success-subtle text-success': data.type === 'success',
+        'bg-danger-subtle text-danger': data.type === 'error',
+      }"
+    >
+      @if (data.type === 'success') {
+        <i class="bi bi-check-circle-fill"></i>
+      } @else {
+        <i class="bi bi-exclamation-triangle-fill"></i>
+      }
+    </div>
+    <h5 class="modal-title fw-semibold mb-0">
+      {{ data.title || (data.type === 'success' ? 'Completato' : 'Errore') }}
+    </h5>
+  </div>
+
+  <div class="modal-body px-4 py-4 text-body-secondary">
+    {{ data.message }}
+  </div>
+
+  <div class="modal-footer border-0 px-4 pb-4 pt-2 justify-content-end">
+    <button mat-button class="btn btn-outline-secondary px-4 py-2" (click)="close()">Chiudi</button>
+  </div>
+</div>

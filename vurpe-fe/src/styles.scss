@@ -1,6 +1,7 @@
 @use '@angular/material' as mat;
 @import "bootstrap/scss/functions";
 @import "bootstrap/scss/variables";
+@import 'fastbootstrap/dist/css/fastbootstrap.min.css';
 
 
 html {
@@ -55,3 +56,28 @@ $custom-theme-colors: (
 $theme-colors: map-merge($theme-colors, $custom-theme-colors);
 
 @import "bootstrap/scss/bootstrap";
+
+
+
+
+.vurpe-dialog-panel {
+  .mat-mdc-dialog-surface {
+    padding: 0 !important;
+    border-radius: var(--bs-border-radius-lg) !important;
+    overflow: hidden;
+  }
+
+  .cdk-overlay-pane {
+    margin: 1.75rem auto !important;  
+  }
+}
+
+.vurpe-dialog-backdrop {
+  background-color: rgba($vurpe-background, 0.35) !important;
+  backdrop-filter: blur(10px) saturate(1.15) !important;
+  opacity: 1 !important;
+}
+
+.cdk-overlay-backdrop {
+  transition: opacity 0.3s ease, backdrop-filter 0.4s ease !important;
+}

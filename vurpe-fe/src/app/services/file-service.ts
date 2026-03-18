@@ -37,11 +37,7 @@ export class FileService {
 
       const file = await fileHandle.getFile();
 
-      const formData = new FormData();
-      formData.append('file', file);
-
-      //console.log('File selezionato:', file.name, file.size, file.type);
-      return this.http.post(`${this.apiUrl}/uploadCSV`, formData);
+      this.callUploadCSV(file);
     } catch (err: any) {
       if (err.name === 'AbortError') {
         return;
@@ -49,5 +45,11 @@ export class FileService {
       console.error('Error on opening:', err);
       return;
     }
+  }
+
+  public callUploadCSV(file: any) {
+    const formData = new FormData();
+    formData.append('file', file);
+    return this.http.post(`${this.apiUrl}/uploadCSV`, formData);
   }
 }

@@ -1,15 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { HttpClient } from '@angular/common/http';
-import {
-  Component,
-  EventEmitter,
-  HostBinding,
-  HostListener,
-  Input,
-  output,
-  Output,
-  signal,
-} from '@angular/core';
+import { Component, HostBinding, HostListener, output, signal } from '@angular/core';
 import { MatButton } from '@angular/material/button';
 
 @Component({
@@ -20,9 +10,6 @@ import { MatButton } from '@angular/material/button';
 })
 export class DragAndDropCsv {
   fileProcessed = output<File>();
-  uploadSuccess = output<any>();
-  uploadError = output<Error | any>();
-
   currentFile = signal<File | null>(null);
   isDragOver = signal(false);
   isUploading = signal(false);
@@ -72,23 +59,18 @@ export class DragAndDropCsv {
       return;
     }
 
-    this.fileProcessed.emit(file);
     this.startUpload(file);
   }
 
   private startUpload(file: File) {
     this.isUploading.set(true);
     this.statusMessage.set('Caricamento in corso...');
-
-    const formData = new FormData();
-    formData.append('file', file);
-
     setTimeout(() => {
       this.isUploading.set(false);
+      this.currentFile.set(file);
+      this.fileProcessed.emit(file);
       this.statusMessage.set('File caricato');
-      this.uploadSuccess.emit('OK');
     }, 2500);
-    //chiamata upload csv
   }
 
   reset() {

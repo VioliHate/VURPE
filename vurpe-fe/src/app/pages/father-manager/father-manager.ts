@@ -15,7 +15,7 @@ import { RulesSerivce } from '../../services/rules-serivce';
 
 const SERVICE_REGISTRY: { [key: string]: any } = {
   files: FileService,
-  rules:RulesSerivce
+  rules: RulesSerivce,
 };
 
 @Component({
@@ -84,7 +84,6 @@ export class FatherManager {
 
     if (params.criteria != null) {
       for (let iter of Object.keys(params.criteria)) {
-        console.log('patate->', iter, ' ', params.criteria[iter]);
         httpParams = httpParams.set(iter, params.criteria[iter]);
       }
       console.log(httpParams);

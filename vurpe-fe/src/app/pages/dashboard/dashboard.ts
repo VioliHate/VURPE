@@ -1,12 +1,6 @@
-import { Component, effect, inject, Injector } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import { DragAndDropCsv } from '../../components/drag-and-drop-csv/drag-and-drop-csv';
 import { FileService } from '../../services/file-service';
-import { RulesSerivce } from '../../services/rules-serivce';
-
-const SERVICE_REGISTRY: { [key: string]: any } = {
-  files: FileService,
-  rules: RulesSerivce,
-};
 
 @Component({
   selector: 'app-dashboard',
@@ -15,26 +9,16 @@ const SERVICE_REGISTRY: { [key: string]: any } = {
   styleUrl: './dashboard.scss',
 })
 export class Dashboard {
-  services: any = null;
-  private injector = inject(Injector);
+  fileService = inject(FileService);
 
-  constructor() {
-    effect(() => {
-      const serviceToken = SERVICE_REGISTRY['files'];
-
-      if (serviceToken) {
-        this.services = this.injector.get(serviceToken);
-      } else {
-        console.warn('Service non trovato');
-      }
-    });
-  }
+  constructor() {}
 
   onFileProcessed(file: File) {
-    console.log(file);
-    this.services.callUploadCSV(file)?.subscribe((res: any) => {
+    this.fileService.callUploadCSV(file)?.subscribe((res: any) => {
       if (res.status == 'OK') {
-        console.log('faricato');
+        //success dialog di caricamento riuscito
+      } else {
+        //error dialog di caricamento fallito
       }
     });
   }

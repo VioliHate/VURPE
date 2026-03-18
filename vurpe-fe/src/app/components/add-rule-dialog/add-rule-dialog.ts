@@ -153,7 +153,6 @@ export class AddRuleDialog {
       this.riskFlag(),
       this.severity(),
     );
-    //console.log('builded rule:', buildedRule);
     this.dialogRef.close(buildedRule);
   }
 

@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component, HostBinding, HostListener, output, signal } from '@angular/core';
+import { Component, HostBinding, HostListener, input, model, output, signal } from '@angular/core';
 import { MatButton } from '@angular/material/button';
 
 @Component({
@@ -13,7 +13,8 @@ export class DragAndDropCsv {
   currentFile = signal<File | null>(null);
   isDragOver = signal(false);
   isUploading = signal(false);
-  statusMessage = signal<string>('');
+  statusMessage = model<string>('');
+  valueChange = output<string>();
 
   constructor() {}
 
@@ -75,7 +76,7 @@ export class DragAndDropCsv {
 
   reset() {
     this.currentFile.set(null);
-    this.statusMessage.set('');
+    this.statusMessage.set(' ');
     this.isUploading.set(false);
   }
 }

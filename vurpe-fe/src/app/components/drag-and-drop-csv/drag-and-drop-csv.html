@@ -3,6 +3,7 @@
   [class.border-primary]="isDragOver()"
   [class.bg-light]="isDragOver()"
   [class.border-danger]="statusMessage().includes('Errore') && !isUploading()"
+  [class.border-success]="statusMessage().includes('caricato') && !isUploading()"
 >
   @if (!currentFile() && !isUploading()) {
     <section>

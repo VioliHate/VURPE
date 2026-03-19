@@ -2,6 +2,7 @@ import { Component, inject, input, signal } from '@angular/core';
 import { DragAndDropCsv } from '../../components/drag-and-drop-csv/drag-and-drop-csv';
 import { FileService } from '../../services/file-service';
 import { DialogService } from '../../services/dialog-service';
+import { DashboardServices } from '../../services/dashboard-services';
 
 @Component({
   selector: 'app-dashboard',
@@ -13,8 +14,16 @@ export class Dashboard {
   private dialog = inject(DialogService);
   fileService = inject(FileService);
   statusMessage = signal('');
+  DashboardSrv = inject(DashboardServices);
+  list:any[]=[];
 
-  constructor() {}
+  constructor() {
+    this.DashboardSrv.getStats().subscribe((resp) => {
+      this.list = resp;
+      
+    });
+    
+  }
 
   onFileProcessed(file: File) {
     this.fileService.callUploadCSV(file).subscribe({

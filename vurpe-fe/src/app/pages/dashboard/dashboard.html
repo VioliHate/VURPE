@@ -2,3 +2,13 @@
   (fileProcessed)="onFileProcessed($event)"
   [(statusMessage)]="statusMessage"
 ></drag-and-drop-csv>
+
+@if(list().length > 0){
+  <div class="row">
+  @for(stat of list();track $index){
+    <app-stats-card class="col-4"
+      [title]="stat[0]"
+      [list]="stat[1]"
+  ></app-stats-card>  
+  }
+</div>}

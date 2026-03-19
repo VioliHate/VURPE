@@ -1,5 +1,6 @@
 package it.study.bruvio.vurpe.repository;
 
+import it.study.bruvio.vurpe.dto.response.StatusCountDTO;
 import it.study.bruvio.vurpe.entity.DataRecord;
 
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -41,5 +42,9 @@ public interface DataRecordRepository extends JpaRepository<DataRecord, UUID>,
                 GROUP BY date_trunc('day', d.date)
             """, nativeQuery = true)
     List<Object[]> sumAmountTimeSeriesByDate(UUID fileId);
+
+    @Query("SELECT new it.study.bruvio.vurpe.dto.response.StatusCountDTO(f.risk_flag, COUNT(f)) " +
+            "FROM DataRecord f GROUP BY f.risk_flag")
+    List<StatusCountDTO> countDataRecordsByRiskFlag();
 
 }

@@ -12,8 +12,7 @@ public record StatusCountDTO(
     public static class DashBoardStatsDTO {
         public List<StatusCountDTO> filesStats;
         public List<StatusCountDTO> tasksStats;
-        public List<StatusCountDTO> DataRecordStats;
-
+        public List<StatusCountDTO> dataRecordStats;
     }
 
 }

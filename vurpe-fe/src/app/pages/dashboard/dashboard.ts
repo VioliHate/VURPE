@@ -3,7 +3,7 @@ import { DragAndDropCsv } from '../../components/drag-and-drop-csv/drag-and-drop
 import { FileService } from '../../services/file-service';
 import { DialogService } from '../../services/dialog-service';
 import { DashboardServices } from '../../services/dashboard-services';
-import { StatsCard } from "../../components/stats-card/stats-card";
+import { StatsCard } from '../../components/stats-card/stats-card';
 
 @Component({
   selector: 'app-dashboard',
@@ -16,19 +16,16 @@ export class Dashboard {
   fileService = inject(FileService);
   statusMessage = signal('');
   DashboardSrv = inject(DashboardServices);
-  list=signal<any>([]);
+  list = signal<any>([]);
 
   constructor() {
     this.DashboardSrv.getStats().subscribe((resp) => {
       let maps = Object.entries(resp);
-      this.list.set(maps);  
-      console.log(this.list() );
-      
+      this.list.set(maps);
+      //console.log(this.list() );
     });
-    
   }
- 
-   
+
   onFileProcessed(file: File) {
     this.fileService.callUploadCSV(file).subscribe({
       next: () => this.dialog.success('File caricato correttamente'),

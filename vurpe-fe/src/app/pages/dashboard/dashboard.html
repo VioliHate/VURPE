@@ -1,14 +1,18 @@
-<drag-and-drop-csv
-  (fileProcessed)="onFileProcessed($event)"
-  [(statusMessage)]="statusMessage"
-></drag-and-drop-csv>
+<div class="table-bordered">
+  <div class="col-8">
+    <drag-and-drop-csv
+      (fileProcessed)="onFileProcessed($event)"
+      [(statusMessage)]="statusMessage"
+    ></drag-and-drop-csv>
+  </div>
 
-@if(list().length > 0){
-  <div class="row">
-  @for(stat of list();track $index){
-    <app-stats-card class="col-4"
-      [title]="stat[0]"
-      [list]="stat[1]"
-  ></app-stats-card>  
-  }
-</div>}
+  <div class="container">
+    @if (list().length > 0) {
+      <div class="row">
+        @for (stat of list(); track $index) {
+          <app-stats-card class="col-4" [title]="stat[0]" [list]="stat[1]"></app-stats-card>
+        }
+      </div>
+    }
+  </div>
+</div>

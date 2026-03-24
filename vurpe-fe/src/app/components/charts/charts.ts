@@ -25,11 +25,16 @@ export class Charts {
         {
           data: this.chartData(),
           label: this.systemName(),
-          backgroundColor: 'rgba(255,0,0,0.2)',
-          borderColor: 'red',
+         
+        
           pointBackgroundColor: 'red',
           pointBorderColor: '#fff',
-          fill: 'origin',
+        
+             backgroundColor: this.chartType() === 'pie' || this.chartType() === 'doughnut' 
+        ? ['#FF6384', '#36A2EB', '#FFCE56', '#4BC0C0', '#9966FF'] // Colori diversi per le fette
+        : '#36A2EB', // Colore unico per le barre/linee
+      borderColor: '#36A2EB',
+      fill: this.chartType() === 'line', // Riempimento solo per il grafico a linee
         }
       ]
     };

@@ -4,7 +4,6 @@ import { Directive, input, computed } from '@angular/core';
   selector: '[appStatusBadge]',
   standalone: true,
   exportAs: 'statusBadge',
-  // Usiamo host per applicare stili e classi direttamente all'elemento
   host: {
     '[style.background-color]': 'badgeConfig().bg',
     '[style.color]': 'badgeConfig().text',

@@ -13,6 +13,7 @@ import { ActivatedRoute } from '@angular/router';
 import { FileService } from '../../services/file-service';
 import { RulesSerivce } from '../../services/rules-serivce';
 import { MetricsService } from '../../services/metrics-service';
+import { DialogService } from '../../services/dialog-service';
 
 const SERVICE_REGISTRY: { [key: string]: any } = {
   files: FileService,
@@ -30,6 +31,7 @@ const SERVICE_REGISTRY: { [key: string]: any } = {
 export class FatherManager {
   private http = inject(HttpClient);
   api = input.required<string>();
+  private dialog = inject(DialogService);
 
   private route = inject(ActivatedRoute);
   parentId = this.route.snapshot.queryParamMap.get('file_id');
@@ -130,17 +132,33 @@ export class FatherManager {
     this.filter.set(null);
   }
 
-  async addNewRow() {
-    console.log('clicked add new row');
-    let result = await this.Srv.addRow();
-    result?.subscribe((res: any) => {
-      if (res.status == 'OK') {
-        this.sortField.set('createdAt');
-        this.sortDir.set('DESC');
+
+async addNewRow() {
+  console.log('clicked add new row');
+  
+  // result$ sarà l'Observable restituito dalla POST (o null se annullato)
+  const result$ = await this.Srv.addRow();
+
+  // Controllo se result$ esiste (se l'utente ha annullato la scelta file, sarà null)
+  if (result$) {
+    result$.subscribe({
+      next: (res: any) => {
+        console.log('result add new row', res.status);
+        if (res.status === 'OK') {
+          this.dialog.success('File caricato correttamente');
+          this.sortField.set('id');
+          this.sortDir.set('DESC');
+        } else {
+          this.dialog.error('Errore nel caricamento del file');
+        }
+      },
+      error: (err:any) => {
+        this.dialog.error('Errore di rete o del server');
+        console.error(err);
       }
     });
   }
-
+}
 
   detailsRow(el: any) {
     this.Srv.getDetails(el.id);

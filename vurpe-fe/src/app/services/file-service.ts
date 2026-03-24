@@ -19,41 +19,38 @@ export class FileService {
     this.router.navigate(['/metrics'], { queryParams: { file_id: id } });
   }
 
+// FileService
 
-  public async addRow() {
-    return this.openWindowFileCSV();
-  }
+public async addRow() {
+  // Aggiungiamo il return qui
+  return await this.openWindowFileCSV();
+}
 
-  private async openWindowFileCSV() {
-    try {
-      // Apre la finestra di selezione file
-      const [fileHandle] = await (window as any).showOpenFilePicker({
-        types: [
-          {
-            description: 'File CSV',
-            accept: {
-              'text/csv': ['.csv'],
-            },
-          },
-        ],
-        multiple: false,
-      });
+private async openWindowFileCSV() {
+  try {
+    const [fileHandle] = await (window as any).showOpenFilePicker({
+      types: [{ description: 'File CSV', accept: { 'text/csv': ['.csv'] } }],
+      multiple: false,
+    });
 
-      const file = await fileHandle.getFile();
+    const file = await fileHandle.getFile();
 
-      this.callUploadCSV(file);
-    } catch (err: any) {
-      if (err.name === 'AbortError') {
-        return;
-      }
-      console.error('Error on opening:', err);
-      return;
+    // Fondamentale: devi fare il RETURN del risultato di callUploadCSV
+    return this.callUploadCSV(file); 
+    
+  } catch (err: any) {
+    if (err.name === 'AbortError') {
+      return null; // L'utente ha chiuso la finestra senza scegliere
     }
+    console.error('Error on opening:', err);
+    return null;
   }
+}
 
-  public callUploadCSV(file: any) {
-    const formData = new FormData();
-    formData.append('file', file);
-    return this.http.post(`${this.apiUrl}/uploadCSV`, formData);
-  }
+public callUploadCSV(file: any) {
+  const formData = new FormData();
+  formData.append('file', file);
+  // Questo restituisce un Observable
+  return this.http.post(`${this.apiUrl}/uploadCSV`, formData);
+}
 }

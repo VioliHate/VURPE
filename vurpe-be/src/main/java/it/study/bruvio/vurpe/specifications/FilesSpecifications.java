@@ -31,7 +31,7 @@ public class FilesSpecifications {
                 ));
             }
             if(filter.status() != null){
-                predicates.add(cb.equal(root.get("Status"), filter.status()
+                predicates.add(cb.equal(root.get("status"), filter.status()
                 ));
             }
             if(filter.createdAt() != null){

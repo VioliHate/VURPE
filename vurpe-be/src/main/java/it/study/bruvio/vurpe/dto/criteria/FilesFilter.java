@@ -1,5 +1,7 @@
 package it.study.bruvio.vurpe.dto.criteria;
 
+import it.study.bruvio.vurpe.entity.FileStatusEnum;
+
 import java.time.Instant;
 import java.util.UUID;
 
@@ -7,7 +9,7 @@ public record FilesFilter(
         UUID id,
         String originalName,
         Long fileSize,
-        String status,
+        FileStatusEnum status,
         Instant createdAt
 ) {
     public boolean isEmpty() {

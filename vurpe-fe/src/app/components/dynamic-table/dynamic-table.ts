@@ -9,6 +9,9 @@ import { MatIcon } from '@angular/material/icon';
 import { MatButton } from '@angular/material/button';
 import { MatMenuModule } from '@angular/material/menu';
 import { MatButtonModule } from '@angular/material/button';
+import { TabConfig } from '../../entities/TabConfig';
+import { StatusBadgeDirective } from '../../directives/status-badge-directive';
+
 
 @Component({
   selector: 'app-dynamic-table',
@@ -22,7 +25,9 @@ import { MatButtonModule } from '@angular/material/button';
     CamelToTitlePipe,
     MatIcon,
     MatButton,
-  ],
+    StatusBadgeDirective
+    
+],
   templateUrl: './dynamic-table.html',
   styleUrl: './dynamic-table.scss',
   standalone: true,
@@ -31,6 +36,15 @@ export class DynamicTable {
   serviceKey = input.required<string>();
   data = input.required<any>();
   plainDisplayedColumns = signal<string[]>([]);
+  config  = input<TabConfig>(
+    {
+      columns: [],
+      buttons: [],
+      new:true
+      
+    },
+
+  );
 
   pageInfo = computed<PageInfo | undefined>(() => {
     return this.data().payload?.page;
@@ -69,7 +83,13 @@ export class DynamicTable {
       if (this.sort) this.DataSource.sort = this.sort;
       if (this.paginator) this.DataSource.paginator = this.paginator;
       this.plainDisplayedColumns.set(this.displayedColumns());
+      console.log('data', this.DataSource.data);
+      console.log('config', this.config());
+      
     });
+  }
+  print(col:any){
+    console.log('col', col);
   }
 
   onPageChange(event: PageEvent) {

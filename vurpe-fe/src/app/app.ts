@@ -1,19 +1,23 @@
-import { Component, signal } from '@angular/core';
-import {RouterLink, RouterOutlet} from '@angular/router';
+import { Component, inject, signal } from '@angular/core';
+import {NavigationEnd, Router, RouterLink, RouterOutlet} from '@angular/router';
 import {MatSidenav, MatSidenavContainer, MatSidenavContent} from '@angular/material/sidenav';
 import {MatListItem, MatNavList} from '@angular/material/list';
 import {MatIcon} from '@angular/material/icon';
-import {MatIconButton} from '@angular/material/button';
+import { MatIconButton, MatAnchor } from '@angular/material/button';
+import { NavigationService } from './services/navigation-service';
+
 
 @Component({
   selector: 'app-root',
-  imports: [RouterOutlet, MatSidenavContent, MatSidenav, MatSidenavContainer, MatNavList, MatIcon, MatListItem, MatIconButton, RouterLink],
+  imports: [RouterOutlet, MatSidenavContent, MatSidenav, MatSidenavContainer, MatNavList, MatIcon, MatListItem, MatIconButton, RouterLink, MatAnchor],
   templateUrl: './app.html',
   styleUrl: './app.scss'
 })
 export class App {
+  private nav = inject(NavigationService);
   protected readonly title = signal('vurpe-fe');
   expanded = true;
+
 
   listMenu = [
     {route: '/dashboard', title: 'Dashboard', icon: 'dashboard'},
@@ -21,8 +25,14 @@ export class App {
     {route: '/rules', title: 'Rules', icon: 'rule'},
   ];
 
+    
+
   toggleExpand() {
     this.expanded = !this.expanded;
   }
+  
+goBack(){
+  this.nav.back();
+}
 
 }

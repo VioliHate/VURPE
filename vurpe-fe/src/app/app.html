@@ -27,6 +27,9 @@
 
   <mat-sidenav-content class="content">
     <!-- main page -->
+     <button matButton class="col-1" (click)="goBack()">
+      <mat-icon>arrow_back</mat-icon>
+    </button>
     <router-outlet></router-outlet>
   </mat-sidenav-content>
 

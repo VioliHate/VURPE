@@ -14,11 +14,14 @@ import { FileService } from '../../services/file-service';
 import { RulesSerivce } from '../../services/rules-serivce';
 import { MetricsService } from '../../services/metrics-service';
 import { DialogService } from '../../services/dialog-service';
+import { TabConfig } from '../../entities/TabConfig';
+import { DataRecord } from '../../services/data-record';
 
 const SERVICE_REGISTRY: { [key: string]: any } = {
   files: FileService,
   rules: RulesSerivce,
   metrics: MetricsService,
+  dataRecord:DataRecord
 };
 
 @Component({
@@ -41,6 +44,7 @@ export class FatherManager {
   sortField = signal('id');
   sortDir = signal('ASC');
   filter = signal(null);
+   config:TabConfig={ columns: [], buttons: [] , new:true };
 
   private injector = inject(Injector);
 
@@ -73,6 +77,7 @@ export class FatherManager {
 
       if (serviceToken) {
         this.Srv = this.injector.get(serviceToken);
+        this.config = this.Srv.tabsConfig; // Assuming each service has a tabsConfig property
       } else {
         console.warn(`Service non trovato per la chiave: ${this.serviceKey()}`);
       }
@@ -98,6 +103,7 @@ export class FatherManager {
     }
     return httpParams;
   }
+
 
   onPageChange(event: PageEvent) {
     this.pageIndex.set(event.pageIndex);

@@ -2,6 +2,7 @@ import { HttpClient } from '@angular/common/http';
 import { inject, Injectable } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { environment } from '../../environments/environment';
+import { TabConfig } from '../entities/TabConfig';
 
 @Injectable({
   providedIn: 'root',
@@ -11,6 +12,13 @@ export class FileService {
   private route = inject(ActivatedRoute);
   private http = inject(HttpClient);
   private readonly apiUrl = `${environment.url}/call`;
+
+    public tabsConfig: TabConfig = 
+      {
+        columns: [ 'id','fileSize'],
+        buttons: ["Modifica","Elimina","Visualizza","Metriche"],
+        new:true
+      };
 
   public getDetails(id: string) {
     this.router.navigate(['/dataRecords'], { queryParams: { file_id: id } });

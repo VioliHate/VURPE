@@ -30,7 +30,7 @@ export const routes: Routes = [
     path: 'dataRecords',
     component: FatherManager,
     title: 'Vurpe - Data Records',
-    data: { api: 'http://localhost:8080/call/data-records', serviceKey: 'files' },
+    data: { api: 'http://localhost:8080/call/data-records', serviceKey: 'dataRecord' },
   },
   {
     path: 'rules',

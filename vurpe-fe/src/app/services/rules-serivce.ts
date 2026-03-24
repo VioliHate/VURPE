@@ -5,6 +5,7 @@ import { HttpClient } from '@angular/common/http';
 import { BusinessRule } from '../entities/BusinessRule';
 import { environment } from '../../environments/environment';
 import { of, switchMap } from 'rxjs';
+import { TabConfig } from '../entities/TabConfig';
 
 @Injectable({
   providedIn: 'root',
@@ -13,6 +14,12 @@ export class RulesSerivce {
   readonly dialog = inject(MatDialog);
   private http = inject(HttpClient);
   private readonly apiUrl = `${environment.url}/call`;
+      public tabsConfig: TabConfig = 
+        {
+          columns: [ 'id'],
+          buttons: [],
+          new:true
+        };
 
 async addRow() {
   // Restituiamo il risultato di openDialog per poterlo usare nel component

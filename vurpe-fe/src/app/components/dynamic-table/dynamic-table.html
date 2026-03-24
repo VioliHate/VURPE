@@ -1,50 +1,73 @@
 @if (DataSource.data.length !== 0) {
   <div class="mat-elevation-z8">
     <table mat-table [dataSource]="DataSource" matSort (matSortChange)="onSortChange($event)">
-      <ng-container matColumnDef="edit">
+    
+      <ng-container matColumnDef="edit" >
         <th mat-header-cell *matHeaderCellDef class="d-sm-table-cell">
-          <button mat-button color="primary" (click)="selectedNew.emit('id')">
+          <button mat-button color="primary" (click)="selectedNew.emit('id')" [hidden]="!config().new">
             <mat-icon>add</mat-icon>
           </button>
         </th>
-
+        
+     
+        <div [hidden]="config().buttons.length === 0">
         <td mat-cell *matCellDef="let element">
-          <button mat-icon-button [matMenuTriggerFor]="menu">
+          <button mat-icon-button [matMenuTriggerFor]="menu" [hidden]="config().buttons.length === 0">
             <mat-icon>more_vert</mat-icon>
           </button>
 
           <mat-menu #menu="matMenu">
+            @if(config().buttons.includes('Modifica')) {
             <button mat-menu-item (click)="selectedEdit.emit(element)">
               <mat-icon>edit</mat-icon>
               <span>Modifica</span>
             </button>
+          }
+              @if(config().buttons.includes('Visualizza')) {
             <button mat-menu-item (click)="selectedDetails.emit(element)">
               <mat-icon>visibility</mat-icon>
               <span>Visualizza</span>
             </button>
+          }
+              @if(config().buttons.includes('Elimina')) {
             <button mat-menu-item color="warn" (click)="selectedDelete.emit(element)">
               <mat-icon>delete</mat-icon>
               <span>Elimina</span>
             </button>
+          }
+              @if(config().buttons.includes('Metriche')) {
             <button mat-menu-item color="warn" (click)="viewGraph.emit(element)">
               <mat-icon>assessment</mat-icon>
               <span>Metriche</span>
             </button>
+          }
             
           </mat-menu>
+        
         </td>
+      </div>
+      
       </ng-container>
 
       @for (col of columns(); track col) {
-        <ng-container [matColumnDef]="col">
-          <th mat-header-cell *matHeaderCellDef mat-sort-header>
+       
+       
+        <ng-container [matColumnDef]="col" >
+          <th mat-header-cell *matHeaderCellDef mat-sort-header [hidden]="config().columns.includes(col)" >
             {{ col | camelToTitle }}
           </th>
 
-          <td mat-cell *matCellDef="let element">
-            {{ element[col] }}
+          <td mat-cell *matCellDef="let element " [hidden]="config().columns.includes(col)">
+        <span #badge="statusBadge" [appStatusBadge]="element[col]" [hidden]="config().columns.includes(col)">
+          @if (badge.label && badge.label !== 'UNKNOWN') {
+          {{ badge.label }}
+          } @else {
+          {{ element[col] }}
+          }
+        </span>
           </td>
         </ng-container>
+      
       }
       <tr mat-header-row *matHeaderRowDef="plainDisplayedColumns()"></tr>
       <tr mat-row *matRowDef="let row; columns: plainDisplayedColumns()"></tr>

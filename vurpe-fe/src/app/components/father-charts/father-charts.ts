@@ -6,6 +6,7 @@ import { ApiResponse } from '../../entities/ApiResponse';
 import { tap } from 'rxjs';
 import { TitleCasePipe } from '@angular/common';
 import { MatSelect, MatOption } from "@angular/material/select";
+import { ActivatedRoute } from '@angular/router';
 
 @Component({
   selector: 'app-father-charts',
@@ -19,8 +20,8 @@ export class FatherCharts {
 
     private http = inject(HttpClient);
   list = ["distribution_by_category","distribution_by_risk_flag","time_series_by_date"];
- 
-   analysisId = input.required<any>(); 
+   private route = inject(ActivatedRoute);
+   analysisId = this.route.snapshot.queryParamMap.get('analysisId');
    typeMetric = signal<string>('');
  
 
@@ -35,7 +36,7 @@ export class FatherCharts {
 
 analysisResource = rxResource<any,any>({
 params: () => ({
-  id:this.analysisId(),
+  id:this.analysisId,
   graph:this.typeMetric(),
     
     }),
@@ -43,7 +44,7 @@ params: () => ({
     stream: ({ params }) => {
       
        
-          this.defaultParams(params);
+          // this.defaultParams(params);
       
 
       return this.http.get<ApiResponse<any>>(`http://localhost:8080/call/analysis-metrics/${params.id}`)

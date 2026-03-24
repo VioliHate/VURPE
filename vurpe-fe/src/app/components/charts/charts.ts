@@ -18,8 +18,6 @@ export class Charts {
   chartLabels = input.required<string[]>();
   chartType = input<ChartType>('line');
 
-  // --- COMPUTED (Sostituisce ngOnChanges) ---
-  // Questo segnale si aggiorna automaticamente ogni volta che cambiano i dati o le label
   public lineChartData = computed<ChartData>(() => {
     return {
       labels: this.chartLabels(),

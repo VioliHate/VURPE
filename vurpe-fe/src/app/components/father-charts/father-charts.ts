@@ -7,11 +7,12 @@ import { tap } from 'rxjs';
 import { TitleCasePipe } from '@angular/common';
 import { MatSelect, MatOption } from "@angular/material/select";
 import { ActivatedRoute } from '@angular/router';
+import { ChartType } from 'chart.js';
 
 @Component({
   selector: 'app-father-charts',
   standalone: true,
-  imports: [Charts, TitleCasePipe, MatSelect, MatOption],
+  imports: [Charts, MatSelect, MatOption],
   templateUrl: './father-charts.html',
   styleUrl: './father-charts.scss',
 })
@@ -19,13 +20,21 @@ export class FatherCharts {
 
 
     private http = inject(HttpClient);
-  list = ["distribution_by_category","distribution_by_risk_flag","time_series_by_date"];
+  list:Map<String,ChartType>= new Map<String,ChartType>(
+    [
+    
+    ["distribution_by_category","pie"],
+    ["distribution_by_risk_flag","bar"],
+     ["time_series_by_date","line"]
+  ]
+    
+  
+);
    private route = inject(ActivatedRoute);
    analysisId = this.route.snapshot.queryParamMap.get('analysisId');
    typeMetric = signal<string>('');
  
-
-
+chartType = signal<ChartType>("line");
   
   chartData = signal<any[]>([]);
 
@@ -84,9 +93,9 @@ takeDataCharts(){
 
   
 onSystemChange(arg0: any) {
-
-this.typeMetric.set(arg0);
-
+console.log(arg0);
+this.typeMetric.set(arg0[0]);
+this.chartType.set(arg0[1]);
 this.takeDataCharts();
 }
 }

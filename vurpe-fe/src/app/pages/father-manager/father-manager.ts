@@ -133,11 +133,13 @@ export class FatherManager {
   }
 
 
-async addNewRow() {
-  console.log('clicked add new row');
-  
+async addNewRow(id?: string) {
+  console.log('clicked add new row',id,this.parentId);
+  const result$ = id ? await this.Srv.addRow( this.parentId) : await this.Srv.addRow();
   // result$ sarà l'Observable restituito dalla POST (o null se annullato)
-  const result$ = await this.Srv.addRow();
+
+
+
 
   // Controllo se result$ esiste (se l'utente ha annullato la scelta file, sarà null)
   if (result$) {

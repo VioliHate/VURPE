@@ -43,7 +43,7 @@ export class DynamicTable {
   selectedDetails = output<any>();
   selectedDelete = output<any>();
   selectedEdit = output<any>();
-  selectedNew = output<null>();
+  selectedNew = output<any>();
 viewGraph = output<any>();
   customColumns = input<string[]>([]);
   columns = computed(() => {

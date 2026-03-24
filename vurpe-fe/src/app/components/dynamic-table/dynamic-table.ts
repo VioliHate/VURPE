@@ -44,7 +44,7 @@ export class DynamicTable {
   selectedDelete = output<any>();
   selectedEdit = output<any>();
   selectedNew = output<null>();
-
+viewGraph = output<any>();
   customColumns = input<string[]>([]);
   columns = computed(() => {
     const custom = this.customColumns();

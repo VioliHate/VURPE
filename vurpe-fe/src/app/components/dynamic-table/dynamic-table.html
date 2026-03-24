@@ -26,6 +26,10 @@
               <mat-icon>delete</mat-icon>
               <span>Elimina</span>
             </button>
+            <button mat-menu-item color="warn" (click)="viewGraph.emit(element)">
+              <mat-icon>assessment</mat-icon>
+              <span>Metriche</span>
+            </button>
           </mat-menu>
         </td>
       </ng-container>

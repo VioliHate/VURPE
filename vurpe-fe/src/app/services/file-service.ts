@@ -15,6 +15,10 @@ export class FileService {
   public getDetails(id: string) {
     this.router.navigate(['/dataRecords'], { queryParams: { file_id: id } });
   }
+  public getMetrics(id: string) {
+    this.router.navigate(['/metrics'], { queryParams: { file_id: id } });
+  }
+
 
   public async addRow() {
     return this.openWindowFileCSV();

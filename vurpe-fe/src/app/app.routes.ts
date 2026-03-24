@@ -2,6 +2,7 @@ import { Routes } from '@angular/router';
 import { Dashboard } from './pages/dashboard/dashboard';
 import { Dummy } from './pages/dummy/dummy';
 import { FatherManager } from './pages/father-manager/father-manager';
+import { FatherCharts } from './components/father-charts/father-charts';
 
 export const routes: Routes = [
   {
@@ -36,5 +37,17 @@ export const routes: Routes = [
     component: FatherManager,
     title: 'Vurpe - rules',
     data: { api: 'http://localhost:8080/call/rules', serviceKey: 'rules' },
+  },
+   {
+    path: 'metrics',
+    component: FatherManager,
+    title: 'Vurpe - rules',
+    data: { api: 'http://localhost:8080/call/analysis-results', serviceKey: 'metrics' },
+  },
+  {
+    path: 'charts',
+    component: FatherCharts,
+    title: 'Vurpe - charts',
+    data: { },
   },
 ];

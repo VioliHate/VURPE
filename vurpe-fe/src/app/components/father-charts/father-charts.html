@@ -1,0 +1,15 @@
+
+    
+<mat-select #select placeholder="Scegli un sistema" (selectionChange)="onSystemChange(select.value)">
+    @for (i of list; track i) {
+    <mat-option [value]="i">{{ i | titlecase }}</mat-option>
+    }
+</mat-select>
+
+    @if (typeMetric()) {
+    <div class="chart-wrapper" style="background: white; padding: 20px; border: 1px solid #ddd;">
+        <!-- Passaggio dei dati al componente figlio -->
+        <app-charts [systemName]="typeMetric()" [chartData]="chartData()" [chartLabels]="chartLabels()">
+        </app-charts>
+    </div>
+}

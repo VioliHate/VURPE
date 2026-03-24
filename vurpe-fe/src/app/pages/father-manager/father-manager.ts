@@ -12,10 +12,12 @@ import { MatButton } from '@angular/material/button';
 import { ActivatedRoute } from '@angular/router';
 import { FileService } from '../../services/file-service';
 import { RulesSerivce } from '../../services/rules-serivce';
+import { MetricsService } from '../../services/metrics-service';
 
 const SERVICE_REGISTRY: { [key: string]: any } = {
   files: FileService,
   rules: RulesSerivce,
+  metrics: MetricsService,
 };
 
 @Component({
@@ -139,8 +141,13 @@ export class FatherManager {
     });
   }
 
+
   detailsRow(el: any) {
     this.Srv.getDetails(el.id);
+  }
+
+  viewGraph(el: any) {
+    this.Srv.getMetrics(el.id);
   }
 
   deleteRow(el: any) {

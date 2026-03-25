@@ -44,7 +44,7 @@ export class FatherManager {
   sortField = signal('id');
   sortDir = signal('ASC');
   filter = signal(null);
-  config: TabConfig = { columns: [], buttons: [], new: true };
+  config: TabConfig = { title: '', columns: [], buttons: [], new: true };
 
   private injector = inject(Injector);
 

@@ -6,6 +6,7 @@ import { TabConfig } from '../data/TabConfig';
 })
 export class DataRecord {
   public tabsConfig: TabConfig = {
+    title: 'data-record',
     columns: ['id', 'file_id'],
     buttons: [],
     new: false,

@@ -12,6 +12,7 @@ export class MetricsService {
   private http = inject(HttpClient);
   private readonly apiUrl = `${environment.url}/call`;
   public tabsConfig: TabConfig = {
+    title: 'metrics',
     columns: [
       'id',
       'file_id',

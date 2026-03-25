@@ -1,5 +1,6 @@
 export interface TabConfig {
-    columns:string[],
-    buttons:string[],
-    new:boolean;
+  title: string;
+  columns: string[];
+  buttons: string[];
+  new: boolean;
 }

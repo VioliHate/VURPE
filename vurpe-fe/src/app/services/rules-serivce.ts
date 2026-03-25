@@ -15,6 +15,7 @@ export class RulesSerivce {
   private http = inject(HttpClient);
   private readonly apiUrl = `${environment.url}/call`;
   public tabsConfig: TabConfig = {
+    title: 'rules',
     columns: ['id'],
     buttons: [],
     new: true,

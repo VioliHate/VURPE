@@ -14,6 +14,7 @@ export class FileService {
   private readonly apiUrl = `${environment.url}/call`;
 
   public tabsConfig: TabConfig = {
+    title: 'file',
     columns: ['id', 'fileSize'],
     buttons: ['Modifica', 'Elimina', 'Visualizza', 'Metriche'],
     new: true,

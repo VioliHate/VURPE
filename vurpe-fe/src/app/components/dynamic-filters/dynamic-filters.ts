@@ -115,6 +115,10 @@ export class DynamicFilters {
     });
 
     this.saveToStorage();
+
+    if (this.filtersMap().size === 0) {
+      untracked(() => this.send());
+    }
   }
 
   send(): void {

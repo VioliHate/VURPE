@@ -9,8 +9,6 @@
           <span #badge="statusBadge" [appStatusBadge]="item.status" class="stat-label">
             @if (badge.label && badge.label != 'UNKNOWN') {
               {{ badge.label }}
-            } @else {
-              {{ item.status ? item.status : 'da analizzare' }}
             }
           </span>
           <span class="stat-value">{{ item.count }}</span>

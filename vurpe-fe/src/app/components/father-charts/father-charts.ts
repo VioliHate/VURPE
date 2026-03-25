@@ -70,7 +70,6 @@ export class FatherCharts {
   }
 
   onSystemChange(arg0: any) {
-    console.log(arg0);
     this.typeMetric.set(arg0[0]);
     this.chartType.set(arg0[1]);
     this.takeDataCharts();

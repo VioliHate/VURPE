@@ -78,12 +78,7 @@ export class DynamicTable {
       if (this.sort) this.DataSource.sort = this.sort;
       if (this.paginator) this.DataSource.paginator = this.paginator;
       this.plainDisplayedColumns.set(this.displayedColumns());
-      console.log('data', this.DataSource.data);
-      console.log('config', this.config());
     });
-  }
-  print(col: any) {
-    console.log('col', col);
   }
 
   onPageChange(event: PageEvent) {

@@ -47,9 +47,7 @@ export class DynamicFilters {
     effect(() => {
       if (this.list2().payload.content != 0) {
         let val = Object.keys(this.list2().payload.content[0]);
-
         let col = this.conf().columns;
-
         this.list = val.filter((item) => !col.includes(item));
       }
     });
@@ -101,6 +99,7 @@ export class DynamicFilters {
       newMap.set(key, value);
       return newMap;
     });
+    this.#saveToStorage();
   }
 
   deleteFromMap(key: any) {
@@ -109,9 +108,25 @@ export class DynamicFilters {
       newMap.delete(key);
       return newMap;
     });
+    this.#saveToStorage();
   }
 
   send() {
     this.MapOutput.emit(Object.fromEntries(this.filtersMap()));
+  }
+
+  #saveToStorage() {
+    if (!isPlatformBrowser(this.platformId)) return;
+
+    const tableId = this.conf().title;
+    const storageKey = `filters_${tableId}`;
+    const current = this.filtersMap();
+
+    if (current.size > 0) {
+      const obj = Object.fromEntries(current);
+      localStorage.setItem(storageKey, JSON.stringify(obj));
+    } else {
+      localStorage.removeItem(storageKey);
+    }
   }
 }

@@ -95,7 +95,6 @@ export class FatherManager {
       for (let iter of Object.keys(params.criteria)) {
         httpParams = httpParams.set(iter, params.criteria[iter]);
       }
-      console.log(httpParams);
     }
     let url = params.api;
     if (params.parentId) {
@@ -138,7 +137,6 @@ export class FatherManager {
   }
 
   async addNewRow(id?: string) {
-    console.log('clicked add new row', id, this.parentId);
     const result$ = id ? await this.Srv.addRow(this.parentId) : await this.Srv.addRow();
     // result$ sarà l'Observable restituito dalla POST (o null se annullato)
 
@@ -146,7 +144,6 @@ export class FatherManager {
     if (result$) {
       result$.subscribe({
         next: (res: any) => {
-          console.log('result add new row', res.status);
           if (res.status === 'OK') {
             this.dialog.success('File caricato correttamente');
             this.sortField.set('id');

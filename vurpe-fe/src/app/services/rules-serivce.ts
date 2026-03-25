@@ -38,7 +38,6 @@ export class RulesSerivce {
     return dialogRef.afterClosed().pipe(
       switchMap((data: BusinessRule) => {
         if (data) {
-          console.log('Dialog result:', data);
           return this.sendRule(data); // Ritorna l'observable della POST
         } else {
           return of(null); // Se l'utente chiude senza salvare

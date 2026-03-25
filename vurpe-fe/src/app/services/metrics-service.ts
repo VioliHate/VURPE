@@ -29,7 +29,6 @@ export class MetricsService {
   }
 
   public async addRow(id: string) {
-    console.log('clicked add new row with id:', id);
     const httpParams = { fileId: id };
     return await this.http.post(`${this.apiUrl}/save-analysis`, null, { params: httpParams });
   }

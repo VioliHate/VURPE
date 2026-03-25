@@ -50,7 +50,7 @@ export class StatusBadgeDirective {
     };
 
     // Restituisce la config se esiste, altrimenti null
-    return configs[s] ?? configs['UNKNOWN'];
+    return configs[s];
   });
 
   get label() {

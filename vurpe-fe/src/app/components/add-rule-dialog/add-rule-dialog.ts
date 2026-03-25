@@ -13,8 +13,8 @@ import { MatButton } from '@angular/material/button';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { MatIconModule } from '@angular/material/icon';
-import { RiskFlag, Field, FieldType, Operator, RuleGroup, Condition } from '../../entities/types';
-import { BusinessRule } from '../../entities/BusinessRule';
+import { RiskFlag, Field, FieldType, Operator, RuleGroup, Condition } from '../../data/types';
+import { BusinessRule } from '../../data/BusinessRule';
 
 @Component({
   selector: 'app-add-rule-dialog',

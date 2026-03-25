@@ -5,7 +5,7 @@ import { MatOption, MatSelect } from '@angular/material/select';
 import { FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { MatButton } from '@angular/material/button';
 import { MatIcon } from '@angular/material/icon';
-import { TabConfig } from '../../entities/TabConfig';
+import { TabConfig } from '../../data/TabConfig';
 
 @Component({
   selector: 'app-dynamic-filters',
@@ -26,24 +26,19 @@ import { TabConfig } from '../../entities/TabConfig';
 })
 export class DynamicFilters {
   list2 = input.required<any>();
-  conf=input.required<TabConfig>();
+  conf = input.required<TabConfig>();
   list: any[] = [];
   filtersMap: Map<any, any> = new Map<any, any>();
   MapOutput = output<any>();
   constructor() {
     effect(() => {
-      if (this.list2().payload.content != 0){
-      
-      let val=Object.keys(this.list2().payload.content[0]);
-      
-        let col= this.conf().columns;
-      
-        this.list = val.filter(item=>!col.includes(item));
-       
-      }
-        
+      if (this.list2().payload.content != 0) {
+        let val = Object.keys(this.list2().payload.content[0]);
 
-     
+        let col = this.conf().columns;
+
+        this.list = val.filter((item) => !col.includes(item));
+      }
     });
   }
 

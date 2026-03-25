@@ -3,7 +3,7 @@ import { HttpClient, HttpParams } from '@angular/common/http';
 import { rxResource } from '@angular/core/rxjs-interop';
 import { DynamicTable } from '../../components/dynamic-table/dynamic-table';
 
-import { ApiResponse } from '../../entities/ApiResponse';
+import { ApiResponse } from '../../data/ApiResponse';
 import { PageEvent } from '@angular/material/paginator';
 import { SortUrl } from '../../utils/sort';
 import { Sort } from '@angular/material/sort';
@@ -14,14 +14,14 @@ import { FileService } from '../../services/file-service';
 import { RulesSerivce } from '../../services/rules-serivce';
 import { MetricsService } from '../../services/metrics-service';
 import { DialogService } from '../../services/dialog-service';
-import { TabConfig } from '../../entities/TabConfig';
+import { TabConfig } from '../../data/TabConfig';
 import { DataRecord } from '../../services/data-record';
 
 const SERVICE_REGISTRY: { [key: string]: any } = {
   files: FileService,
   rules: RulesSerivce,
   metrics: MetricsService,
-  dataRecord:DataRecord
+  dataRecord: DataRecord,
 };
 
 @Component({
@@ -44,7 +44,7 @@ export class FatherManager {
   sortField = signal('id');
   sortDir = signal('ASC');
   filter = signal(null);
-   config:TabConfig={ columns: [], buttons: [] , new:true };
+  config: TabConfig = { columns: [], buttons: [], new: true };
 
   private injector = inject(Injector);
 
@@ -104,7 +104,6 @@ export class FatherManager {
     return httpParams;
   }
 
-
   onPageChange(event: PageEvent) {
     this.pageIndex.set(event.pageIndex);
     this.pageSize.set(event.pageSize);
@@ -138,35 +137,31 @@ export class FatherManager {
     this.filter.set(null);
   }
 
+  async addNewRow(id?: string) {
+    console.log('clicked add new row', id, this.parentId);
+    const result$ = id ? await this.Srv.addRow(this.parentId) : await this.Srv.addRow();
+    // result$ sarà l'Observable restituito dalla POST (o null se annullato)
 
-async addNewRow(id?: string) {
-  console.log('clicked add new row',id,this.parentId);
-  const result$ = id ? await this.Srv.addRow( this.parentId) : await this.Srv.addRow();
-  // result$ sarà l'Observable restituito dalla POST (o null se annullato)
-
-
-
-
-  // Controllo se result$ esiste (se l'utente ha annullato la scelta file, sarà null)
-  if (result$) {
-    result$.subscribe({
-      next: (res: any) => {
-        console.log('result add new row', res.status);
-        if (res.status === 'OK') {
-          this.dialog.success('File caricato correttamente');
-          this.sortField.set('id');
-          this.sortDir.set('DESC');
-        } else {
-          this.dialog.error('Errore nel caricamento del file');
-        }
-      },
-      error: (err:any) => {
-        this.dialog.error('Errore di rete o del server');
-        console.error(err);
-      }
-    });
+    // Controllo se result$ esiste (se l'utente ha annullato la scelta file, sarà null)
+    if (result$) {
+      result$.subscribe({
+        next: (res: any) => {
+          console.log('result add new row', res.status);
+          if (res.status === 'OK') {
+            this.dialog.success('File caricato correttamente');
+            this.sortField.set('id');
+            this.sortDir.set('DESC');
+          } else {
+            this.dialog.error('Errore nel caricamento del file');
+          }
+        },
+        error: (err: any) => {
+          this.dialog.error('Errore di rete o del server');
+          console.error(err);
+        },
+      });
+    }
   }
-}
 
   detailsRow(el: any) {
     this.Srv.getDetails(el.id);

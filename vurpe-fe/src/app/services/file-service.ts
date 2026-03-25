@@ -2,7 +2,7 @@ import { HttpClient } from '@angular/common/http';
 import { inject, Injectable } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { environment } from '../../environments/environment';
-import { TabConfig } from '../entities/TabConfig';
+import { TabConfig } from '../data/TabConfig';
 
 @Injectable({
   providedIn: 'root',
@@ -13,12 +13,11 @@ export class FileService {
   private http = inject(HttpClient);
   private readonly apiUrl = `${environment.url}/call`;
 
-    public tabsConfig: TabConfig = 
-      {
-        columns: [ 'id','fileSize'],
-        buttons: ["Modifica","Elimina","Visualizza","Metriche"],
-        new:true
-      };
+  public tabsConfig: TabConfig = {
+    columns: ['id', 'fileSize'],
+    buttons: ['Modifica', 'Elimina', 'Visualizza', 'Metriche'],
+    new: true,
+  };
 
   public getDetails(id: string) {
     this.router.navigate(['/dataRecords'], { queryParams: { file_id: id } });
@@ -27,38 +26,37 @@ export class FileService {
     this.router.navigate(['/metrics'], { queryParams: { file_id: id } });
   }
 
-// FileService
+  // FileService
 
-public async addRow() {
-  // Aggiungiamo il return qui
-  return await this.openWindowFileCSV();
-}
-
-private async openWindowFileCSV() {
-  try {
-    const [fileHandle] = await (window as any).showOpenFilePicker({
-      types: [{ description: 'File CSV', accept: { 'text/csv': ['.csv'] } }],
-      multiple: false,
-    });
-
-    const file = await fileHandle.getFile();
-
-    // Fondamentale: devi fare il RETURN del risultato di callUploadCSV
-    return this.callUploadCSV(file); 
-    
-  } catch (err: any) {
-    if (err.name === 'AbortError') {
-      return null; // L'utente ha chiuso la finestra senza scegliere
-    }
-    console.error('Error on opening:', err);
-    return null;
+  public async addRow() {
+    // Aggiungiamo il return qui
+    return await this.openWindowFileCSV();
   }
-}
 
-public callUploadCSV(file: any) {
-  const formData = new FormData();
-  formData.append('file', file);
-  // Questo restituisce un Observable
-  return this.http.post(`${this.apiUrl}/uploadCSV`, formData);
-}
+  private async openWindowFileCSV() {
+    try {
+      const [fileHandle] = await (window as any).showOpenFilePicker({
+        types: [{ description: 'File CSV', accept: { 'text/csv': ['.csv'] } }],
+        multiple: false,
+      });
+
+      const file = await fileHandle.getFile();
+
+      // Fondamentale: devi fare il RETURN del risultato di callUploadCSV
+      return this.callUploadCSV(file);
+    } catch (err: any) {
+      if (err.name === 'AbortError') {
+        return null; // L'utente ha chiuso la finestra senza scegliere
+      }
+      console.error('Error on opening:', err);
+      return null;
+    }
+  }
+
+  public callUploadCSV(file: any) {
+    const formData = new FormData();
+    formData.append('file', file);
+    // Questo restituisce un Observable
+    return this.http.post(`${this.apiUrl}/uploadCSV`, formData);
+  }
 }

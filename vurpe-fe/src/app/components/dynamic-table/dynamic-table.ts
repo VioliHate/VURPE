@@ -35,6 +35,7 @@ export class DynamicTable {
   data = input.required<any>();
   plainDisplayedColumns = signal<string[]>([]);
   config = input<TabConfig>({
+    title: '',
     columns: [],
     buttons: [],
     new: true,

@@ -26,7 +26,7 @@
     <div class="p-2 border rounded">
       <strong>{{ j.key | camelToTitle }}</strong> → {{ j.value }}
       <button mat-button>
-        <mat-icon (click)="deleteFromMap(j.key)">delete</mat-icon>
+        <mat-icon (click)="deleteFromMap(j.key); $event.stopPropagation()">delete</mat-icon>
       </button>
     </div>
   }

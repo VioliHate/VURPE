@@ -15,7 +15,7 @@ import { ReactiveFormsModule } from '@angular/forms';
 import { MatButton } from '@angular/material/button';
 import { MatIcon } from '@angular/material/icon';
 import { TabConfig } from '../../data/TabConfig';
-import { isPlatformBrowser } from '@angular/common';
+import { isPlatformBrowser, KeyValuePipe } from '@angular/common';
 
 @Component({
   selector: 'app-dynamic-filters',
@@ -29,6 +29,7 @@ import { isPlatformBrowser } from '@angular/common';
     MatInput,
     MatButton,
     MatIcon,
+    KeyValuePipe,
   ],
   templateUrl: './dynamic-filters.html',
   styleUrl: './dynamic-filters.scss',
@@ -94,6 +95,7 @@ export class DynamicFilters {
   }
 
   addMap(key: any, value: any) {
+    if (!key || value === undefined || value === '') return;
     this.filtersMap.update((oldMap) => {
       const newMap = new Map(oldMap);
       newMap.set(key, value);

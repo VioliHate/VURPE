@@ -40,21 +40,25 @@ export class DynamicFilters {
 
   list2 = input.required<any>();
   conf = input.required<TabConfig>();
+
   list: any[] = [];
   filtersMap = signal<Map<any, any>>(new Map());
+
   MapOutput = output<any>();
 
   constructor() {
     effect(() => {
-      if (this.list2().payload.content != 0) {
-        let val = Object.keys(this.list2().payload.content[0]);
-        let col = this.conf().columns;
-        this.list = val.filter((item) => !col.includes(item));
+      const content = this.list2().payload?.content;
+      if (content && content.length > 0) {
+        const keys = Object.keys(content[0]);
+        const columns = this.conf().columns || [];
+        this.list = keys.filter((item) => !columns.includes(item));
+      } else {
+        this.list = [];
       }
     });
 
     effect(() => {
-      // Recuperiamo un identificativo unico dalla config (es. il titolo o una proprietà 'id')
       const tableId = this.conf().title;
       const storageKey = `filters_${tableId}`;
 
@@ -63,61 +67,21 @@ export class DynamicFilters {
         if (saved) {
           try {
             const parsed = JSON.parse(saved);
-            // Usiamo untracked per impostare il valore senza triggerare immediatamente il salvataggio
             untracked(() => {
               this.filtersMap.set(new Map(Object.entries(parsed)));
             });
           } catch (e) {
-            this.filtersMap.set(new Map());
+            console.error('Errore parsing filtri salvati:', e);
+            untracked(() => this.filtersMap.set(new Map()));
           }
         } else {
-          // Se non c'è nulla nel cache per questa tabella, svuotiamo i filtri correnti
           untracked(() => this.filtersMap.set(new Map()));
         }
       }
     });
-
-    effect(() => {
-      const tableId = this.conf().title;
-      const storageKey = `filters_${tableId}`;
-      const currentFilters = this.filtersMap();
-
-      if (isPlatformBrowser(this.platformId)) {
-        if (currentFilters.size > 0) {
-          const obj = Object.fromEntries(currentFilters);
-          localStorage.setItem(storageKey, JSON.stringify(obj));
-        } else {
-          // Se i filtri sono vuoti, puliamo il localStorage per questa tabella
-          localStorage.removeItem(storageKey);
-        }
-      }
-    });
   }
 
-  addMap(key: any, value: any) {
-    if (!key || value === undefined || value === '') return;
-    this.filtersMap.update((oldMap) => {
-      const newMap = new Map(oldMap);
-      newMap.set(key, value);
-      return newMap;
-    });
-    this.#saveToStorage();
-  }
-
-  deleteFromMap(key: any) {
-    this.filtersMap.update((oldMap) => {
-      const newMap = new Map(oldMap);
-      newMap.delete(key);
-      return newMap;
-    });
-    this.#saveToStorage();
-  }
-
-  send() {
-    this.MapOutput.emit(Object.fromEntries(this.filtersMap()));
-  }
-
-  #saveToStorage() {
+  private saveToStorage(): void {
     if (!isPlatformBrowser(this.platformId)) return;
 
     const tableId = this.conf().title;
@@ -125,10 +89,38 @@ export class DynamicFilters {
     const current = this.filtersMap();
 
     if (current.size > 0) {
-      const obj = Object.fromEntries(current);
-      localStorage.setItem(storageKey, JSON.stringify(obj));
+      localStorage.setItem(storageKey, JSON.stringify(Object.fromEntries(current)));
     } else {
       localStorage.removeItem(storageKey);
     }
+  }
+
+  addMap(key: any, value: any): void {
+    if (!key || value === undefined || value === '') return;
+
+    this.filtersMap.update((oldMap) => {
+      const newMap = new Map(oldMap);
+      newMap.set(key, value);
+      return newMap;
+    });
+
+    this.saveToStorage();
+  }
+
+  deleteFromMap(key: any): void {
+    this.filtersMap.update((oldMap) => {
+      const newMap = new Map(oldMap);
+      newMap.delete(key);
+      return newMap;
+    });
+
+    this.saveToStorage();
+  }
+
+  send(): void {
+    const filters = Object.fromEntries(this.filtersMap());
+    this.MapOutput.emit(filters);
+
+    this.saveToStorage();
   }
 }

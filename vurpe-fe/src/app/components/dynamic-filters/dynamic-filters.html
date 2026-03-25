@@ -22,15 +22,12 @@
 </div>
 <br />
 <div class="d-flex flex-row">
-  @for (j of filtersMap(); track j[0]) {
-    <div class="p-2">
-      <p>
-        {{ j[0] }} → {{ j[1] }}
-        <button mat-button>
-          <mat-icon (click)="deleteFromMap(j[0])">delete</mat-icon>
-          {{ j[0] }}
-        </button>
-      </p>
+  @for (j of filtersMap() | keyvalue; track j.key) {
+    <div class="p-2 border rounded">
+      <strong>{{ j.key | camelToTitle }}</strong> → {{ j.value }}
+      <button mat-button>
+        <mat-icon (click)="deleteFromMap(j.key)">delete</mat-icon>
+      </button>
     </div>
   }
   @if (filtersMap().size > 0) {

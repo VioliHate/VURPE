@@ -1,27 +1,23 @@
 <button mat-button (click)="refresh()">Refresh</button>
 
-@if (dataResource.error()) {
-  <div class="error">Errore nel caricamento dati</div>
-} @else if (dataResource.hasValue()) {
+@if (dataResource.value()) {
   <app-dynamic-filters
     [list2]="dataResource.value()"
     [conf]="config"
     (filterMapModel)="sendFilters($event)"
     [resetTrigger]="filter()"
   ></app-dynamic-filters>
-  <app-dynamic-table
-    [data]="dataResource.value()"
-    [serviceKey]="serviceKey()"
-    [config]="config"
-    (pageChanged)="onPageChange($event)"
-    (sortChanged)="onSortChange($event)"
-    (selectedDelete)="deleteRow($event)"
-    (selectedDetails)="detailsRow($event)"
-    (selectedEdit)="editRow($event)"
-    (selectedNew)="addNewRow($event)"
-    (viewGraph)="viewGraph($event)"
-  >
-  </app-dynamic-table>
-} @else {
-  <div class="loading">Caricamento in corso...</div>
 }
+<app-dynamic-table
+  [data]="dataResource"
+  [serviceKey]="serviceKey()"
+  [config]="config"
+  (pageChanged)="onPageChange($event)"
+  (sortChanged)="onSortChange($event)"
+  (selectedDelete)="deleteRow($event)"
+  (selectedDetails)="detailsRow($event)"
+  (selectedEdit)="editRow($event)"
+  (selectedNew)="addNewRow($event)"
+  (viewGraph)="viewGraph($event)"
+>
+</app-dynamic-table>

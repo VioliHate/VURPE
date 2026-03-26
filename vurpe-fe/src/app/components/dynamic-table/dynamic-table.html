@@ -6,6 +6,8 @@
         [dataSource]="DataSource"
         matSort
         (matSortChange)="onSortChange($event)"
+        [matSortActive]="sort?.active || ''"
+        [matSortDirection]="sort?.direction || 'asc'"
         matSortDisableClear
         class="w-100"
       >
@@ -109,10 +111,10 @@
           </ng-container>
         }
 
-        <tr mat-header-row *matHeaderRowDef="plainDisplayedColumns()" class="border-bottom"></tr>
+        <tr mat-header-row *matHeaderRowDef="displayedColumns()" class="border-bottom"></tr>
         <tr
           mat-row
-          *matRowDef="let row; columns: plainDisplayedColumns()"
+          *matRowDef="let row; columns: displayedColumns()"
           class="hover-row transition-all"
         ></tr>
 

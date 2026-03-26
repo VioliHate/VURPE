@@ -36,7 +36,6 @@ import { MatDivider } from '@angular/material/divider';
 export class DynamicTable {
   serviceKey = input.required<string>();
   data = input.required<any>();
-  plainDisplayedColumns = signal<string[]>([]);
   config = input<TabConfig>({
     title: '',
     columns: [],
@@ -45,7 +44,7 @@ export class DynamicTable {
   });
 
   pageInfo = computed<PageInfo | undefined>(() => {
-    return this.data().payload?.page;
+    return this.data().value()?.payload?.page;
   });
 
   pageChanged = output<PageEvent>();
@@ -57,13 +56,9 @@ export class DynamicTable {
   selectedEdit = output<any>();
   selectedNew = output<any>();
   viewGraph = output<any>();
-  customColumns = input<string[]>([]);
   columns = computed(() => {
-    const custom = this.customColumns();
-    if (custom.length > 0) return custom;
-
-    const tableData = this.data().payload.content;
-    if (tableData) {
+    if (this.data().value()) {
+      const tableData = this.data().value().payload.content;
       return tableData.length > 0 ? Object.keys(tableData[0]) : [];
     }
     return [];
@@ -77,10 +72,12 @@ export class DynamicTable {
 
   constructor() {
     effect(() => {
-      this.DataSource.data = this.data().payload.content;
-      if (this.sort) this.DataSource.sort = this.sort;
-      if (this.paginator) this.DataSource.paginator = this.paginator;
-      this.plainDisplayedColumns.set(this.displayedColumns());
+      console.log('DATA->', this.data().value());
+      if (this.data().value()) {
+        this.DataSource.data = this.data().value().payload.content;
+        if (this.sort) this.DataSource.sort = this.sort;
+        if (this.paginator) this.DataSource.paginator = this.paginator;
+      }
     });
   }
 

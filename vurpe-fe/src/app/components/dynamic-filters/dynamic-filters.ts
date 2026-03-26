@@ -61,13 +61,15 @@ export class DynamicFilters {
       }
     });
     effect(() => {
-      const content = this.list2().payload?.content;
-      if (content && content.length > 0) {
-        const keys = Object.keys(content[0]);
-        const columns = this.conf().columns || [];
-        this.list = keys.filter((item) => !columns.includes(item));
-      } else {
-        this.list = [];
+      if (this.list2()) {
+        const content = this.list2().payload?.content;
+        if (content && content.length > 0) {
+          const keys = Object.keys(content[0]);
+          const columns = this.conf().columns || [];
+          this.list = keys.filter((item) => !columns.includes(item));
+        } else {
+          this.list = [];
+        }
       }
     });
 

@@ -3,6 +3,7 @@ import {
   effect,
   inject,
   input,
+  model,
   output,
   PLATFORM_ID,
   signal,
@@ -47,7 +48,7 @@ export class DynamicFilters {
   list: any[] = [];
   filtersMap = signal<Map<any, any>>(new Map());
 
-  MapOutput = output<any>();
+  filterMapModel = model<any>();
 
   constructor() {
     effect(() => {
@@ -126,8 +127,7 @@ export class DynamicFilters {
 
   send(): void {
     const filters = Object.fromEntries(this.filtersMap());
-    this.MapOutput.emit(filters);
-
+    this.filterMapModel.set(filters);
     this.saveToStorage();
   }
 }

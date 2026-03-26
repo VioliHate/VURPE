@@ -42,4 +42,6 @@ export class App {
   goBack() {
     this.nav.back();
   }
+
+  refresh() {}
 }

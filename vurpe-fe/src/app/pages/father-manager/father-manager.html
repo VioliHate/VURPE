@@ -1,15 +1,12 @@
+<button mat-button (click)="refresh()">Refresh</button>
+
 @if (dataResource.error()) {
-  <div class="error">Errore di caricamento: {{ dataResource.error() }}</div>
+  <div class="error">Errore nel caricamento dati</div>
 } @else if (dataResource.hasValue()) {
-  <!-- Passiamo i dati e ascoltiamo l'evento del paginatore -->
-  <!-- Mettiamo il "!" dopo value() per rassicurare TypeScript che il dato c'è -->
-
-  <button mat-button (click)="refresh()">Refresh</button>
-
   <app-dynamic-filters
     [list2]="dataResource.value()"
     [conf]="config"
-    (MapOutput)="sendFilters($event)"
+    [(filterMapModel)]="filter"
   ></app-dynamic-filters>
   <app-dynamic-table
     [data]="dataResource.value()"
@@ -25,6 +22,5 @@
   >
   </app-dynamic-table>
 } @else {
-  <!-- Qui potresti mettere uno spinner o skeleton loader -->
   <div class="loading">Caricamento in corso...</div>
 }

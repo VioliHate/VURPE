@@ -133,7 +133,7 @@ export class FatherManager {
     this.pageSize.set(20);
     this.sortField.set('id');
     this.sortDir.set('ASC');
-    this.filter.set(null);
+    this.deleteFilter(this.config.title);
   }
 
   async addNewRow(id?: string) {
@@ -174,5 +174,11 @@ export class FatherManager {
 
   editRow(el: any) {
     console.log('clicked edit', el);
+  }
+  private deleteFilter(tableName: string) {
+    console.log(tableName);
+    const storageKey = `filters_${tableName}`;
+    localStorage.removeItem(storageKey);
+    this.filter.set(null);
   }
 }

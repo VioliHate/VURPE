@@ -10,7 +10,7 @@
       <div class="d-flex flex-wrap align-items-center gap-3">
         <mat-form-field appearance="outline" class="vurpe-compact-field">
           <mat-label>Scegli:</mat-label>
-          <mat-select #select>
+          <mat-select #select (selectionChange)="Input.value = ''">
             @for (i of list; track i) {
               <mat-option [value]="i">{{ i | camelToTitle }}</mat-option>
             }

@@ -1,10 +1,9 @@
-$vurpe-info: #2563EB;
-$vurpe-border: rgba(0, 0, 0, 0.05);
-$vurpe-primary-text: #1A1A1A;
+
+@use '../../../styles.scss' as theme; 
 
 .vurpe-filter-panel {
   background-color: #ffffff;
-  border: 1px solid $vurpe-border !important;
+  border: 1px solid theme.$vurpe-border !important;
   border-radius: 12px;
 }
 
@@ -12,13 +11,13 @@ $vurpe-primary-text: #1A1A1A;
   font-size: 0.85rem;
   font-weight: 800;
   letter-spacing: 0.05em;
-  color: $vurpe-primary-text;
+  color: theme.$vurpe-primary-text;
   
   mat-icon {
     font-size: 20px;
     width: 20px;
     height: 20px;
-    color: $vurpe-info; // L'icona richiama il colore primario
+    color: theme.$vurpe-info;
   }
 }
 
@@ -27,26 +26,38 @@ $vurpe-primary-text: #1A1A1A;
   ::ng-deep .mat-mdc-form-field-subscript-wrapper { display: none; }
 }
 
-.vurpe-add-btn {
-  height: 48px;
-  border-radius: 8px !important;
+.vurpe-btn-dark {
+  background-color: theme.$vurpe-primary-text !important;
+  color: white !important;
   font-weight: 600;
+  transition: opacity 0.2s ease;
+
+  mat-icon { color: white !important; }
+
+  &:hover {
+    opacity: 0.9; 
+  }
 }
 
-/* Bottone Invia compatto dopo i chips */
+.vurpe-add-btn {
+  @extend .vurpe-btn-dark;
+  height: 48px;
+  border-radius: 8px !important;
+}
+
 .vurpe-send-btn {
-  height: 32px; // Più basso per allinearsi ai badge
+  @extend .vurpe-btn-dark;
+  height: 32px;
   line-height: 32px;
   padding: 0 16px !important;
   border-radius: 6px !important;
-  font-size: 0.8rem;
-  font-weight: 700;
+  font-size: 0.75rem;
   text-transform: uppercase;
 
   mat-icon {
-    font-size: 16px;
-    width: 16px;
-    height: 16px;
+    font-size: 14px;
+    width: 14px;
+    height: 14px;
     margin-right: 4px;
   }
 }
@@ -54,24 +65,24 @@ $vurpe-primary-text: #1A1A1A;
 .vurpe-badge {
   display: inline-flex;
   align-items: center;
-  background-color: #EFF6FF;
-  color: $vurpe-info;
+  background-color: theme.$vurpe-info-bg;
+  color: theme.$vurpe-info;
   padding: 4px 12px;
   border-radius: 6px;
   font-size: 0.85rem;
-  border: 1px solid rgba($vurpe-info, 0.1);
-  height: 32px; // Stessa altezza del tasto invia per allineamento perfetto
+  border: 1px solid rgba(theme.$vurpe-info, 0.1);
+  height: 32px;
 
   .badge-label { font-weight: 600; margin-right: 4px; }
   
   .badge-close {
     background: none; border: none; padding: 0; margin-left: 8px;
-    display: flex; align-items: center; color: $vurpe-info; cursor: pointer;
+    display: flex; align-items: center; color: theme.$vurpe-info; cursor: pointer;
     mat-icon { font-size: 16px; width: 16px; height: 16px; }
-    &:hover { color: #DC2626; }
+    &:hover { color: theme.$vurpe-danger; }
   }
 }
 
 .border-top {
-  border-top: 1px dashed $vurpe-border !important;
+  border-top: 1px dashed theme.$vurpe-border !important;
 }

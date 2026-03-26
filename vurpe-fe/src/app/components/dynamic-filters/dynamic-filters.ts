@@ -16,6 +16,7 @@ import { MatButton } from '@angular/material/button';
 import { MatIcon } from '@angular/material/icon';
 import { TabConfig } from '../../data/TabConfig';
 import { isPlatformBrowser, KeyValuePipe } from '@angular/common';
+import { MatChipRow, MatChipSet } from '@angular/material/chips';
 
 @Component({
   selector: 'app-dynamic-filters',
@@ -30,6 +31,8 @@ import { isPlatformBrowser, KeyValuePipe } from '@angular/common';
     MatButton,
     MatIcon,
     KeyValuePipe,
+    MatChipSet,
+    MatChipRow,
   ],
   templateUrl: './dynamic-filters.html',
   styleUrl: './dynamic-filters.scss',

@@ -1,38 +1,60 @@
-<h4>Filtri</h4>
-@defer (on immediate) {
-  <div class="row">
-    <form class="col-4">
-      <mat-form-field>
-        <mat-label>Scegli:</mat-label>
-        <mat-select #select>
-          @for (i of list; track i) {
-            <mat-option [value]="i">{{ i | camelToTitle }}</mat-option>
-          }
-        </mat-select>
-      </mat-form-field>
-    </form>
+<div class="card vurpe-filter-panel border-0 shadow-sm">
+  <div class="card-body p-3">
+    <!-- Titolo con Icona -->
+    <div class="filter-title d-flex align-items-center mb-3">
+      <mat-icon class="me-2">filter_list</mat-icon>
+      <span>FILTRI</span>
+    </div>
 
-    <form class="col-2">
-      <mat-form-field class="example-full-width">
-        <mat-label>{{ select.value }}</mat-label>
-        <input matInput placeholder="" #Input />
-      </mat-form-field>
-    </form>
+    @defer (on immediate) {
+      <div class="d-flex flex-wrap align-items-center gap-3">
+        <mat-form-field appearance="outline" class="vurpe-compact-field">
+          <mat-label>Scegli:</mat-label>
+          <mat-select #select>
+            @for (i of list; track i) {
+              <mat-option [value]="i">{{ i | camelToTitle }}</mat-option>
+            }
+          </mat-select>
+        </mat-form-field>
 
-    <button class="col-2" mat-button (click)="addMap(select.value, Input.value)">Aggiungi</button>
-  </div>
-  <br />
-  <div class="d-flex flex-row">
-    @for (j of filtersMap() | keyvalue; track j.key) {
-      <div class="p-2 border rounded">
-        <strong>{{ j.key | camelToTitle }}</strong> → {{ j.value }}
-        <button mat-button (click)="deleteFromMap(j.key); $event.stopPropagation()">
-          <mat-icon>delete</mat-icon>
+        <mat-form-field appearance="outline" class="vurpe-compact-field">
+          <mat-label>{{ select.value || 'Valore' }}</mat-label>
+          <input matInput #Input />
+        </mat-form-field>
+
+        <button
+          mat-flat-button
+          color="primary"
+          class="vurpe-add-btn"
+          (click)="addMap(select.value, Input.value)"
+        >
+          <mat-icon>add</mat-icon>
+          Aggiungi
         </button>
       </div>
-    }
-    @if (filtersMap().size > 0) {
-      <button mat-button (click)="send()">invia</button>
+
+      <!-- Area Filtri Attivi + Invia -->
+      @if (filtersMap().size > 0) {
+        <div
+          class="active-filters-row d-flex flex-wrap align-items-center gap-2 mt-3 pt-3 border-top"
+        >
+          @for (j of filtersMap() | keyvalue; track j.key) {
+            <div class="vurpe-badge">
+              <span class="badge-label">{{ j.key | camelToTitle }}:</span>
+              <span class="badge-value">{{ j.value }}</span>
+              <button class="badge-close" (click)="deleteFromMap(j.key); $event.stopPropagation()">
+                <mat-icon>close</mat-icon>
+              </button>
+            </div>
+          }
+
+          <!-- Bottone Invia posizionato subito dopo i chips -->
+          <button mat-flat-button color="primary" class="vurpe-send-btn ms-2" (click)="send()">
+            <mat-icon>send</mat-icon>
+            Invia
+          </button>
+        </div>
+      }
     }
   </div>
-}
+</div>

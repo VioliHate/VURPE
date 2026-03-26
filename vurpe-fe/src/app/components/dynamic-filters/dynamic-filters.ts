@@ -47,10 +47,18 @@ export class DynamicFilters {
 
   list: any[] = [];
   filtersMap = signal<Map<any, any>>(new Map());
-
-  filterMapModel = model<any>();
+  resetTrigger = input<any>(null);
+  filterMapModel = output<any>();
 
   constructor() {
+    effect(() => {
+      const trigger = this.resetTrigger();
+      if (trigger && typeof trigger === 'object' && trigger.reset === true) {
+        untracked(() => {
+          this.filtersMap.set(new Map());
+        });
+      }
+    });
     effect(() => {
       const content = this.list2().payload?.content;
       if (content && content.length > 0) {
@@ -127,7 +135,7 @@ export class DynamicFilters {
 
   send(): void {
     const filters = Object.fromEntries(this.filtersMap());
-    this.filterMapModel.set(filters);
+    this.filterMapModel.emit(filters);
     this.saveToStorage();
   }
 }

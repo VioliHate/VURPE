@@ -6,7 +6,8 @@
   <app-dynamic-filters
     [list2]="dataResource.value()"
     [conf]="config"
-    [(filterMapModel)]="filter"
+    (filterMapModel)="sendFilters($event)"
+    [resetTrigger]="filter()"
   ></app-dynamic-filters>
   <app-dynamic-table
     [data]="dataResource.value()"

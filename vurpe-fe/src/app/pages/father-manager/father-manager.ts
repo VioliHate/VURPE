@@ -43,7 +43,7 @@ export class FatherManager {
   pageSize = signal(20);
   sortField = signal('id');
   sortDir = signal('ASC');
-  filter = signal(null);
+  filter = signal({});
   config: TabConfig = { title: '', columns: [], buttons: [], new: true };
 
   private injector = inject(Injector);
@@ -176,9 +176,8 @@ export class FatherManager {
     console.log('clicked edit', el);
   }
   private deleteFilter(tableName: string) {
-    console.log(tableName);
     const storageKey = `filters_${tableName}`;
     localStorage.removeItem(storageKey);
-    this.filter.set(null);
+    this.filter.set({ reset: true, timestamp: Date.now() });
   }
 }

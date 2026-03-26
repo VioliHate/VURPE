@@ -37,6 +37,11 @@
   &:hover {
     opacity: 0.9; 
   }
+
+  &:disabled{
+  background-color: theme.$vurpe-primary-text !important;
+  opacity: 0.3;
+  }
 }
 
 .vurpe-add-btn {

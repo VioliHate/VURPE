@@ -27,6 +27,7 @@
           color="primary"
           class="vurpe-add-btn"
           (click)="addMap(select.value, Input.value)"
+          [disabled]="!Input.value || !select.value"
         >
           <mat-icon>add</mat-icon>
           Aggiungi

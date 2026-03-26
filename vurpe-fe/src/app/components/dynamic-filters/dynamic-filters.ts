@@ -16,7 +16,7 @@ import { ReactiveFormsModule } from '@angular/forms';
 import { MatButton } from '@angular/material/button';
 import { MatIcon } from '@angular/material/icon';
 import { TabConfig } from '../../data/TabConfig';
-import { isPlatformBrowser, KeyValuePipe } from '@angular/common';
+import { isPlatformBrowser, KeyValuePipe, NgClass } from '@angular/common';
 import { MatChipRow, MatChipSet } from '@angular/material/chips';
 
 @Component({
@@ -34,6 +34,7 @@ import { MatChipRow, MatChipSet } from '@angular/material/chips';
     KeyValuePipe,
     MatChipSet,
     MatChipRow,
+    NgClass,
   ],
   templateUrl: './dynamic-filters.html',
   styleUrl: './dynamic-filters.scss',

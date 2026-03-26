@@ -6,11 +6,12 @@ import { MatPaginator, MatPaginatorModule, PageEvent } from '@angular/material/p
 import { PageInfo } from '../../data/PageInfo';
 import { CamelToTitlePipe } from '../../pipe/CamelToTitlePipe';
 import { MatIcon } from '@angular/material/icon';
-import { MatButton } from '@angular/material/button';
+import { MatButton, MatFabButton } from '@angular/material/button';
 import { MatMenuModule } from '@angular/material/menu';
 import { MatButtonModule } from '@angular/material/button';
 import { TabConfig } from '../../data/TabConfig';
 import { StatusBadgeDirective } from '../../directives/status-badge-directive';
+import { MatDivider } from '@angular/material/divider';
 
 @Component({
   selector: 'app-dynamic-table',
@@ -25,6 +26,8 @@ import { StatusBadgeDirective } from '../../directives/status-badge-directive';
     MatIcon,
     MatButton,
     StatusBadgeDirective,
+    MatFabButton,
+    MatDivider,
   ],
   templateUrl: './dynamic-table.html',
   styleUrl: './dynamic-table.scss',

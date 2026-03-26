@@ -1,6 +1,61 @@
-table {
-  width: 100%;
+/* Stile per la tabella migliorata */
+.mat-mdc-table {
+  background: transparent !important;
+  
+  .mat-mdc-header-cell {
+    border-bottom: 1px solid rgba(0, 0, 0, 0.08);
+  }
+
+  .mat-mdc-cell {
+    border-bottom: 1px solid rgba(0, 0, 0, 0.04);
+    font-size: 0.875rem;
+    color: #444;
+  }
 }
-.mat-elevation-z8 {
-  overflow-x: auto;
+
+/* Effetto Hover sulle righe */
+.hover-row {
+  cursor: default;
+  transition: background-color 0.2s ease;
+
+  &:hover {
+    background-color: rgba(37, 99, 235, 0.03) !important; // Usa il tuo $vurpe-info con bassa opacità
+  }
 }
+
+/* Badge personalizzati (basati sulla tua direttiva) */
+.badge-custom {
+  padding: 0.35em 0.8em;
+  border-radius: 6px;
+  font-weight: 500;
+  font-size: 0.75rem;
+  letter-spacing: 0.01em;
+  display: inline-block;
+}
+
+/* Paginatore minimal */
+.mat-mdc-paginator {
+  background-color: transparent !important;
+  color: #666 !important;
+  font-size: 0.8rem;
+}
+
+/* Bottone Edit "Invisibile" che appare al bisogno */
+.hover-primary {
+  &:hover {
+    background-color: rgba(37, 99, 235, 0.1) !important;
+    color: #2563eb !important;
+  }
+}
+
+/* Animazione per l'aggiunta delle righe */
+.transition-all {
+  transition: all 0.25s ease-in-out;
+}
+
+/* Ombre per i menu */
+.mat-mdc-menu-panel {
+  border-radius: 12px !important;
+  box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05) !important;
+}
+

@@ -1,36 +1,84 @@
-<mat-sidenav-container class="sidenav-container bg-light" autosize>
-
+<mat-sidenav-container class="sidenav-container" autosize>
+  <!-- Sidebar laterale -->
   <mat-sidenav
     mode="side"
     opened="true"
     [class.expanded]="expanded"
-    class="main-sidenav"
+    class="main-sidenav bg-white border-end shadow-sm"
   >
+    <!-- Header della sidebar con toggle -->
+    <div class="sidenav-header d-flex align-items-center justify-content-between p-3 border-bottom">
+      <div class="d-flex align-items-center gap-2">
+        <!-- Logo o brand (puoi personalizzarlo) -->
+        <div style="width: 40px; height: 40px; display: flex; align-items: center">
+          <img src="/logo.svg" style="width: 100%; height: auto" />
+        </div>
+        <span class="fw-semibold text-dark nav-brand" [hidden]="!expanded">Vurpe</span>
+      </div>
+    </div>
 
-    <button mat-icon-button class="expand-toggle" (click)="toggleExpand()">
-      <mat-icon>
-        {{ expanded ? 'chevron_left' : 'chevron_right' }}
-      </mat-icon>
-    </button>
+    <!-- Menu di navigazione -->
+    <mat-nav-list class="pt-2">
+      @for (element of listMenu; track element) {
+        <a
+          mat-list-item
+          routerLink="{{ element.route }}"
+          routerLinkActive="active"
+          [routerLinkActiveOptions]="{ exact: true }"
+          class="d-flex align-items-center px-3 py-3"
+        >
+          <mat-icon class="me-3">{{ element.icon }}</mat-icon>
 
-    <mat-nav-list>
-      @for(element of listMenu;track element){
-      <a mat-list-item routerLink="{{element.route}}">
-        <mat-icon>{{element.icon}}</mat-icon>
-        <span class="nav-link-text p-lg-3"
-        [hidden]="!expanded">{{ element.title }}</span>
-      </a>
+          <span class="nav-link-text fw-medium" [hidden]="!expanded">
+            {{ element.title }}
+          </span>
+        </a>
       }
     </mat-nav-list>
-
+    <div class="sidenav-header d-flex align-items-center justify-content-between p-3 border-top">
+      <button
+        mat-icon-button
+        class="expand-toggle w-100 d-flex justify-content-center"
+        (click)="toggleExpand()"
+        aria-label="Toggle menu"
+      >
+        <mat-icon>
+          {{ expanded ? 'keyboard_double_arrow_left' : 'keyboard_double_arrow_right' }}
+        </mat-icon>
+      </button>
+    </div>
   </mat-sidenav>
 
+  <!-- Contenuto principale -->
   <mat-sidenav-content class="content">
-    <!-- main page -->
-     <button matButton class="col-1" (click)="goBack()">
-      <mat-icon>arrow_back</mat-icon>
-    </button>
-    <router-outlet></router-outlet>
-  </mat-sidenav-content>
+    <!-- Top Bar (Toolbar) -->
+    <nav
+      class="navbar navbar-light bg-white border-bottom shadow-sm px-3 py-2 d-flex align-items-center"
+    >
+      <!-- Pulsante Back -->
+      <button
+        mat-icon-button
+        (click)="goBack()"
+        class="me-3 text-muted"
+        aria-label="Torna indietro"
+      >
+        <mat-icon>arrow_back</mat-icon>
+      </button>
 
+      <!-- Titolo dinamico della pagina (opzionale: puoi bindarlo da un servizio o da router events) -->
+      <h1 class="navbar-brand mb-0 fs-5 fw-semibold text-dark">
+        <!-- Qui puoi inserire un titolo dinamico se vuoi -->
+      </h1>
+
+      <!-- Spazio per azioni future a destra (es. utente, notifiche, ecc.) -->
+      <div class="ms-auto d-flex align-items-center gap-2">
+        <!-- Placeholder per futuri elementi -->
+      </div>
+    </nav>
+
+    <!-- Area principale del contenuto -->
+    <main class="p-4 bg-light min-vh-100">
+      <router-outlet></router-outlet>
+    </main>
+  </mat-sidenav-content>
 </mat-sidenav-container>

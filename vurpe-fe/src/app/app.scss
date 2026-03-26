@@ -1,53 +1,24 @@
-.sidenav-container {
-  height: 100vh;
-}
-
 .main-sidenav {
-  transition: width 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  width: 72px;           /* larghezza collapsed (solo icone) */
+  transition: width 0.3s ease;
   overflow-x: hidden;
-  width: 68px;
-
-  &.expanded {
-    width: 260px;   // ← larghezza menu completo
-  }
-
-  .expand-toggle {
-    width: 100%;
-    border-radius: 0;
-    justify-content: center;
-    margin-bottom: 8px;
-  }
-
-  .mat-mdc-list-item {
-    height: 48px;
-
-    .mat-mdc-list-item-icon {
-      margin-right: 16px;
-    }
-
-  }
-
-  &.expanded {
-    .item-text {
-      opacity: 1;
-    }
-  }
 }
 
-.content {
-  display: flex;
-  flex-direction: column;
-  height: 100vh;
+.main-sidenav.expanded {
+  width: 260px;          /* larghezza espansa */
 }
 
-.page-content {
-  padding: 24px;
-  flex: 1;
+.sidenav-header {
+  min-height: 64px;
 }
 
 .nav-link-text {
-  transition: all 0.3s ease;
   white-space: nowrap;
+  transition: opacity 0.2s ease;
 }
 
-
+/* Opzionale: stile per item attivo */
+.mat-mdc-list-item.active {
+  background-color: rgba(37, 99, 235, 0.08); /* azzurro tenue dal tuo tema */
+  color: var(--bs-primary);
+}

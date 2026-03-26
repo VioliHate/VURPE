@@ -16,11 +16,6 @@ export const routes: Routes = [
     title: 'Vurpe - Dashboard',
   },
   {
-    path: 'dummy',
-    component: Dummy,
-    title: 'Vurpe - Dummy',
-  },
-  {
     path: 'files',
     component: FatherManager,
     title: 'Vurpe - Files',
@@ -35,19 +30,19 @@ export const routes: Routes = [
   {
     path: 'rules',
     component: FatherManager,
-    title: 'Vurpe - rules',
+    title: 'Vurpe - Rules',
     data: { api: 'http://localhost:8080/call/rules', serviceKey: 'rules' },
   },
-   {
+  {
     path: 'metrics',
     component: FatherManager,
-    title: 'Vurpe - rules',
+    title: 'Vurpe - Metrics',
     data: { api: 'http://localhost:8080/call/analysis-results', serviceKey: 'metrics' },
   },
   {
     path: 'charts',
     component: FatherCharts,
     title: 'Vurpe - charts',
-    data: { },
+    data: {},
   },
 ];

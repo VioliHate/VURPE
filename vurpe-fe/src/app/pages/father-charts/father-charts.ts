@@ -1,5 +1,5 @@
 import { Component, computed, inject, input, signal } from '@angular/core';
-import { Charts } from '../charts/charts';
+import { Charts } from '../../components/charts/charts';
 import { rxResource } from '@angular/core/rxjs-interop';
 import { HttpClient } from '@angular/common/http';
 import { ApiResponse } from '../../data/ApiResponse';

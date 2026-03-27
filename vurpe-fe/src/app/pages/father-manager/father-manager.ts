@@ -39,6 +39,7 @@ export class FatherManager {
 
   private route = inject(ActivatedRoute);
   parentId = this.route.snapshot.queryParamMap.get('file_id');
+  parentStatus: string | undefined;
   serviceKey = input.required<string>();
   pageIndex = signal(0);
   pageSize = signal(20);
@@ -73,6 +74,8 @@ export class FatherManager {
   });
 
   constructor() {
+    const navigation = window.history.state;
+    this.parentStatus = navigation.file_status;
     effect(() => {
       const serviceToken = SERVICE_REGISTRY[this.serviceKey()];
 

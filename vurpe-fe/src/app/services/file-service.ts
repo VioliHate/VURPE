@@ -21,7 +21,8 @@ export class FileService {
 
   public getDetails(el: any) {
     this.router.navigate(['/dataRecords'], {
-      queryParams: { file_id: el.id, file_status: el.status },
+      state: { file_status: el.status },
+      queryParams: { file_id: el.id },
     });
   }
   public getMetrics(id: string) {

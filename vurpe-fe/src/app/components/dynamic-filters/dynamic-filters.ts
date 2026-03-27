@@ -1,5 +1,6 @@
 import {
   Component,
+  computed,
   effect,
   inject,
   input,
@@ -46,30 +47,35 @@ export class DynamicFilters {
   data = input.required<any>();
   conf = input.required<TabConfig>();
 
-  list: any[] = [];
   filtersMap = signal<Map<any, any>>(new Map());
   resetTrigger = input<any>(null);
   filterMapModel = output<any>();
 
+  hasError = computed(() => !!this.data().error());
+
+  filterableKeys = computed(() => {
+    if (this.hasError()) return [];
+
+    try {
+      const val = this.data().value();
+      const content = val?.payload?.content;
+
+      if (content && content.length > 0) {
+        const keys = Object.keys(content[0]);
+        const excludedColumns = this.conf().columns || [];
+        return keys.filter((item) => !excludedColumns.includes(item));
+      }
+    } catch (e) {
+      console.warn('Filtri: Impossibile leggere i dati', e);
+    }
+    return [];
+  });
+
   constructor() {
     effect(() => {
       const trigger = this.resetTrigger();
-      if (trigger && typeof trigger === 'object' && trigger.reset === true) {
-        untracked(() => {
-          this.filtersMap.set(new Map());
-        });
-      }
-    });
-    effect(() => {
-      if (this.data()) {
-        const content = this.data().payload?.content;
-        if (content && content.length > 0) {
-          const keys = Object.keys(content[0]);
-          const columns = this.conf().columns || [];
-          this.list = keys.filter((item) => !columns.includes(item));
-        } else {
-          this.list = [];
-        }
+      if (trigger?.reset === true) {
+        untracked(() => this.filtersMap.set(new Map()));
       }
     });
 

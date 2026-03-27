@@ -11,7 +11,7 @@
         <mat-form-field appearance="outline" class="vurpe-compact-field">
           <mat-label>Scegli:</mat-label>
           <mat-select #select (selectionChange)="Input.value = ''">
-            @for (i of list; track i) {
+            @for (i of filterableKeys(); track i) {
               <mat-option [value]="i">{{ i | camelToTitle }}</mat-option>
             }
           </mat-select>

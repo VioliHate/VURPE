@@ -24,8 +24,8 @@ export class MetricsService {
     new: true,
   };
 
-  public getDetails(id: string) {
-    this.router.navigate(['/charts'], { queryParams: { analysisId: id } });
+  public getDetails(el: any) {
+    this.router.navigate(['/charts'], { queryParams: { analysisId: el.id } });
   }
 
   public async addRow(id: string) {

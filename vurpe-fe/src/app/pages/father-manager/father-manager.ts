@@ -161,7 +161,7 @@ export class FatherManager {
   }
 
   detailsRow(el: any) {
-    this.Srv.getDetails(el.id);
+    this.Srv.getDetails(el);
   }
 
   viewGraph(el: any) {

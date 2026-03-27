@@ -8,7 +8,7 @@ export class DataRecord {
   public tabsConfig: TabConfig = {
     title: 'data-record',
     columns: ['id', 'file_id'],
-    buttons: [],
+    buttons: ['Analizza'],
     new: false,
   };
 }

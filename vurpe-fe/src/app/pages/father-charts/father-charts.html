@@ -1,7 +1,4 @@
 <div class="container py-4">
-  <!-- Usiamo 'container' invece di 'container-fluid' per centrare il contenuto -->
-
-  <!-- Header compatto -->
   <div class="row align-items-center mb-4 g-3">
     <div class="col-sm-6">
       <h3 class="fw-bold m-0 text-dark">Analisi Metriche</h3>
@@ -19,10 +16,9 @@
     </div>
   </div>
 
-  <!-- Card Ottimizzata -->
+  <!-- Card -->
   @if (typeMetric()) {
-    <div class="card border-0 shadow-sm rounded-4 overflow-hidden">
-      <!-- Header della card più sottile e integrato -->
+    <div class="card border-0 shadow-sm rounded-4 overflow-hidden box-height">
       <div
         class="card-header bg-light border-0 py-3 px-4 d-flex align-items-center justify-content-between"
       >
@@ -30,12 +26,9 @@
           <div class="metric-dot me-2"></div>
           <span class="fw-bold text-secondary small text-uppercase mt-1">{{ typeMetric() }}</span>
         </div>
-        <!-- Spazio per eventuali altri filtri o info -->
-        <mat-icon class="text-muted opacity-50" style="font-size: 18px">info</mat-icon>
       </div>
 
       <div class="card-body p-0">
-        <!-- Riduciamo il padding interno -->
         <div class="chart-stage">
           <app-charts
             [systemName]="typeMetric()"

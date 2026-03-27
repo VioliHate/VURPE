@@ -1,16 +1,17 @@
 ::ng-deep .compact-select .mat-mdc-form-field-subscript-wrapper {
     display: none !important; /* Rimuove lo spazio bianco sotto la select */
 }
-
-/* L'area del grafico: il cuore dell'ottimizzazione */
+.box-height{
+    height: 500px;
+}
 .chart-stage {
     position: relative;
-    height: 400px; /* Altezza fissa: il grafico non potrà mai superare questa misura */
+    height: 400px; 
     width: 100%;
     display: flex;
     justify-content: center;
     align-items: center;
-    overflow: hidden; /* Sicurezza extra: taglia ciò che esce */
+    overflow: hidden; 
 }
 
 app-charts {
@@ -21,7 +22,6 @@ app-charts {
 
 /* Forza il canvas a comportarsi bene */
 ::ng-deep canvas {
-    /* Impedisce al grafico di "esplodere" */
     max-height: 100% !important; 
     max-width: 100% !important;
     
@@ -30,7 +30,6 @@ app-charts {
     margin: 0 auto;
 }
 
-/* Piccoli dettagli estetici */
 .metric-dot {
     width: 8px;
     height: 8px;
@@ -47,7 +46,6 @@ h3 {
     letter-spacing: -0.5px;
 }
 
-/* Responsive: su mobile togliamo i limiti */
 @media (max-width: 768px) {
     .chart-stage {
         height: 350px;

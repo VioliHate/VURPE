@@ -1,6 +1,5 @@
 import { Routes } from '@angular/router';
 import { Dashboard } from './pages/dashboard/dashboard';
-import { Dummy } from './pages/dummy/dummy';
 import { FatherManager } from './pages/father-manager/father-manager';
 import { FatherCharts } from './components/father-charts/father-charts';
 

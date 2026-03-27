@@ -43,7 +43,7 @@ import { MatChipRow, MatChipSet } from '@angular/material/chips';
 export class DynamicFilters {
   private platformId = inject(PLATFORM_ID);
 
-  list2 = input.required<any>();
+  data = input.required<any>();
   conf = input.required<TabConfig>();
 
   list: any[] = [];
@@ -61,8 +61,8 @@ export class DynamicFilters {
       }
     });
     effect(() => {
-      if (this.list2()) {
-        const content = this.list2().payload?.content;
+      if (this.data()) {
+        const content = this.data().payload?.content;
         if (content && content.length > 0) {
           const keys = Object.keys(content[0]);
           const columns = this.conf().columns || [];

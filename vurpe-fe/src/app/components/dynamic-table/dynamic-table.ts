@@ -62,18 +62,20 @@ export class DynamicTable {
   viewGraph = output<any>();
 
   // computed
-  tableData = computed(() => {
-    if (this.hasError()) return [];
-    return this.data().value()?.payload?.content || [];
-  });
-  hasError = computed(() => this.data().status() === 3);
-  isRefreshing = computed(() => this.data().isLoading() && !!this.data().value());
+
+  hasError = computed(() => !!this.data().error());
   columns = computed(() => {
-    const content = this.tableData();
-    return content.length > 0 ? Object.keys(content[0]) : [];
+    if (this.hasError()) return [];
+    const val = this.data().value();
+    const tableData = val?.payload?.content || [];
+    return tableData.length > 0 ? Object.keys(tableData[0]) : [];
   });
   displayedColumns = computed(() => (this.columns().length > 0 ? ['edit', ...this.columns()] : []));
-  pageInfo = computed<PageInfo | undefined>(() => this.data().value()?.payload?.page);
+
+  pageInfo = computed<PageInfo | undefined>(() => {
+    if (this.hasError()) return undefined;
+    return this.data().value()?.payload?.page;
+  });
 
   DataSource = new MatTableDataSource<any>();
   @ViewChild(MatSort) sort!: MatSort;
@@ -81,19 +83,15 @@ export class DynamicTable {
 
   constructor() {
     effect(() => {
-      console.log(this.data().status());
-      console.log(this.data().value());
-
       if (this.hasError()) {
-        console.log('Errore rilevato:', this.data().error());
         this.DataSource.data = [];
         return;
       }
-      const currentVal = this.data().value();
-      if (currentVal) {
-        this.DataSource.data = this.tableData();
-        if (this.sort) this.DataSource.sort = this.sort;
+      const val = this.data().value();
+      if (val) {
+        this.DataSource.data = val.payload.content;
       }
+      if (this.sort) this.DataSource.sort = this.sort;
     });
   }
 

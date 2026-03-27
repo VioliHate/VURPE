@@ -16,6 +16,7 @@ import { MetricsService } from '../../services/metrics-service';
 import { DialogService } from '../../services/dialog-service';
 import { TabConfig } from '../../data/TabConfig';
 import { DataRecord } from '../../services/data-record';
+import { MatIcon } from '@angular/material/icon';
 
 const SERVICE_REGISTRY: { [key: string]: any } = {
   files: FileService,
@@ -26,7 +27,7 @@ const SERVICE_REGISTRY: { [key: string]: any } = {
 
 @Component({
   selector: 'app-father-manager',
-  imports: [DynamicTable, DynamicFilters, MatButton],
+  imports: [DynamicTable, DynamicFilters, MatButton, MatIcon, MatButton],
   templateUrl: './father-manager.html',
   styleUrl: './father-manager.scss',
   standalone: true,

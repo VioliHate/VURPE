@@ -1,5 +1,12 @@
-<button mat-button (click)="refresh()">Refresh</button>
-
+<button
+  mat-stroked-button
+  matTooltip="Ripristina la lista originale"
+  class="shadow-none mb-3"
+  (click)="refresh()"
+>
+  <mat-icon>restart_alt</mat-icon>
+  <span>Resetta</span>
+</button>
 <app-dynamic-filters
   [data]="dataResource"
   [conf]="config"

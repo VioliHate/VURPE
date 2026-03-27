@@ -53,6 +53,8 @@ export class DynamicTable {
     new: true,
   });
 
+  tooltipString: string | undefined;
+
   pageChanged = output<PageEvent>();
   sortChanged = output<any>();
   refreshCall = output<null>();
@@ -90,6 +92,8 @@ export class DynamicTable {
         return;
       }
       const val = this.data().value();
+      this.tooltipString =
+        this.config().title !== 'metrics' ? 'aggiungi ' + this.config().title : 'genera metriche';
       if (val) {
         this.DataSource.data = val.payload.content;
       }

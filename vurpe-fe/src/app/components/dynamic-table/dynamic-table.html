@@ -37,7 +37,7 @@
                 class="shadow-none"
                 (click)="selectedNew.emit('id')"
                 [hidden]="!config().new"
-                [matTooltip]="'aggiungi ' + config().title"
+                [matTooltip]="tooltipString"
               >
                 <mat-icon>add</mat-icon>
               </button>
@@ -144,7 +144,7 @@
                 class="shadow-none"
                 (click)="selectedNew.emit('id')"
                 [hidden]="!config().new"
-                [matTooltip]="'aggiungi ' + config().title"
+                [matTooltip]="tooltipString"
               >
                 <mat-icon>add</mat-icon>
               </button>

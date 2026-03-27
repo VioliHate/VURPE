@@ -20,6 +20,7 @@ import { MatButtonModule } from '@angular/material/button';
 import { TabConfig } from '../../data/TabConfig';
 import { StatusBadgeDirective } from '../../directives/status-badge-directive';
 import { MatDivider } from '@angular/material/divider';
+import { MatTooltip } from '@angular/material/tooltip';
 
 @Component({
   selector: 'app-dynamic-table',
@@ -36,6 +37,7 @@ import { MatDivider } from '@angular/material/divider';
     StatusBadgeDirective,
     MatFabButton,
     MatDivider,
+    MatTooltip,
   ],
   templateUrl: './dynamic-table.html',
   styleUrl: './dynamic-table.scss',

@@ -1,4 +1,3 @@
-
 import { Component, computed, input } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { BaseChartDirective } from 'ng2-charts';
@@ -12,79 +11,76 @@ import { ChartConfiguration, ChartData, ChartType } from 'chart.js';
   styleUrl: './charts.scss',
 })
 export class Charts {
-  // --- SIGNAL INPUTS (Sostituiscono @Input) ---
-  systemName = input<string>("MF1");
+  systemName = input<string>('MF1');
   chartData = input.required<any[]>();
   chartLabels = input.required<string[]>();
   chartType = input<ChartType>('line');
 
+  palette = [
+    '#3b82f6', // Blue
+    '#10b981', // Emerald
+    '#6366f1', // Indigo
+    '#f59e0b', // Amber
+    '#ec4899', // Pink
+    '#8b5cf6', // Violet
+    '#94a3b8', // Slate (per i dati "altri")
+  ];
+
   public lineChartData = computed<ChartData>(() => {
+    const isPie = this.chartType() === 'pie' || this.chartType() === 'doughnut';
     return {
       labels: this.chartLabels(),
       datasets: [
         {
           data: this.chartData(),
           label: this.systemName(),
-         
-        
-          pointBackgroundColor: 'red',
-          pointBorderColor: '#fff',
-        
-             backgroundColor: this.chartType() === 'pie' || this.chartType() === 'doughnut' 
-        ? ['#FF6384', '#36A2EB', '#FFCE56', '#4BC0C0', '#9966FF'] // Colori diversi per le fette
-        : '#36A2EB', // Colore unico per le barre/linee
-      borderColor: '#36A2EB',
-      fill: this.chartType() === 'line', // Riempimento solo per il grafico a linee
-        }
-      ]
+          backgroundColor: isPie ? this.palette : 'rgba(54, 162, 235, 0.2)',
+          borderColor: isPie ? '#ffffff' : '#2563eb',
+          borderWidth: isPie ? 1 : 2,
+          pointBackgroundColor: '#2563eb',
+          fill: this.chartType() === 'line',
+          tension: 0.4,
+        },
+      ],
     };
   });
 
+  public lineChartOptions = computed<ChartConfiguration['options']>(() => {
+    const isPie = this.chartType() === 'pie' || this.chartType() === 'doughnut';
 
+    return {
+      responsive: true,
+      maintainAspectRatio: isPie,
+      aspectRatio: isPie ? 2 : undefined,
 
-  public lineChartOptions: any = {
-responsive: true,
-scales : {
-yAxes: [{
-ticks: {
-max : 60,
-min : 0,
-}
-}],
-xAxes: [{
+      plugins: {
+        legend: {
+          display: true,
+          position: isPie ? 'right' : 'top',
+        },
+        tooltip: {
+          backgroundColor: 'rgba(0,0,0,0.8)',
+          padding: 10,
+        },
+      },
+      scales: isPie
+        ? {}
+        : {
+            y: {
+              beginAtZero: true,
+              grid: { color: '#f1f5f9' },
+            },
+            x: {
+              grid: { display: false },
+            },
+          },
+    };
+  });
 
-}],
-},
-  plugins: {
-  datalabels: {
-    display: true,
-    align: 'top',
-    anchor: 'end',
-    //color: "#2756B3",
-    color: "#222",
-
-    font: {
-      family: 'FontAwesome',
-      size: 14
-    },
-  
-  },
-  deferred: false
-
-},
-};
-_lineChartColors:Array<any> = [{
-backgroundColor: 'red',
-borderColor: 'red',
-pointBackgroundColor: 'red',
-pointBorderColor: 'red',
-pointHoverBackgroundColor: 'red',
-pointHoverBorderColor: 'red'
-}];
-public chartClicked(e: any): void {
-console.log(e);
-}
-public chartHovered(e: any): void {
-console.log(e);
-}
+  public chartClicked(e: any): void {
+    console.log(e);
+  }
+  public chartHovered(e: any): void {
+    console.log(e);
+  }
 }

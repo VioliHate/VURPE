@@ -1,18 +1,18 @@
-import { Component, computed, inject, input, signal } from '@angular/core';
+import { Component, inject, signal } from '@angular/core';
 import { Charts } from '../../components/charts/charts';
 import { rxResource } from '@angular/core/rxjs-interop';
 import { HttpClient } from '@angular/common/http';
 import { ApiResponse } from '../../data/ApiResponse';
 import { tap } from 'rxjs';
-import { TitleCasePipe } from '@angular/common';
-import { MatSelect, MatOption } from '@angular/material/select';
+import { MatSelect, MatOption, MatLabel, MatFormField } from '@angular/material/select';
 import { ActivatedRoute } from '@angular/router';
 import { ChartType } from 'chart.js';
+import { MatIcon } from '@angular/material/icon';
 
 @Component({
   selector: 'app-father-charts',
   standalone: true,
-  imports: [Charts, MatSelect, MatOption],
+  imports: [Charts, MatSelect, MatOption, MatIcon, MatLabel, MatFormField],
   templateUrl: './father-charts.html',
   styleUrl: './father-charts.scss',
 })

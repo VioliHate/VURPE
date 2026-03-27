@@ -1,5 +1,11 @@
-<div style="display: block;" class="chart">
-    <canvas baseChart [data]="lineChartData()" [options]="lineChartOptions" [type]="chartType()"
-        (chartHover)="chartHovered($event)" (chartClick)="chartClicked($event)">
-    </canvas>
+<div class="chart-container">
+  <canvas
+    baseChart
+    [data]="lineChartData()"
+    [options]="lineChartOptions()"
+    [type]="chartType()"
+    (chartHover)="chartHovered($event)"
+    (chartClick)="chartClicked($event)"
+  >
+  </canvas>
 </div>

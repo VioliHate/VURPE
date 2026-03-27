@@ -29,6 +29,7 @@
             class="vurpe-add-btn"
             (click)="addMap(select.value, Input.value)"
             [disabled]="!Input.value || !select.value"
+            [matTooltip]="'aggiungi regola per filtrare'"
           >
             <mat-icon>add</mat-icon>
             Aggiungi
@@ -54,7 +55,13 @@
             }
 
             <!-- Bottone Invia posizionato subito dopo i chips -->
-            <button mat-flat-button color="primary" class="vurpe-send-btn ms-2" (click)="send()">
+            <button
+              mat-flat-button
+              color="primary"
+              class="vurpe-send-btn ms-2"
+              (click)="send()"
+              [matTooltip]="'filtra tabella'"
+            >
               <mat-icon>send</mat-icon>
               Invia
             </button>

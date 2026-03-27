@@ -2,7 +2,6 @@ import { Component, effect, inject, Injector, input, signal } from '@angular/cor
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { rxResource } from '@angular/core/rxjs-interop';
 import { DynamicTable } from '../../components/dynamic-table/dynamic-table';
-
 import { ApiResponse } from '../../data/ApiResponse';
 import { PageEvent } from '@angular/material/paginator';
 import { SortUrl } from '../../utils/sort';
@@ -18,6 +17,7 @@ import { TabConfig } from '../../data/TabConfig';
 import { DataRecord } from '../../services/data-record';
 import { MatIcon } from '@angular/material/icon';
 import { Analizer } from '../../components/analizer/analizer';
+import { MatTooltip } from '@angular/material/tooltip';
 
 const SERVICE_REGISTRY: { [key: string]: any } = {
   files: FileService,
@@ -28,7 +28,7 @@ const SERVICE_REGISTRY: { [key: string]: any } = {
 
 @Component({
   selector: 'app-father-manager',
-  imports: [DynamicTable, DynamicFilters, MatButton, MatIcon, Analizer],
+  imports: [DynamicTable, DynamicFilters, MatButton, MatIcon, Analizer, MatTooltip],
   templateUrl: './father-manager.html',
   styleUrl: './father-manager.scss',
   standalone: true,

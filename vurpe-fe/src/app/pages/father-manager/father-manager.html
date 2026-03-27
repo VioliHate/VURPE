@@ -13,6 +13,9 @@
   (filterMapModel)="sendFilters($event)"
   [resetTrigger]="filter()"
 ></app-dynamic-filters>
+@if (parentStatus && parentStatus == 'UPLOADED') {
+  <app-analizer [fileId]="parentId"></app-analizer>
+}
 <app-dynamic-table
   [data]="dataResource"
   [serviceKey]="serviceKey()"

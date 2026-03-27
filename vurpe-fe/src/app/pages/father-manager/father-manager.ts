@@ -17,6 +17,7 @@ import { DialogService } from '../../services/dialog-service';
 import { TabConfig } from '../../data/TabConfig';
 import { DataRecord } from '../../services/data-record';
 import { MatIcon } from '@angular/material/icon';
+import { Analizer } from '../../components/analizer/analizer';
 
 const SERVICE_REGISTRY: { [key: string]: any } = {
   files: FileService,
@@ -27,7 +28,7 @@ const SERVICE_REGISTRY: { [key: string]: any } = {
 
 @Component({
   selector: 'app-father-manager',
-  imports: [DynamicTable, DynamicFilters, MatButton, MatIcon, MatButton],
+  imports: [DynamicTable, DynamicFilters, MatButton, MatIcon, Analizer],
   templateUrl: './father-manager.html',
   styleUrl: './father-manager.scss',
   standalone: true,
@@ -38,7 +39,7 @@ export class FatherManager {
   private dialog = inject(DialogService);
 
   private route = inject(ActivatedRoute);
-  parentId = this.route.snapshot.queryParamMap.get('file_id');
+  parentId: any = this.route.snapshot.queryParamMap.get('file_id');
   parentStatus: string | undefined;
   serviceKey = input.required<string>();
   pageIndex = signal(0);

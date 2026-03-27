@@ -1,0 +1,22 @@
+.font-monospace {
+  font-family: 'Inter', 'Courier New', monospace !important; // Mix tra il tuo font e mono
+  letter-spacing: -0.2px;
+}
+
+.card.bg-dark {
+  background-color: #1A1A1A !important; // Il tuo $vurpe-primary-text
+  border: 1px solid rgba(255, 255, 255, 0.1) !important;
+}
+
+// Effetto scrollbar per il terminale
+.card-body::-webkit-scrollbar {
+  width: 6px;
+}
+.card-body::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.2);
+  border-radius: 10px;
+}
+.panel-title{
+    font-weight: 800 ;
+    letter-spacing: 0.05em;
+}

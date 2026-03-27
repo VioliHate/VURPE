@@ -1,6 +1,6 @@
 import { HttpClient } from '@angular/common/http';
 import { inject, Injectable } from '@angular/core';
-import { ActivatedRoute, Router } from '@angular/router';
+import { Router } from '@angular/router';
 import { environment } from '../../environments/environment';
 import { TabConfig } from '../data/TabConfig';
 
@@ -9,7 +9,6 @@ import { TabConfig } from '../data/TabConfig';
 })
 export class FileService {
   private router = inject(Router);
-  private route = inject(ActivatedRoute);
   private http = inject(HttpClient);
   private readonly apiUrl = `${environment.url}/call`;
 

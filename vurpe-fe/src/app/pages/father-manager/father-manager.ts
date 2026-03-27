@@ -96,7 +96,6 @@ export class FatherManager {
         httpParams = httpParams.set(iter, params.criteria[iter]);
       }
     }
-    let url = params.api;
     if (params.parentId) {
       httpParams = httpParams.set('file_id', params.parentId);
     }

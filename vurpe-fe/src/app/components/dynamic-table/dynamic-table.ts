@@ -62,8 +62,11 @@ export class DynamicTable {
   viewGraph = output<any>();
 
   // computed
-  tableData = computed(() => this.data().value()?.payload?.content || []);
-  hasError = computed(() => !!this.data().error());
+  tableData = computed(() => {
+    if (this.hasError()) return [];
+    return this.data().value()?.payload?.content || [];
+  });
+  hasError = computed(() => this.data().status() === 3);
   isRefreshing = computed(() => this.data().isLoading() && !!this.data().value());
   columns = computed(() => {
     const content = this.tableData();
@@ -78,7 +81,16 @@ export class DynamicTable {
 
   constructor() {
     effect(() => {
-      if (!this.hasError() && this.data().value()) {
+      console.log(this.data().status());
+      console.log(this.data().value());
+
+      if (this.hasError()) {
+        console.log('Errore rilevato:', this.data().error());
+        this.DataSource.data = [];
+        return;
+      }
+      const currentVal = this.data().value();
+      if (currentVal) {
         this.DataSource.data = this.tableData();
         if (this.sort) this.DataSource.sort = this.sort;
       }

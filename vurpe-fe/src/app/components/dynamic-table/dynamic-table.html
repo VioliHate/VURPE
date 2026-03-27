@@ -142,15 +142,17 @@
     </div>
 
     <!-- Paginator -->
-    <mat-paginator
-      class="border-top"
-      [length]="pageInfo()?.totalElements || 0"
-      [pageSize]="pageInfo()?.size || 10"
-      [pageIndex]="pageInfo()?.number || 0"
-      [pageSizeOptions]="[5, 10, 25, 100]"
-      (page)="onPageChange($event)"
-      aria-label="Seleziona pagina"
-    >
-    </mat-paginator>
+    @if (DataSource.data.length) {
+      <mat-paginator
+        class="border-top"
+        [length]="pageInfo()?.totalElements || 0"
+        [pageSize]="pageInfo()?.size || 10"
+        [pageIndex]="pageInfo()?.number || 0"
+        [pageSizeOptions]="[5, 10, 25, 100]"
+        (page)="onPageChange($event)"
+        aria-label="Seleziona pagina"
+      >
+      </mat-paginator>
+    }
   }
 </div>

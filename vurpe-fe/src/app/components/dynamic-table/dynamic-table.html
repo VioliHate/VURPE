@@ -1,13 +1,42 @@
-<div class="card border-0 shadow-sm overflow-hidden">
-  @if (DataSource.data.length !== 0) {
+<div class="card border-0 shadow-sm overflow-hidden mt-lg-6">
+  @if (hasError()) {
+    <div class="text-center py-5 bg-white border rounded-3 shadow-sm">
+      <div class="d-flex flex-column align-items-center text-muted">
+        <mat-icon
+          style="font-size: 60px; width: 60px; height: 60px"
+          class="mb-3 text-danger opacity-75"
+        >
+          cloud_off
+        </mat-icon>
+        <h5 class="fw-bold text-dark">Oops! Qualcosa è andato storto</h5>
+        <p class="mb-3">Impossibile caricare i dati. Verifica la connessione o riprova.</p>
+
+        <!-- reload() è un metodo nativo di rxResource -->
+        <button mat-flat-button color="primary" (click)="data().reload()">
+          <mat-icon>refresh</mat-icon> Riprova
+        </button>
+      </div>
+    </div>
+  } @else if (isInitialLoading()) {
+    <div class="d-flex flex-column align-items-center justify-content-center py-5 bg-white">
+      <div class="spinner-border text-primary mb-3" role="status"></div>
+      <p class="text-muted fw-medium">Recupero dati in corso...</p>
+    </div>
+  } @else {
+    @if (isRefreshing()) {
+      <div
+        class="position-absolute w-100 h-100 d-flex justify-content-center align-items-center bg-white opacity-50"
+        style="z-index: 100"
+      >
+        <div class="spinner-border text-primary" role="status"></div>
+      </div>
+    }
     <div class="table-responsive">
       <table
         mat-table
         [dataSource]="DataSource"
         matSort
         (matSortChange)="onSortChange($event)"
-        [matSortActive]="sort?.active || ''"
-        [matSortDirection]="sort?.direction || 'asc'"
         matSortDisableClear
         class="w-100"
       >
@@ -141,15 +170,5 @@
       aria-label="Seleziona pagina"
     >
     </mat-paginator>
-  } @else {
-    <div class="text-center py-5 bg-white border rounded-3 shadow-sm">
-      <div class="d-flex flex-column align-items-center text-muted">
-        <mat-icon style="font-size: 60px; width: 60px; height: 60px" class="mb-3 opacity-25"
-          >cloud_off</mat-icon
-        >
-        <h5 class="fw-normal">Nessun dato da mostrare</h5>
-        <p class="small">Inizia aggiungendo un nuovo elemento o controlla i filtri.</p>
-      </div>
-    </div>
   }
 </div>

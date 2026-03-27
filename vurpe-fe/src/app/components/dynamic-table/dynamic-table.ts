@@ -1,4 +1,12 @@
-import { Component, effect, input, computed, ViewChild, output, signal } from '@angular/core';
+import {
+  Component,
+  effect,
+  input,
+  computed,
+  ViewChild,
+  output,
+  ResourceStatus,
+} from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { MatTableDataSource, MatTableModule } from '@angular/material/table';
 import { MatSort, MatSortModule, Sort } from '@angular/material/sort';
@@ -43,10 +51,6 @@ export class DynamicTable {
     new: true,
   });
 
-  pageInfo = computed<PageInfo | undefined>(() => {
-    return this.data().value()?.payload?.page;
-  });
-
   pageChanged = output<PageEvent>();
   sortChanged = output<any>();
   refreshCall = output<null>();
@@ -56,27 +60,30 @@ export class DynamicTable {
   selectedEdit = output<any>();
   selectedNew = output<any>();
   viewGraph = output<any>();
+
+  // computed
+  tableData = computed(() => this.data().value()?.payload?.content || []);
+  hasError = computed(() => !!this.data().error());
+  isLoading = computed(() => this.data().isLoading());
+  isInitialLoading = computed(() => this.isLoading() && this.tableData().length === 0);
+  isEmpty = computed(() => !this.isLoading() && !this.hasError() && this.tableData().length === 0);
+  isRefreshing = computed(() => this.data().isLoading() && !!this.data().value());
   columns = computed(() => {
-    if (this.data().value()) {
-      const tableData = this.data().value().payload.content;
-      return tableData.length > 0 ? Object.keys(tableData[0]) : [];
-    }
-    return [];
+    const content = this.tableData();
+    return content.length > 0 ? Object.keys(content[0]) : [];
   });
-  displayedColumns = computed(() => ['edit', ...this.columns()]);
+  displayedColumns = computed(() => (this.columns().length > 0 ? ['edit', ...this.columns()] : []));
+  pageInfo = computed<PageInfo | undefined>(() => this.data().value()?.payload?.page);
 
   DataSource = new MatTableDataSource<any>();
-
   @ViewChild(MatSort) sort!: MatSort;
   @ViewChild(MatPaginator) paginator!: MatPaginator;
 
   constructor() {
     effect(() => {
-      console.log('DATA->', this.data().value());
-      if (this.data().value()) {
-        this.DataSource.data = this.data().value().payload.content;
+      if (!this.hasError() && this.data().value()) {
+        this.DataSource.data = this.tableData();
         if (this.sort) this.DataSource.sort = this.sort;
-        if (this.paginator) this.DataSource.paginator = this.paginator;
       }
     });
   }

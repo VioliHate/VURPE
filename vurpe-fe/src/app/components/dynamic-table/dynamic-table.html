@@ -133,10 +133,19 @@
 
         <!-- No Data Row -->
         <tr class="mat-row" *matNoDataRow>
-          <td class="mat-cell text-center py-5" [attr.colspan]="columns().length + 1">
+          <td class="mat-cell text-center py-5" [attr.colspan]="columns().length + 2">
             <div class="d-flex flex-column align-items-center opacity-50">
               <mat-icon style="font-size: 48px; width: 48px; height: 48px">inbox</mat-icon>
               <p class="mt-2 fw-medium">Nessun dato disponibile.</p>
+              <button
+                mat-mini-fab
+                color="primary"
+                class="shadow-none"
+                (click)="selectedNew.emit('id')"
+                [hidden]="!config().new"
+              >
+                <mat-icon>add</mat-icon>
+              </button>
             </div>
           </td>
         </tr>

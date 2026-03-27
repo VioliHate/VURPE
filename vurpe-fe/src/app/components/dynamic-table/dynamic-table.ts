@@ -64,9 +64,6 @@ export class DynamicTable {
   // computed
   tableData = computed(() => this.data().value()?.payload?.content || []);
   hasError = computed(() => !!this.data().error());
-  isLoading = computed(() => this.data().isLoading());
-  isInitialLoading = computed(() => this.isLoading() && this.tableData().length === 0);
-  isEmpty = computed(() => !this.isLoading() && !this.hasError() && this.tableData().length === 0);
   isRefreshing = computed(() => this.data().isLoading() && !!this.data().value());
   columns = computed(() => {
     const content = this.tableData();

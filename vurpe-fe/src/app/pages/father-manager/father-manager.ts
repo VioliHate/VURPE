@@ -149,11 +149,11 @@ export class FatherManager {
       result$.subscribe({
         next: (res: any) => {
           if (res.status === 'OK') {
-            this.dialog.success('File caricato correttamente');
+            this.dialog.success('Inserimento avvenuto con successo');
             this.sortField.set('id');
             this.sortDir.set('DESC');
           } else {
-            this.dialog.error('Errore nel caricamento del file');
+            this.dialog.error('Errore durante il salvataggio');
           }
         },
         error: (err: any) => {

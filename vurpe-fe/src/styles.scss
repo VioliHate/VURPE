@@ -62,6 +62,7 @@ $theme-colors: map-merge($theme-colors, $custom-theme-colors);
 
 .vurpe-dialog-panel {
   .mat-mdc-dialog-surface {
+    border: 1px solid $vurpe-border !important;
     padding: 0 !important;
     border-radius: var(--bs-border-radius-lg) !important;
     overflow: hidden;

@@ -1,28 +1,33 @@
-<div class="border-2">
-  <div class="modal-header border-0 pb-2 pt-4 px-4 d-flex align-items-center gap-3">
+<div class="border rounded-3 shadow-sm bg-white overflow-hidden">
+  <div class="modal-header border-0 pb-2 pt-4 px-4 d-flex align-items-center">
     <div
-      class="rounded-circle p-3 fs-4"
+      class="rounded-circle p-3 fs-4 d-flex align-items-center justify-content-center"
+      style="width: 48px; height: 48px"
       [ngClass]="{
         'bg-success-subtle text-success': data.type === 'success',
         'bg-danger-subtle text-danger': data.type === 'error',
       }"
     >
       @if (data.type === 'success') {
-        <i class="bi bi-check-circle-fill"></i>
+        <i class="bi bi-check-lg"></i>
       } @else {
-        <i class="bi bi-exclamation-triangle-fill"></i>
+        <i class="bi bi-exclamation-circle-fill"></i>
       }
     </div>
-    <h5 class="modal-title fw-semibold mb-0">
-      {{ data.title || (data.type === 'success' ? 'Completato' : 'Errore') }}
+    <h5 class="modal-title fw-bold mb-0 text-dark">
+      {{ data.title || (data.type === 'success' ? 'Operazione Riuscita' : 'Errore') }}
     </h5>
   </div>
 
-  <div class="modal-body px-4 py-4 text-body-secondary">
-    {{ data.message }}
+  <div class="modal-body px-4 py-3">
+    <p class="text-secondary mb-0 lh-base">
+      {{ data.message }}
+    </p>
   </div>
 
-  <div class="modal-footer border-0 px-4 pb-4 pt-2 justify-content-end">
-    <button mat-button class="btn btn-outline-secondary px-4 py-2" (click)="close()">Chiudi</button>
+  <div class="modal-footer border-0 px-4 pb-4 pt-2">
+    <button type="button" class="btn btn-dark fw-medium px-4 py-2 shadow-sm" (click)="close()">
+      Chiudi
+    </button>
   </div>
 </div>

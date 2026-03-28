@@ -1,20 +1,42 @@
-<mat-card class="example-card" appearance="outlined">
-  <mat-card-header>
-    <mat-card-title>{{ title() | camelToTitle }}</mat-card-title>
-  </mat-card-header>
-  <mat-card-content>
-    <div class="stats-container">
+<mat-card class="border-0 shadow-sm rounded-3 overflow-hidden h-100 bg-white" appearance="outlined">
+  <!-- Header compatto con sfondo leggero -->
+  <div class="bg-dark border-bottom py-2 px-3">
+    <div class="d-flex align-items-center gap-2">
+      <mat-icon class="text-light fs-5" style="width: 20px; height: 20px">analytics</mat-icon>
+      <span class="fw-bold text-light small text-uppercase tracking-wider">
+        {{ title() | camelToTitle }}
+      </span>
+    </div>
+  </div>
+
+  <mat-card-content class="p-2">
+    <!-- Griglia a 2 colonne per massima compattezza -->
+    <div class="row g-2 m-0">
       @for (item of list(); track $index) {
-        <div class="stat-row">
-          <span #badge="statusBadge" [appStatusBadge]="item.status" class="stat-label">
-            @if (badge.label && badge.label != 'UNKNOWN') {
-              {{ badge.label }}
-            }
-          </span>
-          <span class="stat-value">{{ item.count }}</span>
+        <div class="col-6">
+          <div
+            class="d-flex align-items-center justify-content-between p-2 rounded-2 bg-light-subtle border border-light"
+          >
+            <span
+              #badge="statusBadge"
+              [appStatusBadge]="item.status"
+              class="badge rounded-pill fw-bold"
+              style="font-size: 0.65rem; padding: 0.35em 0.65em; min-width: 60px"
+            >
+              @if (badge.label && badge.label != 'UNKNOWN') {
+                {{ badge.label }}
+              }
+            </span>
+
+            <span class="fw-bold text-dark ms-2" style="font-size: 0.9rem">
+              {{ item.count }}
+            </span>
+          </div>
         </div>
       } @empty {
-        <p class="no-data">Nessun dato disponibile</p>
+        <div class="col-12 text-center py-3">
+          <p class="text-muted small mb-0 italic">Nessun dato</p>
+        </div>
       }
     </div>
   </mat-card-content>

@@ -5,36 +5,43 @@ import java.time.LocalDateTime;
 import java.util.UUID;
 
 public record DataRecordFilter(
-        UUID file_id,
-        String category,
-        String risk_flag,
-        String search,                  // ricerca libera su description / original_id / category
-        BigDecimal min_amount,
-        BigDecimal max_amount,
-        LocalDateTime date_from,
-        LocalDateTime date_to,
-
         UUID id,
-        LocalDateTime exact_date,
-        LocalDateTime created_at_from,
-        LocalDateTime created_at_to,
-        LocalDateTime updated_at_from,
-        LocalDateTime updated_at_to
-)
+        UUID fileId,
+        String originalId,
+        BigDecimal amount,
+        String category,
+        LocalDateTime date,
+        String description,
+        String riskFlag,
+        LocalDateTime createdAt,
+        LocalDateTime updatedAt
+) {
 
-{
-    public boolean isEmpty(){
-        return file_id == null && category == null && risk_flag == null &&
-               search == null && min_amount == null && max_amount == null &&
-               date_from == null && date_to == null && id == null &&
-               exact_date == null && created_at_from == null && created_at_to == null &&
-                updated_at_from == null && updated_at_to == null;
-
+    public boolean isEmpty() {
+        return id == null &&
+               fileId == null &&
+               originalId == null &&
+               amount == null &&
+               category == null &&
+               date == null &&
+               description == null &&
+               riskFlag == null &&
+               createdAt == null &&
+               updatedAt == null;
     }
-    public static DataRecordFilter withFileId(UUID fileId){
-        return new DataRecordFilter(fileId,null, null, null,
-                null, null, null,
-                null, null, null,
-                null, null, null, null);
+
+    public static DataRecordFilter withFileId(UUID fileId) {
+        return new DataRecordFilter(
+                null,
+                fileId,
+                null,
+                null,
+                null,
+                null,
+                null,
+                null,
+                null,
+                null
+        );
     }
 }

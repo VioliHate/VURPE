@@ -44,7 +44,7 @@ public class DataRecordTest {
                     .as("ID must be not null for record: " + record)
                     .isNotNull();
 
-            assertThat(record.getCreated_at())
+            assertThat(record.getCreatedAt())
                     .as("created_at must be not null for record: " + record)
                     .isNotNull();
         });
@@ -54,7 +54,7 @@ public class DataRecordTest {
     void shouldRejectInvalidAmountType() {
         // Amount not null
         DataRecord record = createDataRecord("27d0e7dd-93d5-4ce2-8212-16b3fff35163", "TEST-001",
-                "TEST","data record di test", "HIGH");
+                "TEST", "data record di test", "HIGH");
         record.setDate(LocalDateTime.now());
         record.setAmount(null);
         assertThrows(DataIntegrityViolationException.class, () -> {
@@ -66,7 +66,7 @@ public class DataRecordTest {
     void shouldRejectInvalidDateType() {
         // Date not null
         DataRecord record = createDataRecord("27d0e7dd-93d5-4ce2-8212-16b3fff35163", "TEST-002",
-                "TEST","data record di test", "HIGH");
+                "TEST", "data record di test", "HIGH");
         record.setDate(null);
         record.setAmount(BigDecimal.valueOf(1000L));
         assertThrows(DataIntegrityViolationException.class, () -> {
@@ -78,8 +78,8 @@ public class DataRecordTest {
     void shouldRejectInvalidUUIDType() {
         // UUID not null
         DataRecord record = createDataRecord("27d0e7dd-93d5-4ce2-8212-16b3fff35163", "TEST-003",
-                "TEST","data record di test", "HIGH");
-        record.setFile_id(null);
+                "TEST", "data record di test", "HIGH");
+        record.setFileId(null);
         record.setDate(LocalDateTime.now());
         record.setAmount(BigDecimal.valueOf(1000L));
         assertThrows(DataIntegrityViolationException.class, () -> {
@@ -90,7 +90,7 @@ public class DataRecordTest {
     @Test
     void shouldRejectInvalidCategoryType() {
         DataRecord record = createDataRecord("27d0e7dd-93d5-4ce2-8212-16b3fff35163", "TEST-004",
-                "TEST","data record di test", "HIGH");
+                "TEST", "data record di test", "HIGH");
         record.setCategory(null);
         record.setDate(LocalDateTime.now());
         record.setAmount(BigDecimal.valueOf(1000L));
@@ -98,11 +98,12 @@ public class DataRecordTest {
             repository.saveAndFlush(record);
         });
     }
+
     @Test
     void shouldRejectInvalidOriginalIdType() {
         DataRecord record = createDataRecord("27d0e7dd-93d5-4ce2-8212-16b3fff35163", "TEST-005",
-                "TEST","data record di test", "HIGH");
-        record.setOriginal_id(null);
+                "TEST", "data record di test", "HIGH");
+        record.setOriginalId(null);
         record.setDate(LocalDateTime.now());
         record.setAmount(BigDecimal.valueOf(1000L));
         assertThrows(DataIntegrityViolationException.class, () -> {
@@ -114,7 +115,7 @@ public class DataRecordTest {
     void shouldAcceptValidDataTypes() {
         // check insert
         DataRecord record = createDataRecord("27d0e7dd-93d5-4ce2-8212-16b3fff35163", "TEST-006",
-                "TEST","data record di test", "HIGH");
+                "TEST", "data record di test", "HIGH");
         record.setAmount(new BigDecimal("100.00"));
         record.setCategory("Test");
         record.setDate(LocalDateTime.now());
@@ -125,16 +126,16 @@ public class DataRecordTest {
         });
     }
 
-    //metodo creazione DataRecord di test
+    // metodo creazione DataRecord di test
     private DataRecord createDataRecord(String file_id, String original_id,
-                                        String category,
-                                        String description, String risk_flag) {
+            String category,
+            String description, String risk_flag) {
         DataRecord record = new DataRecord();
-        record.setFile_id(UUID.fromString(file_id));
-        record.setOriginal_id(original_id);
+        record.setFileId(UUID.fromString(file_id));
+        record.setOriginalId(original_id);
         record.setCategory(category);
         record.setDescription(description);
-        record.setRisk_flag(risk_flag);
+        record.setRiskFlag(risk_flag);
         return record;
     }
 }

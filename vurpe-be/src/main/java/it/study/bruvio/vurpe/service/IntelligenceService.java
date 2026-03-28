@@ -79,8 +79,8 @@ public class IntelligenceService {
 
         for (DataRecord record : matchingRecords) {
             // Logica di sovrascrittura flag
-            if (record.getRisk_flag() == null || record.getRisk_flag().isEmpty()) {
-                record.setRisk_flag(rule.getRiskFlag());
+            if (record.getRiskFlag() == null || record.getRiskFlag().isEmpty()) {
+                record.setRiskFlag(rule.getRiskFlag());
             }
         }
 
@@ -99,7 +99,7 @@ public class IntelligenceService {
         @SuppressWarnings("unchecked")
         List<DataRecord> notMatchingRecords = takeNoMatchesQuery.getResultList();
         for (DataRecord record : notMatchingRecords) {
-            record.setRisk_flag("NO_MATCHES");
+            record.setRiskFlag("NO_MATCHES");
         }
         if (!notMatchingRecords.isEmpty()) {
             dataRecordRepository.saveAll(notMatchingRecords);

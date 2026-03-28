@@ -15,18 +15,15 @@ import java.util.UUID;
 @AllArgsConstructor
 public class DataRecord {
 
-
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
     private UUID id;
 
-
-    @Column(name="file_id",nullable = false)
-    private UUID file_id;
+    @Column(name = "file_id", nullable = false)
+    private UUID fileId;
 
     @Column(name = "original_id", nullable = false)
-    private String original_id;
-
+    private String originalId;
 
     @Column(name = "amount", nullable = false)
     private BigDecimal amount;
@@ -41,17 +38,17 @@ public class DataRecord {
     private String description;
 
     @Column(name = "risk_flag")
-    private String risk_flag;
+    private String riskFlag;
 
     @Column(name = "created_at", nullable = false, updatable = false)
-    private LocalDateTime created_at;
+    private LocalDateTime createdAt;
 
     @Column(name = "updated_at")
-    private LocalDateTime updated_at;
+    private LocalDateTime updatedAt;
 
     public DataRecord(UUID idFIle, String id, BigDecimal bigDecimal, String s1, LocalDateTime parse, String s2) {
-        this.setFile_id(idFIle);
-        this.setOriginal_id(id);
+        this.setFileId(idFIle);
+        this.setOriginalId(id);
         this.setAmount(bigDecimal);
         this.setCategory(s1);
         this.setDate(parse);
@@ -59,15 +56,14 @@ public class DataRecord {
 
     }
 
-
     @PrePersist
     protected void onCreate() {
-        created_at = LocalDateTime.now();
-        updated_at = LocalDateTime.now();
+        createdAt = LocalDateTime.now();
+        updatedAt = LocalDateTime.now();
     }
 
     @PreUpdate
     protected void onUpdate() {
-        updated_at = LocalDateTime.now();
+        updatedAt = LocalDateTime.now();
     }
 }

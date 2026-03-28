@@ -15,22 +15,22 @@ import java.util.*;
 public interface DataRecordRepository extends JpaRepository<DataRecord, UUID>,
         JpaSpecificationExecutor<DataRecord> {
 
-    @Query("SELECT d FROM DataRecord d WHERE d.file_id = :fileId")
+    @Query("SELECT d FROM DataRecord d WHERE d.fileId = :fileId")
     List<DataRecord> findByFileId(UUID fileId);
 
-    @Query("SELECT SUM(d.amount) FROM DataRecord d where d.file_id = :fileId")
+    @Query("SELECT SUM(d.amount) FROM DataRecord d where d.fileId = :fileId")
     BigDecimal sumAmountByFileId(UUID fileId);
 
-    @Query("SELECT AVG(d.amount) FROM DataRecord d where d.file_id = :fileId")
+    @Query("SELECT AVG(d.amount) FROM DataRecord d where d.fileId = :fileId")
     BigDecimal avgAmountByFileId(UUID fileId);
 
-    @Query("SELECT COUNT(d) FROM DataRecord d where d.file_id = :fileId")
+    @Query("SELECT COUNT(d) FROM DataRecord d where d.fileId = :fileId")
     Integer countByFileId(UUID fileId);
 
-    @Query("SELECT d.category,count(d) FROM DataRecord d WHERE d.file_id = :fileId GROUP BY d.category")
+    @Query("SELECT d.category,count(d) FROM DataRecord d WHERE d.fileId = :fileId GROUP BY d.category")
     List<Object[]> countByCategoryRaw(UUID fileId);
 
-    @Query("SELECT d.risk_flag,count(d) FROM DataRecord d WHERE d.file_id = :fileId GROUP BY d.risk_flag")
+    @Query("SELECT d.riskFlag, COUNT(d) FROM DataRecord d WHERE d.fileId = :fileId GROUP BY d.riskFlag")
     List<Object[]> countByRiskFlagRaw(UUID fileId);
 
     @Query(value = """
@@ -38,13 +38,12 @@ public interface DataRecordRepository extends JpaRepository<DataRecord, UUID>,
                     date_trunc('day', d.date)::date AS day,
                     SUM(d.amount) AS total
                 FROM data_records d
-                WHERE d.file_id = :fileId
+                WHERE d.fileId = :fileId
                 GROUP BY date_trunc('day', d.date)
             """, nativeQuery = true)
     List<Object[]> sumAmountTimeSeriesByDate(UUID fileId);
 
-    @Query("SELECT new it.study.bruvio.vurpe.dto.response.StatusCountDTO(f.risk_flag, COUNT(f)) " +
-            "FROM DataRecord f GROUP BY f.risk_flag")
+    @Query("SELECT new it.study.bruvio.vurpe.dto.response.StatusCountDTO(f.riskFlag, COUNT(f)) FROM DataRecord f GROUP BY f.riskFlag")
     List<StatusCountDTO> countDataRecordsByRiskFlag();
 
 }

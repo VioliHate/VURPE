@@ -59,7 +59,7 @@ public class IntelligenceServiceTest {
 
         service.applyBusinessRulesToFile(fileId);
         DataRecord updated = dataRecordRepository.findByFileId(fileId).getFirst();
-        assertNotNull(updated.getRisk_flag(), "Il flag di rischio dovrebbe essere stato impostato");
+        assertNotNull(updated.getRiskFlag(), "Il flag di rischio dovrebbe essere stato impostato");
         // assertEquals("HIGH", updated.getRisk_flag(), "Flag sbagliato");
 
         /*
@@ -68,8 +68,8 @@ public class IntelligenceServiceTest {
          * @Transactional(propagation = Propagation.REQUIRES_NEW) in IntelligenceService
          * attivo
          */
-        assertEquals("NO_MATCHES", updated.getRisk_flag(), "Flag sbagliato");
-        assertNotNull(dataRecordTest.getRisk_flag());
+        assertEquals("NO_MATCHES", updated.getRiskFlag(), "Flag sbagliato");
+        assertNotNull(dataRecordTest.getRiskFlag());
     }
 
     private BusinessRule createBusinessRule() {
@@ -83,11 +83,11 @@ public class IntelligenceServiceTest {
 
     private DataRecord createDataRecord(UUID file_id) {
         DataRecord record = new DataRecord();
-        record.setFile_id(file_id);
-        record.setOriginal_id("data-record-test");
+        record.setFileId(file_id);
+        record.setOriginalId("data-record-test");
         record.setCategory("transfer");
         record.setDescription("data record di test");
-        record.setRisk_flag(null);
+        record.setRiskFlag(null);
         record.setDate(LocalDateTime.now());
         return record;
     }

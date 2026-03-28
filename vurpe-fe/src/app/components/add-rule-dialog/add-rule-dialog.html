@@ -1,17 +1,26 @@
-<div class="min-h-screen">
-  <!-- Header -->
-  <nav class="navbar navbar-expand-lg navbar-dark bg-dark sticky-top shadow-sm">
+<div class="min-h-screen bg-light">
+  <nav class="navbar navbar-expand-lg navbar-dark bg-dark sticky-top shadow">
     <div class="container-fluid px-4">
-      <mat-icon class="text-white">build</mat-icon>
-      <span class="text-white align-content-md-start">Costruttore Regola</span>
-      <div class="d-flex gap-2">
-        <button class="btn btn-outline-light btn-sm" type="button" (click)="close()">Chiudi</button>
+      <div class="d-flex align-items-center gap-2">
+        <mat-icon class="text-white">settings_suggest</mat-icon>
+        <span class="text-white fw-bold fs-5">Costruttore Regola</span>
+      </div>
+
+      <div class="d-flex gap-3 align-items-center">
         <button
-          class="btn btn-primary btn-sm d-flex align-items-center gap-2"
+          class="btn btn-outline-light px-3 fw-medium d-flex align-items-center gap-2"
+          type="button"
+          (click)="close()"
+        >
+          Annulla
+        </button>
+        <button
+          class="btn btn-primary px-4 fw-bold d-flex align-items-center gap-2 shadow-sm"
           type="button"
           (click)="saveRule()"
         >
-          Salva
+          <mat-icon>cloud_done</mat-icon>
+          Salva Regola
         </button>
       </div>
     </div>
@@ -19,31 +28,27 @@
 
   <main class="container-fluid p-4">
     <div class="row g-4">
+      <!-- Colonna Sinistra: Proprietà -->
       <div class="col-lg-4">
-        <div class="card shadow-sm mb-4">
-          <div class="card-header bg-white d-flex justify-content-between align-items-center py-3">
-            <h5 class="card-title mb-0 d-flex align-items-center gap-2">
-              <i class="bi bi-filter text-secondary"></i>
-              Proprietà della regola
-            </h5>
+        <div class="card border-0 shadow-sm">
+          <div class="card-header bg-white border-bottom-0 pt-4 px-4">
+            <h5 class="card-title mb-0 fw-bold text-dark">Proprietà della regola</h5>
           </div>
           <div class="card-body p-4">
-            <!-- Nome regola -->
             <div class="mb-4">
-              <label for="ruleName" class="form-label fw-semibold">Nome</label>
+              <label class="form-label small fw-bold text-uppercase text-muted">Nome Regola</label>
               <input
-                id="ruleName"
                 type="text"
-                class="form-control"
+                class="form-control form-control-lg bg-light border-0"
                 [ngModel]="ruleName()"
                 (ngModelChange)="ruleName.set($event)"
               />
             </div>
-
-            <!-- Risk Assessment -->
             <div class="mb-4">
-              <label class="form-label fw-semibold">Livello rischio</label>
-              <div class="btn-group w-100" role="group">
+              <label class="form-label small fw-bold text-uppercase text-muted"
+                >Livello rischio</label
+              >
+              <div class="btn-group w-100 shadow-sm">
                 @for (flag of flags; track flag) {
                   <button
                     type="button"
@@ -54,65 +59,60 @@
                       'btn-outline-warning': flag === 'MEDIUM',
                       'btn-outline-danger': flag === 'HIGH',
                     }"
-                    class="btn"
+                    class="btn py-2 fw-bold"
                   >
                     {{ flag }}
                   </button>
                 }
               </div>
             </div>
-
-            <!-- Severity / Livello -->
-            <div class="mb-3">
-              <label class="form-label fw-semibold">Gravità</label>
-              <div class="d-flex align-items-center gap-3">
-                <div class="flex-grow-1">
-                  <input
-                    type="range"
-                    class="form-range"
-                    min="1"
-                    max="10"
-                    step="1"
-                    [ngModel]="severity()"
-                    (ngModelChange)="severity.set($event)"
-                  />
-                </div>
-                <span class="badge bg-secondary fs-6 px-3 py-2"> {{ severity() }}/10 </span>
+            <div class="mb-2">
+              <label class="form-label small fw-bold text-uppercase text-muted">Gravità</label>
+              <div class="d-flex align-items-center gap-3 p-3 bg-light rounded-3">
+                <input
+                  type="range"
+                  class="form-range flex-grow-1"
+                  min="1"
+                  max="10"
+                  [ngModel]="severity()"
+                  (ngModelChange)="severity.set($event)"
+                />
+                <span class="badge bg-dark fs-6 px-3 py-2 rounded-pill"> {{ severity() }}/10 </span>
               </div>
             </div>
           </div>
         </div>
       </div>
-      <!-- Righ Column: Builder -->
+
+      <!-- Colonna Destra: Builder -->
       <div class="col-lg-8">
-        <div class="card shadow-sm mb-4">
-          <div class="card-header bg-white d-flex justify-content-between align-items-center py-3">
-            <h5 class="card-title mb-0 d-flex align-items-center gap-2">
-              <i class="bi bi-filter text-secondary"></i>
-              Condizione
-            </h5>
+        <div class="card border-0 shadow-sm mb-4">
+          <div class="card-header bg-white border-bottom-0 pt-4 px-4">
+            <h5 class="card-title mb-0 fw-bold text-dark">Configurazione Condizioni</h5>
           </div>
           <div class="card-body p-4">
             <ng-container
-              *ngTemplateOutlet="groupTemplate; context: { $implicit: rule, depth: 0 }"
+              *ngTemplateOutlet="
+                groupTemplate;
+                context: { $implicit: rule, depth: 0, parentGroup: null }
+              "
             ></ng-container>
           </div>
         </div>
 
-        <!-- Generated Logic -->
-        <div class="card bg-dark text-light shadow-lg border-0">
-          <div
-            class="card-header bg-transparent border-secondary d-flex justify-content-between align-items-center py-3"
-          >
-            <h6 class="card-title mb-0 text-secondary text-uppercase fw-bold small tracking-widest">
-              <i class="bi bi-code-slash me-2"></i>
-              Condizione formato testo
+        <!-- Preview Logica -->
+        <div class="card bg-dark border-0 shadow-lg overflow-hidden">
+          <div class="card-header bg-black bg-opacity-25 py-3 px-4">
+            <h6
+              class="card-title mb-0 text-white-50 small fw-bold text-uppercase tracking-wider d-flex align-items-center gap-2"
+            >
+              <mat-icon class="fs-5">code</mat-icon> Anteprima Logica
             </h6>
           </div>
           <div class="card-body p-4">
-            <div class="ps-4 mt-2 font-monospace small text-info">
-              {{ ruleString }}
-            </div>
+            <code class="text-info fs-6 fw-medium">{{
+              ruleString || 'Nessuna condizione definita'
+            }}</code>
           </div>
         </div>
       </div>
@@ -121,108 +121,109 @@
 </div>
 
 <!-- Recursive Group Template -->
-<ng-template #groupTemplate let-group let-depth="depth">
-  <div
-    class="position-relative ps-4 py-2 border-start border-2"
-    [ngClass]="group.conjunction === 'AND' ? 'border-dark' : 'border-warning'"
-  >
-    <!-- Conjunction Toggle -->
-    <div class="position-absolute translate-middle-x start-0 top-50">
-      <button
-        class="btn btn-xs fw-bold shadow-sm border"
-        [ngClass]="group.conjunction === 'AND' ? 'btn-dark' : 'btn-warning'"
-        (click)="toggleConjunction(group)"
-      >
-        {{ group.conjunction }}
-      </button>
+<ng-template #groupTemplate let-group let-depth="depth" let-parentGroup="parentGroup">
+  <div class="mb-4">
+    <!-- HEADER DEL GRUPPO: Chip in alto -->
+    <div class="d-flex align-items-center justify-content-between mb-2">
+      <div class="d-flex align-items-center gap-2">
+        <button
+          class="btn btn-sm fw-bold shadow-sm rounded-pill px-3"
+          [ngClass]="group.conjunction === 'AND' ? 'btn-dark' : 'btn-warning'"
+          (click)="toggleConjunction(group)"
+        >
+          {{ group.conjunction }}
+        </button>
+        <span class="text-muted small fw-bold text-uppercase tracking-wider">Gruppo</span>
+      </div>
+
+      <!-- Cestino Gruppo: mat-icon rosso -->
+      @if (depth > 0) {
+        <button
+          class="btn btn-sm btn-outline-danger border-0 rounded-circle d-flex align-items-center justify-content-center"
+          (click)="removeCondition(parentGroup, group.id)"
+        >
+          <mat-icon class="fs-5">delete_forever</mat-icon>
+        </button>
+      }
     </div>
 
-    <div class="vstack gap-3">
-      @for (item of group.conditions; track item) {
+    <!-- CONTENUTO CON LINEA VERTICALE -->
+    <div
+      class="border-start border-2 ps-4 vstack gap-3"
+      [ngClass]="group.conjunction === 'AND' ? 'border-dark' : 'border-warning'"
+    >
+      <!-- Ciclo Regole: track item.id è fondamentale per la rimozione grafica -->
+      @for (item of group.conditions; track item.id) {
         <div class="position-relative">
-          <!-- Render Subgroup -->
           @if (isGroup(item)) {
-            <div>
-              <ng-container
-                *ngTemplateOutlet="groupTemplate; context: { $implicit: item, depth: depth + 1 }"
-              ></ng-container>
-              <button
-                class="btn btn-link btn-sm text-danger position-absolute top-0 end-0 p-0"
-                (click)="removeCondition(group, item.id)"
-              >
-                <i class="bi bi-trash"></i>
-              </button>
-            </div>
+            <ng-container
+              *ngTemplateOutlet="
+                groupTemplate;
+                context: { $implicit: item, depth: depth + 1, parentGroup: group }
+              "
+            ></ng-container>
           } @else {
-            <div class="card border shadow-sm rule-row">
-              <div class="card-body p-2 d-flex flex-wrap align-items-center gap-2">
-                <div class="d-flex align-items-center gap-2 flex-grow-1 min-w-150">
-                  <i class="bi bi-database text-secondary small"></i>
+            <!-- RIGA REGOLA SINGOLA -->
+            <div class="card border-0 bg-white shadow-sm">
+              <div class="card-body p-2 d-flex align-items-center gap-2">
+                <div class="flex-grow-1">
                   <select
-                    class="form-select form-select-sm border-0 bg-transparent shadow-none fw-bold"
+                    class="form-select form-select-sm border-0 fw-bold text-primary bg-transparent"
                     [(ngModel)]="item.fieldId"
                   >
-                    @for (f of fields; track f) {
+                    @for (f of fields; track f.id) {
                       <option [value]="f.id">{{ f.label }}</option>
                     }
                   </select>
                 </div>
-
-                <div class="vr mx-1 d-none d-md-block" style="height: 20px"></div>
-
+                <div class="vr opacity-10" style="height: 20px"></div>
                 <select
-                  class="form-select form-select-sm border-0 bg-transparent shadow-none text-secondary fst-italic w-auto"
+                  class="form-select form-select-sm border-0 text-muted w-auto bg-transparent"
                   [(ngModel)]="item.operator"
                 >
-                  @for (op of getOperators(item.fieldId); track op) {
-                    <option [value]="op.value">
-                      {{ op.label }}
-                    </option>
+                  @for (op of getOperators(item.fieldId); track op.value) {
+                    <option [value]="op.value">{{ op.label }}</option>
                   }
                 </select>
-
-                <div class="vr mx-1 d-none d-md-block" style="height: 20px"></div>
-
+                <div class="vr opacity-10" style="height: 20px"></div>
                 @if (item.operator !== 'is_null' && item.operator !== 'is_not_null') {
-                  <div class="flex-grow-1 min-w-150">
+                  <div class="flex-grow-1">
                     <input
                       [type]="getFieldType(item.fieldId)"
-                      class="form-control form-control-sm bg-light border-secondary-subtle"
+                      class="form-control form-control-sm border-0 bg-light"
                       [(ngModel)]="item.value"
-                      placeholder="Value..."
+                      placeholder="Valore..."
                     />
                   </div>
                 }
-
+                <!-- CESTINO REGOLA: mat-icon rosso -->
                 <button
-                  class="btn btn-link btn-sm text-secondary hover-danger p-1 opacity-50"
+                  class="btn btn-link btn-sm text-danger d-flex align-items-center justify-content-center p-2"
                   (click)="removeCondition(group, item.id)"
                 >
-                  <mat-icon class="">delete</mat-icon>
+                  <mat-icon>delete</mat-icon>
                 </button>
               </div>
             </div>
           }
         </div>
       }
-    </div>
 
-    <!-- Add Buttons -->
-    <div class="mt-3 d-flex gap-3">
-      <button
-        class="btn btn-link btn-sm text-secondary text-decoration-none fw-bold p-0 d-flex align-items-center gap-1"
-        (click)="addCondition(group)"
-      >
-        <i class="bi bi-plus-lg"></i>
-        Add Rule
-      </button>
-      <button
-        class="btn btn-link btn-sm text-secondary text-decoration-none fw-bold p-0 d-flex align-items-center gap-1"
-        (click)="addGroup(group)"
-      >
-        <i class="bi bi-layers"></i>
-        Add Group
-      </button>
+      <!-- BOTTONI AGGIUNGI -->
+      <div class="d-flex gap-3 pt-2">
+        <button
+          class="btn btn-sm btn-light border shadow-sm fw-bold text-secondary px-3 d-flex align-items-center gap-1"
+          (click)="addCondition(group)"
+        >
+          <mat-icon class="text-primary fs-5">add_circle</mat-icon> Regola
+        </button>
+        <button
+          class="btn btn-sm btn-light border shadow-sm fw-bold text-secondary px-3 d-flex align-items-center gap-1"
+          (click)="addGroup(group)"
+        >
+          <mat-icon class="text-warning fs-5">library_add</mat-icon> Gruppo
+        </button>
+      </div>
     </div>
   </div>
 </ng-template>

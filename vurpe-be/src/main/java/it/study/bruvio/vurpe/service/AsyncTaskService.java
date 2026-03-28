@@ -15,6 +15,7 @@ import org.springframework.data.jpa.domain.Specification;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
 import java.util.UUID;
@@ -47,6 +48,7 @@ public class AsyncTaskService {
 
 
     @Async("taskExecutor")
+    @Transactional
     public void processAnalysisTask(String fileId) throws Exception {
 
         // check id

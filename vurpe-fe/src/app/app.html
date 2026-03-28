@@ -69,6 +69,18 @@
     <!-- Area principale del contenuto -->
     <main class="p-4 bg-light min-vh-100">
       <router-outlet></router-outlet>
+      <div>Stato: {{ isConnected() ? '🟢 Connesso' : '🔴 Disconnesso' }}</div>
+
+      <button (click)="connect()">Connect STOMP</button>
+      <button (click)="sendTest()">🚀 Avvia Analisi File</button>
+
+      <h3>Messaggi ricevuti ({{ messages().length }})</h3>
+      <h3>Messaggi ricevuti ({{ print(messages().at(0)) }})</h3>
+      <ul>
+        @for (msg of messages(); track msg) {
+          <li>{{ msg.payload }}</li>
+        }
+      </ul>
     </main>
   </mat-sidenav-content>
 </mat-sidenav-container>

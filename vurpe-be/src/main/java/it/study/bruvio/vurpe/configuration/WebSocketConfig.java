@@ -14,9 +14,8 @@ public class WebSocketConfig implements WebSocketMessageBrokerConfigurer {
     public void registerStompEndpoints(StompEndpointRegistry registry) {
         registry.addEndpoint("/ws/analysis")
                 .setAllowedOriginPatterns("*")
-        // commentare per testare su POSTMAN
-                //.withSockJS()
-        ;
+                .withSockJS();   // commentare per testare su POSTMAN
+
     }
 
     @Override

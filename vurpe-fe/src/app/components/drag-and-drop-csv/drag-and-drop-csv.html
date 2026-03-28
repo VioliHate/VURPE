@@ -1,43 +1,54 @@
 <div
-  class="dropzone border border-2 rounded-3 p-5 text-center position-relative border-dashed"
+  class="w-100 border border-2 rounded-4 p-4 text-center position-relative border-dashed d-flex flex-column align-items-center justify-content-center"
+  style="min-height: 200px; transition: all 0.3s ease; border-style: dashed !important"
   [class.border-primary]="isDragOver()"
   [class.bg-light]="isDragOver()"
   [class.border-danger]="statusMessage().includes('Errore') && !isUploading()"
   [class.border-success]="statusMessage().includes('caricato') && !isUploading()"
 >
   @if (!currentFile() && !isUploading()) {
-    <section>
-      <i class="bi bi-cloud-arrow-up fs-1 d-block mb-3 text-primary"></i>
-      <h5>Drag&Drop file CSV</h5>
-      <div class="small text-muted mt-3">Solo .csv</div>
-    </section>
-  } @else {
-    @if (currentFile(); as file) {
-      <div class="mb-3">
-        <i class="bi bi-file-earmark-spreadsheet fs-1 text-primary"></i>
-        <div class="mt-2 fw-bold">{{ file.name }}</div>
-        <small class="text-muted"> {{ file.size / 1024 / 1024 | number: '1.1-1' }} MB </small>
-      </div>
-    }
-    @if (statusMessage()) {
-      <div
-        class="alert mt-3"
-        [ngClass]="{
-          'alert-info': isUploading(),
-          'alert-success': statusMessage().includes('caricato'),
-          'alert-danger': statusMessage().includes('Errore'),
-        }"
+    <div class="animate__animated animate__fadeIn">
+      <mat-icon class="text-primary mb-2" style="transform: scale(2); width: 40px; height: 40px"
+        >cloud_upload</mat-icon
       >
-        {{ statusMessage() }}
-      </div>
-    }
-    @if (!isUploading()) {
-      <button mat-button class="btn btn-sm btn-outline-secondary mt-2" (click)="reset()">
-        Rimuovi
-      </button>
-    }
-    @if (isUploading()) {
-      <div class="spinner-border text-primary mt-3" role="status"></div>
-    }
+      <h6 class="fw-bold mt-3 mb-1">Trascina qui il file CSV</h6>
+      <span class="badge bg-light text-secondary border mt-3">Solo .csv</span>
+    </div>
+  } @else {
+    <div class="w-100 animate__animated animate__pulse">
+      @if (currentFile(); as file) {
+        <div class="mb-2">
+          <mat-icon class="text-primary" style="transform: scale(1.5)">description</mat-icon>
+          <div class="mt-2 fw-bold text-truncate px-3">{{ file.name }}</div>
+          <small class="text-muted">{{ file.size / 1024 / 1024 | number: '1.1-1' }} MB</small>
+        </div>
+      }
+
+      @if (statusMessage()) {
+        <div
+          class="alert py-2 px-3 mt-2 mb-0 small d-flex align-items-center justify-content-center gap-2"
+          [ngClass]="{
+            'alert-info': isUploading(),
+            'alert-success': statusMessage().includes('caricato'),
+            'alert-danger': statusMessage().includes('Errore'),
+          }"
+        >
+          @if (isUploading()) {
+            <div class="spinner-border spinner-border-sm" role="status"></div>
+          }
+          {{ statusMessage() }}
+        </div>
+      }
+
+      @if (!isUploading()) {
+        <button
+          mat-button
+          class="btn btn-sm btn-link text-danger fw-bold mt-2 text-decoration-none"
+          (click)="reset()"
+        >
+          <mat-icon class="fs-6">delete</mat-icon> Rimuovi
+        </button>
+      }
+    </div>
   }
 </div>

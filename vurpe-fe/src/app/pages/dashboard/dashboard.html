@@ -1,18 +1,58 @@
-<div class="table-bordered">
-  <div class="col-8">
-    <drag-and-drop-csv
-      (fileProcessed)="onFileProcessed($event)"
-      [(statusMessage)]="statusMessage"
-    ></drag-and-drop-csv>
+<div class="container-fluid p-4 min-vh-100 bg-light">
+  <div class="row mb-4">
+    <div class="col-12">
+      <h4 class="fw-bold text-dark mb-1">Dashboard Operativa</h4>
+      <p class="text-muted small">Gestione caricamenti e monitoraggio globale del sistema.</p>
+    </div>
   </div>
 
-  <div class="container">
-    @if (list().length > 0) {
-      <div class="row">
-        @for (stat of list(); track $index) {
-          <app-stats-card class="col-4" [title]="stat[0]" [list]="stat[1]"></app-stats-card>
+  <div class="row g-4">
+    <!-- COLONNA SINISTRA: Sorgente Dati -->
+    <div class="col-lg-4 col-xl-3">
+      <div class="card border-0 shadow-sm rounded-4 p-4 bg-white">
+        <div class="d-flex align-items-center gap-2 mb-4">
+          <mat-icon class="text-primary">upload_file</mat-icon>
+          <h6 class="mb-0 fw-bold">Sorgente Dati</h6>
+        </div>
+
+        <drag-and-drop-csv
+          (fileProcessed)="onFileProcessed($event)"
+          [(statusMessage)]="statusMessage"
+        ></drag-and-drop-csv>
+
+        <div class="mt-4 p-3 rounded-3 bg-light border border-dashed text-center">
+          <small class="text-muted">L'analisi sarà disponibile dopo il caricamento</small>
+        </div>
+      </div>
+    </div>
+
+    <!-- COLONNA DESTRA: Statistiche Globali -->
+    <div class="col-lg-8 col-xl-9">
+      <div class="card border-0 shadow-sm rounded-4 p-4 bg-white h-100">
+        <div class="d-flex align-items-center justify-content-between mb-4">
+          <div class="d-flex align-items-center gap-2">
+            <mat-icon class="text-secondary">public</mat-icon>
+            <h6 class="mb-0 fw-bold text-secondary text-uppercase tracking-wider">
+              Statistiche Globali Applicativo
+            </h6>
+          </div>
+        </div>
+
+        @if (list().length > 0) {
+          <div class="row g-3">
+            @for (stat of list(); track $index) {
+              <div class="col-md-6 col-xl-4">
+                <app-stats-card [title]="stat[0]" [list]="stat[1]"></app-stats-card>
+              </div>
+            }
+          </div>
+        } @else {
+          <div class="d-flex flex-column align-items-center justify-content-center py-5 opacity-25">
+            <mat-icon style="font-size: 64px; width: 64px; height: 64px">analytics</mat-icon>
+            <p class="mt-3 fw-bold">Nessun dato statistico disponibile</p>
+          </div>
         }
       </div>
-    }
+    </div>
   </div>
 </div>

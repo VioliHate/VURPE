@@ -1,10 +1,11 @@
 import { CommonModule } from '@angular/common';
 import { Component, HostBinding, HostListener, input, model, output, signal } from '@angular/core';
 import { MatButton } from '@angular/material/button';
+import { MatIcon } from '@angular/material/icon';
 
 @Component({
   selector: 'drag-and-drop-csv',
-  imports: [MatButton, CommonModule],
+  imports: [MatButton, CommonModule, MatIcon],
   templateUrl: './drag-and-drop-csv.html',
   styleUrl: './drag-and-drop-csv.scss',
 })

@@ -15,6 +15,7 @@ import { FormsModule } from '@angular/forms';
 import { MatIconModule } from '@angular/material/icon';
 import { RiskFlag, Field, FieldType, Operator, RuleGroup, Condition } from '../../data/types';
 import { BusinessRule } from '../../data/BusinessRule';
+import { MatTooltip } from '@angular/material/tooltip';
 
 @Component({
   selector: 'app-add-rule-dialog',
@@ -31,6 +32,7 @@ import { BusinessRule } from '../../data/BusinessRule';
     CommonModule,
     FormsModule,
     MatIconModule,
+    MatTooltip,
   ],
   templateUrl: './add-rule-dialog.html',
   styleUrl: './add-rule-dialog.scss',

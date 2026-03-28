@@ -18,6 +18,7 @@
           class="btn btn-primary px-4 fw-bold d-flex align-items-center gap-2 shadow-sm"
           type="button"
           (click)="saveRule()"
+          [disabled]="!ruleString"
         >
           <mat-icon>cloud_done</mat-icon>
           Salva Regola
@@ -53,11 +54,15 @@
                   <button
                     type="button"
                     (click)="riskFlag.set(flag)"
-                    [class.active]="riskFlag() === flag"
                     [ngClass]="{
-                      'btn-outline-success': flag === 'LOW',
-                      'btn-outline-warning': flag === 'MEDIUM',
-                      'btn-outline-danger': flag === 'HIGH',
+                      'btn-success': riskFlag() === 'LOW' && flag === 'LOW',
+                      'btn-outline-success': riskFlag() !== 'LOW' && flag === 'LOW',
+
+                      'btn-warning text-dark': riskFlag() === 'MEDIUM' && flag === 'MEDIUM',
+                      'btn-outline-warning': riskFlag() !== 'MEDIUM' && flag === 'MEDIUM',
+
+                      'btn-danger': riskFlag() === 'HIGH' && flag === 'HIGH',
+                      'btn-outline-danger': riskFlag() !== 'HIGH' && flag === 'HIGH',
                     }"
                     class="btn py-2 fw-bold"
                   >
@@ -126,21 +131,26 @@
     <!-- HEADER DEL GRUPPO: Chip in alto -->
     <div class="d-flex align-items-center justify-content-between mb-2">
       <div class="d-flex align-items-center gap-2">
-        <button
-          class="btn btn-sm fw-bold shadow-sm rounded-pill px-3"
-          [ngClass]="group.conjunction === 'AND' ? 'btn-dark' : 'btn-warning'"
-          (click)="toggleConjunction(group)"
-        >
-          {{ group.conjunction }}
-        </button>
-        <span class="text-muted small fw-bold text-uppercase tracking-wider">Gruppo</span>
+        @if (group.conditions.length > 1) {
+          <button
+            class="btn btn-sm fw-bold shadow-sm rounded-pill px-3"
+            [ngClass]="group.conjunction === 'AND' ? 'btn-dark' : 'btn-warning'"
+            (click)="toggleConjunction(group)"
+          >
+            {{ group.conjunction }}
+          </button>
+        }
+        <span class="text-muted small fw-bold text-uppercase tracking-wider">
+          {{ depth === 0 ? 'Regola Principale' : 'Sottogruppo' }}
+        </span>
       </div>
 
-      <!-- Cestino Gruppo: mat-icon rosso -->
+      <!-- DELETE Gruppo -->
       @if (depth > 0) {
         <button
-          class="btn btn-sm btn-outline-danger border-0 rounded-circle d-flex align-items-center justify-content-center"
+          class="btn btn-link btn-sm text-danger d-flex align-items-center justify-content-center p-2"
           (click)="removeCondition(parentGroup, group.id)"
+          [matTooltip]="'Elimina gruppo'"
         >
           <mat-icon class="fs-5">delete_forever</mat-icon>
         </button>
@@ -196,12 +206,13 @@
                     />
                   </div>
                 }
-                <!-- CESTINO REGOLA: mat-icon rosso -->
+                <!-- CESTINO REGOLA -->
                 <button
                   class="btn btn-link btn-sm text-danger d-flex align-items-center justify-content-center p-2"
                   (click)="removeCondition(group, item.id)"
+                  [matTooltip]="'Elimina regola'"
                 >
-                  <mat-icon>delete</mat-icon>
+                  <mat-icon>delete_forever</mat-icon>
                 </button>
               </div>
             </div>

@@ -1,10 +1,11 @@
 import { Component, input } from '@angular/core';
 import { MatButton } from '@angular/material/button';
 import { MatIcon } from '@angular/material/icon';
+import { ExecutionTerminal } from '../execution-terminal/execution-terminal';
 
 @Component({
   selector: 'app-analizer',
-  imports: [MatButton, MatIcon],
+  imports: [MatButton, MatIcon, ExecutionTerminal],
   templateUrl: './analizer.html',
   styleUrl: './analizer.scss',
 })

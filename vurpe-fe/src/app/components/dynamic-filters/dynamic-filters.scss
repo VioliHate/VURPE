@@ -1,9 +1,8 @@
-
-@use '../../../styles.scss' as theme; 
+@use '../../../variables' as v; 
 
 .vurpe-filter-panel {
   background-color: #ffffff;
-  border: 1px solid theme.$vurpe-border !important;
+  border: 1px solid v.$vurpe-border !important; 
   border-radius: 12px;
 }
 
@@ -11,13 +10,13 @@
   font-size: 0.85rem;
   font-weight: 800;
   letter-spacing: 0.05em;
-  color: theme.$vurpe-primary-text;
+  color: v.$vurpe-primary-text;
   
   mat-icon {
     font-size: 20px;
     width: 20px;
     height: 20px;
-    color: theme.$vurpe-info;
+    color: v.$vurpe-info;
   }
 }
 
@@ -26,8 +25,8 @@
   ::ng-deep .mat-mdc-form-field-subscript-wrapper { display: none; }
 }
 
-.vurpe-btn-dark {
-  background-color: theme.$vurpe-primary-text !important;
+%vurpe-btn-base {
+  background-color: v.$vurpe-primary-text !important;
   color: white !important;
   font-weight: 600;
   transition: opacity 0.2s ease;
@@ -38,20 +37,24 @@
     opacity: 0.9; 
   }
 
-  &:disabled{
-  background-color: theme.$vurpe-primary-text !important;
-  opacity: 0.3;
+  &:disabled {
+    background-color: v.$vurpe-primary-text !important;
+    opacity: 0.3;
   }
 }
 
+.vurpe-btn-dark {
+  @extend %vurpe-btn-base;
+}
+
 .vurpe-add-btn {
-  @extend .vurpe-btn-dark;
+  @extend %vurpe-btn-base;
   height: 48px;
   border-radius: 8px !important;
 }
 
 .vurpe-send-btn {
-  @extend .vurpe-btn-dark;
+  @extend %vurpe-btn-base;
   height: 32px;
   line-height: 32px;
   padding: 0 16px !important;
@@ -70,24 +73,24 @@
 .vurpe-badge {
   display: inline-flex;
   align-items: center;
-  background-color: theme.$vurpe-info-bg;
-  color: theme.$vurpe-info;
+  background-color: v.$vurpe-info-bg;
+  color: v.$vurpe-info;
   padding: 4px 12px;
   border-radius: 6px;
   font-size: 0.85rem;
-  border: 1px solid rgba(theme.$vurpe-info, 0.1);
+  border: 1px solid rgba(v.$vurpe-info, 0.1);
   height: 32px;
 
   .badge-label { font-weight: 600; margin-right: 4px; }
   
   .badge-close {
     background: none; border: none; padding: 0; margin-left: 8px;
-    display: flex; align-items: center; color: theme.$vurpe-info; cursor: pointer;
+    display: flex; align-items: center; color: v.$vurpe-info; cursor: pointer;
     mat-icon { font-size: 16px; width: 16px; height: 16px; }
-    &:hover { color: theme.$vurpe-danger; }
+    &:hover { color: v.$vurpe-danger; }
   }
 }
 
 .border-top {
-  border-top: 1px dashed theme.$vurpe-border !important;
+  border-top: 1px dashed v.$vurpe-border !important;
 }

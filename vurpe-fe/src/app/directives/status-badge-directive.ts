@@ -47,6 +47,7 @@ export class StatusBadgeDirective {
       PROCESSING: { bg: '#f3e5f5', text: '#7b1fa2', border: '#e1bee7', label: 'IN ANALISI' },
       UNKNOWN: { bg: '#f5f5f5', text: '#757575', border: '#e0e0e0', label: 'DA ANALIZZARE' },
       UPLOADED: { bg: '#f5f5f5', text: '#757575', border: '#e0e0e0', label: 'CARICATO' },
+      NO_MATCHES: { bg: '#EFF6FF', text: '#2563EB', border: '#e0e0e0', label: 'ZERO RISCHIO' },
     };
 
     // Restituisce la config se esiste, altrimenti null

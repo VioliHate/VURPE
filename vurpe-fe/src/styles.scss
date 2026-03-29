@@ -1,84 +1,39 @@
+// 1. Moduli di sistema
+@use "sass:map";
 @use '@angular/material' as mat;
-@import "bootstrap/scss/functions";
-@import "bootstrap/scss/variables";
-@import 'fastbootstrap/dist/css/fastbootstrap.min.css';
+
+@use "./variables" as v;
+
+@use 'fastbootstrap/dist/css/fastbootstrap.min.css';
 
 
+$primary: v.$vurpe-info;
+$theme-colors: (
+  "primary":   v.$vurpe-info,
+  "secondary": v.$vurpe-secondary-text,
+  "success":   v.$vurpe-success,
+  "info":      v.$vurpe-muted,
+  "warning":   #d97706,
+  "danger":    v.$vurpe-danger,
+  "light":     v.$vurpe-body,
+  "dark":      v.$vurpe-primary-text,
+  "card":      v.$vurpe-card,
+  "muted":     v.$vurpe-muted,
+  "graph-line": #1A1A1A,
+  "graph-grill": #F0F0F0,
+  "vurpe-bg": v.$body-bg
+);
+
+@import "bootstrap/scss/bootstrap";
+
+//style
 html {
   height: 100%;
   @include mat.theme((
-    color: (
-      primary: mat.$azure-palette,
-      tertiary: mat.$blue-palette,
-    ),
+    color: (primary: mat.$azure-palette, tertiary: mat.$blue-palette),
     typography: Roboto,
     density: 0,
   ));
 }
 
-$vurpe-background:    #F8F9FA;
-$vurpe-body:          #F5F5F5;
-$vurpe-card:          #8B5E3C;
-$vurpe-border:        rgba(0, 0, 0, 0.05);
-$vurpe-primary-text:  #1A1A1A;
-$vurpe-secondary-text:#666666;
-$vurpe-muted:         #999999;
-
-$vurpe-success:       #059669;
-$vurpe-success-bg:    #ECFDF5;
-
-$vurpe-info:          #2563EB;
-$vurpe-info-bg:       #EFF6FF;
-
-$vurpe-danger:        #DC2626;
-$vurpe-danger-bg:     #FEF2F2;
-
-$body-bg:             $vurpe-background;
-$body-color:          $vurpe-primary-text;
-$font-family-sans-serif: "Inter", system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
-
-$custom-theme-colors: (
-  "primary":   $vurpe-info,
-  "secondary": $vurpe-secondary-text,
-  "success":   $vurpe-success,
-  "info":      $vurpe-muted,
-  "warning":   #d97706,
-  "danger":    $vurpe-danger,
-  "light":     $vurpe-body,
-  "dark":      $vurpe-primary-text,
-  "card":      $vurpe-card,
-  "muted":     $vurpe-muted,
-  "graph-line": #1A1A1A,
-  "graph-grill": #F0F0F0,
-  "vurpe-bg": $body-bg
-);
-
-$theme-colors: map-merge($theme-colors, $custom-theme-colors);
-
-@import "bootstrap/scss/bootstrap";
-
-
-
-
-.vurpe-dialog-panel {
-  .mat-mdc-dialog-surface {
-    border: 1px solid $vurpe-border !important;
-    padding: 0 !important;
-    border-radius: var(--bs-border-radius-lg) !important;
-    overflow: hidden;
-  }
-
-  .cdk-overlay-pane {
-    margin: 1.75rem auto !important;  
-  }
-}
-
-.vurpe-dialog-backdrop {
-  background-color: rgba($vurpe-background, 0.35) !important;
-  backdrop-filter: blur(10px) saturate(1.15) !important;
-  opacity: 1 !important;
-}
-
-.cdk-overlay-backdrop {
-  transition: opacity 0.3s ease, backdrop-filter 0.4s ease !important;
-}
+// ... i tuoi stili .vurpe-dialog-panel ecc ...

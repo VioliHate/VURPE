@@ -7,12 +7,11 @@ import { tap } from 'rxjs';
 import { MatSelect, MatOption, MatLabel, MatFormField } from '@angular/material/select';
 import { ActivatedRoute } from '@angular/router';
 import { ChartType } from 'chart.js';
-import { MatIcon } from '@angular/material/icon';
 
 @Component({
   selector: 'app-father-charts',
   standalone: true,
-  imports: [Charts, MatSelect, MatOption, MatIcon, MatLabel, MatFormField],
+  imports: [Charts, MatSelect, MatOption, MatLabel, MatFormField],
   templateUrl: './father-charts.html',
   styleUrl: './father-charts.scss',
 })

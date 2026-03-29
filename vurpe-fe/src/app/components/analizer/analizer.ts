@@ -5,7 +5,7 @@ import { ExecutionTerminal } from '../execution-terminal/execution-terminal';
 
 @Component({
   selector: 'app-analizer',
-  imports: [MatButton, MatIcon, ExecutionTerminal],
+  imports: [MatIcon, ExecutionTerminal],
   templateUrl: './analizer.html',
   styleUrl: './analizer.scss',
 })

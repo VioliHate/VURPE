@@ -12,5 +12,12 @@
     class="card-body p-3 font-monospace"
     style="height: 250px; overflow-y: auto; font-size: 0.85rem; background-color: #1a1a1a"
     #scrollContainer
-  ></div>
+  >
+    <h3>Messaggi ricevuti ({{ messages().length }})</h3>
+    <ul>
+      @for (msg of messages(); track msg) {
+        <li>{{ msg.payload }}</li>
+      }
+    </ul>
+  </div>
 </div>

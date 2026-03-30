@@ -32,8 +32,7 @@ public class DataRecordController {
             @RequestParam("id") String id) throws Exception {
         UUID RecordId = UUID.fromString(id);
         try {
-            boolean res = dataRecordService.delete(RecordId);
-            if (res) {
+            if (dataRecordService.delete(RecordId)) {
                 PayloadResponse<String> response = PayloadResponse.success(null,
                         "deleted completed");
                 return ResponseEntity.ok(response);

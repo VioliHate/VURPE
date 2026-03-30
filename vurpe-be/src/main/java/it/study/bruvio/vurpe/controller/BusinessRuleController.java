@@ -56,8 +56,7 @@ public class BusinessRuleController {
             @RequestParam("id") String id) throws Exception {
         UUID recordId = UUID.fromString(id);
         try {
-            boolean res = brServ.delete(recordId);
-            if (res) {
+            if (brServ.delete(recordId)) {
                 PayloadResponse<String> response = PayloadResponse.success(null,
                         "deleted completed");
                 return ResponseEntity.ok(response);

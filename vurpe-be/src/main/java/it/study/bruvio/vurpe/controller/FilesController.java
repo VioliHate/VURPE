@@ -42,8 +42,7 @@ public class FilesController {
             @RequestParam("id") String id) throws Exception {
         UUID recordId = UUID.fromString(id);
         try {
-            boolean res = filesService.delete(recordId);
-            if (res) {
+            if (filesService.delete(recordId)) {
                 PayloadResponse<String> response = PayloadResponse.success(null,
                         "deleted completed");
                 return ResponseEntity.ok(response);

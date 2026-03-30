@@ -65,8 +65,7 @@ public class AsyncTaskController {
             @RequestParam("id") String id) throws Exception {
         UUID recordId = UUID.fromString(id);
         try {
-            boolean res = asyncTaskService.delete(recordId);
-            if (res) {
+            if (asyncTaskService.delete(recordId)) {
                 PayloadResponse<String> response = PayloadResponse.success(null,
                         "deleted completed");
                 return ResponseEntity.ok(response);

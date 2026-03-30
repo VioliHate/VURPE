@@ -40,8 +40,7 @@ public class AnalysisResultController {
             @RequestParam("id") String id) throws Exception {
         UUID RecordId = UUID.fromString(id);
         try {
-            boolean res = service.delete(RecordId);
-            if (res) {
+            if (service.delete(RecordId)) {
                 PayloadResponse<String> response = PayloadResponse.success(null,
                         "deleted completed");
                 return ResponseEntity.ok(response);

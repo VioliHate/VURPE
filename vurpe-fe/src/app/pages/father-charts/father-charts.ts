@@ -17,10 +17,10 @@ import { ChartType } from 'chart.js';
 })
 export class FatherCharts {
   private http = inject(HttpClient);
-  list: Map<String, ChartType> = new Map<String, ChartType>([
-    ['distribution_by_category', 'pie'],
-    ['distribution_by_risk_flag', 'bar'],
-    ['time_series_by_date', 'line'],
+  list: Map<String[], ChartType> = new Map<String[], ChartType>([
+    [['Categoria', 'distributionByCategory'], 'pie'],
+    [['Rischio', 'distributionByRiskFlag'], 'bar'],
+    [['Data', 'timeSeriesByDate'], 'line'],
   ]);
   private route = inject(ActivatedRoute);
   analysisId = this.route.snapshot.queryParamMap.get('analysisId');
@@ -41,8 +41,6 @@ export class FatherCharts {
     }),
 
     stream: ({ params }) => {
-      // this.defaultParams(params);
-
       return this.http
         .get<ApiResponse<any>>(`http://localhost:8080/call/analysis-metrics/${params.id}`)
         .pipe(
@@ -53,23 +51,13 @@ export class FatherCharts {
     },
   });
 
-  private defaultParams(param: any): void {
-    if (!param.graph) {
-      param.graph = 'distribution_by_risk_flag';
-    }
-    if (!param?.id) {
-      param.id = '82f62c28-4721-4195-9f68-3749f6ce49df';
-    }
-    return;
-  }
-
   takeDataCharts() {
     this.chartData.set(Object.values(this.totalData?.[this.typeMetric()]) || []);
     this.chartLabels.set(Object.keys(this.totalData?.[this.typeMetric()]) || []);
   }
 
   onSystemChange(arg0: any) {
-    this.typeMetric.set(arg0[0]);
+    this.typeMetric.set(arg0[0][1]);
     this.chartType.set(arg0[1]);
     this.takeDataCharts();
   }

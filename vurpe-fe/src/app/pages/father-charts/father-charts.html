@@ -9,7 +9,7 @@
         <mat-label>Seleziona Sistema</mat-label>
         <mat-select #select (selectionChange)="onSystemChange(select.value)">
           @for (i of list; track i[0]) {
-            <mat-option [value]="i">{{ i[0] }}</mat-option>
+            <mat-option [value]="i">{{ i[0][0] }}</mat-option>
           }
         </mat-select>
       </mat-form-field>

@@ -1,0 +1,5 @@
+export enum StompStatus {
+  CONNECTED = 'CONNECTED',
+  DISCONNECTED = 'DISCONNECTED',
+  CONNECTING = 'CONNECTING',
+}

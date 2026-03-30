@@ -47,6 +47,7 @@ export class FatherManager {
   sortField = signal('id');
   sortDir = signal('ASC');
   filter = signal({});
+  refershSignal = signal(false);
   config: TabConfig = { title: '', columns: [], buttons: [], new: true };
 
   private injector = inject(Injector);
@@ -63,6 +64,7 @@ export class FatherManager {
       criteria: this.filter(),
       api: this.api(),
       parentId: this.parentId,
+      refresh: this.refershSignal(),
     }),
 
     stream: ({ params }) => {
@@ -140,28 +142,18 @@ export class FatherManager {
     this.deleteFilter(this.config.title);
   }
 
+  updateRefreshSignal() {
+    this.refershSignal.set(!this.refershSignal());
+  }
+
   async addNewRow(id?: string) {
     const result$ = id ? await this.Srv.addRow(this.parentId) : await this.Srv.addRow();
-    // result$ sarà l'Observable restituito dalla POST (o null se annullato)
+    this.openDialogMessage(result$, 'Inserimento avvenuto con successo');
+  }
 
-    // Controllo se result$ esiste (se l'utente ha annullato la scelta file, sarà null)
-    if (result$) {
-      result$.subscribe({
-        next: (res: any) => {
-          if (res.status === 'OK') {
-            this.dialog.success('Inserimento avvenuto con successo');
-            this.sortField.set('id');
-            this.sortDir.set('DESC');
-          } else {
-            this.dialog.error('Errore durante il salvataggio');
-          }
-        },
-        error: (err: any) => {
-          this.dialog.error('Errore di rete o del server');
-          console.error(err);
-        },
-      });
-    }
+  async deleteRow(el: any) {
+    const result$ = await this.Srv.delete(el.id);
+    this.openDialogMessage(result$, 'Cancellazione avvenuta con successo');
   }
 
   detailsRow(el: any) {
@@ -172,17 +164,21 @@ export class FatherManager {
     this.Srv.getMetrics(el.id);
   }
 
-  async deleteRow(el: any) {
-    const result$ = await this.Srv.delete(el.id);
+  private deleteFilter(tableName: string) {
+    const storageKey = `filters_${tableName}`;
+    localStorage.removeItem(storageKey);
+    this.filter.set({ reset: true, timestamp: Date.now() });
+  }
+
+  private openDialogMessage(result$: any, okMessage: string) {
     if (result$) {
       result$.subscribe({
         next: (res: any) => {
           if (res.status === 'OK') {
-            this.dialog.success('Cancellazione avvenuta con successo');
-            this.sortField.set('id');
-            this.sortDir.set('DESC');
+            this.dialog.success(okMessage);
+            this.updateRefreshSignal();
           } else {
-            this.dialog.error('Errore durante la cancellazione');
+            this.dialog.error("Errore durante l'operazione");
           }
         },
         error: (err: any) => {
@@ -191,11 +187,5 @@ export class FatherManager {
         },
       });
     }
-  }
-
-  private deleteFilter(tableName: string) {
-    const storageKey = `filters_${tableName}`;
-    localStorage.removeItem(storageKey);
-    this.filter.set({ reset: true, timestamp: Date.now() });
   }
 }

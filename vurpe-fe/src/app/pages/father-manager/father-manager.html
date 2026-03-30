@@ -13,7 +13,12 @@
   (filterMapModel)="sendFilters($event)"
   [resetTrigger]="filter()"
 ></app-dynamic-filters>
-@if (parentStatus && parentStatus == 'UPLOADED') {
+@if (
+  parentStatus &&
+  parentStatus == 'UPLOADED' &&
+  !dataResource.error() &&
+  dataResource.value()?.payload?.content?.length > 0
+) {
   <app-analizer [fileId]="parentId"></app-analizer>
 }
 <app-dynamic-table

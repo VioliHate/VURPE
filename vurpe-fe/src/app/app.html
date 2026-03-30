@@ -59,28 +59,68 @@
       <button
         mat-icon-button
         (click)="goBack()"
-        class="me-3 text-muted"
+        class="text-dark ms-2 d-inline-flex align-items-center justify-content-center"
+        style="width: 28px; height: 28px; padding: 0; min-width: 28px"
         aria-label="Torna indietro"
+        [matTooltip]="'Indietro'"
       >
         <mat-icon>arrow_back</mat-icon>
       </button>
+      <div class="ms-auto d-flex align-items-center">
+        <div
+          class="badge rounded-pill border bg-light d-flex align-items-center px-3 py-2 shadow-sm"
+          style="height: 38px"
+        >
+          @switch (status()) {
+            @case (StompStatus.CONNECTING) {
+              <mat-icon
+                class="text-warning spin me-2"
+                style="font-size: 20px; width: 20px; height: 20px"
+                >sync</mat-icon
+              >
+              <span class="text-dark fw-semibold small">In Connessione...</span>
+            }
+            @case (StompStatus.CONNECTED) {
+              <mat-icon class="text-success me-2" style="font-size: 18px; width: 18px; height: 18px"
+                >fiber_manual_record</mat-icon
+              >
+              <span class="text-dark fw-semibold small">Connesso</span>
+            }
+            @case (StompStatus.DISCONNECTED) {
+              <mat-icon class="text-danger me-2" style="font-size: 18px; width: 18px; height: 18px">
+                fiber_manual_record
+              </mat-icon>
+
+              <span class="text-dark fw-semibold small">Disconnesso</span>
+
+              <button
+                mat-icon-button
+                (click)="connect()"
+                class="text-primary ms-2 d-inline-flex align-items-center justify-content-center"
+                style="width: 28px; height: 28px; padding: 0; min-width: 28px"
+                [matTooltip]="'Riconnetti'"
+              >
+                <mat-icon style="font-size: 20px; width: 20px; height: 20px; margin: 0"
+                  >refresh</mat-icon
+                >
+              </button>
+            }
+          }
+        </div>
+      </div>
     </nav>
 
     <!-- Area principale del contenuto -->
     <main class="p-4 bg-light min-vh-100">
-      <router-outlet></router-outlet>
-      <div>Stato: {{ isConnected() ? '🟢 Connesso' : '🔴 Disconnesso' }}</div>
-
-      <button (click)="connect()">Connect STOMP</button>
       <button (click)="sendTest()">🚀 Avvia Analisi File</button>
 
       <h3>Messaggi ricevuti ({{ messages().length }})</h3>
-      <h3>Messaggi ricevuti ({{ print(messages().at(0)) }})</h3>
       <ul>
         @for (msg of messages(); track msg) {
           <li>{{ msg.payload }}</li>
         }
       </ul>
+      <router-outlet></router-outlet>
     </main>
   </mat-sidenav-content>
 </mat-sidenav-container>

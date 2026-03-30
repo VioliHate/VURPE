@@ -22,3 +22,12 @@
   background-color: rgba(37, 99, 235, 0.08); /* azzurro tenue dal tuo tema */
   color: var(--bs-primary);
 }
+
+.spin {
+  animation: rotation 2s infinite linear;
+}
+
+@keyframes rotation {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(359deg); }
+}

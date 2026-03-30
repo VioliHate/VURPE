@@ -1,7 +1,7 @@
 import { Routes } from '@angular/router';
 import { Dashboard } from './pages/dashboard/dashboard';
 import { FatherManager } from './pages/father-manager/father-manager';
-import { FatherCharts } from './pages/father-charts/father-charts';
+import { FatherCharts } from './components/father-charts/father-charts';
 
 export const routes: Routes = [
   {

@@ -7,20 +7,20 @@ import java.util.UUID;
 
 public record AnalysisResultFilter (
     UUID id  ,
-    UUID file_id ,
-    BigDecimal total_amount ,
-    Integer record_count ,
-    BigDecimal average_amount ,
-    Map<String, Integer> distribution_by_category ,
-    Map<String, Integer> distribution_by_risk_flag ,
-    Map<String, BigDecimal> time_series_by_date ,
-    LocalDateTime created_at
+    UUID fileId ,
+    BigDecimal totalAmount ,
+    Integer recordCount ,
+    BigDecimal averageAmount ,
+    Map<String, Integer> distributionByCategory ,
+    Map<String, Integer> distributionByRiskFlag ,
+    Map<String, BigDecimal> timeSeriesByDate ,
+    LocalDateTime createdAt
 
     ){
 
     public boolean isEmpty(){
-        return (id==null && file_id==null && total_amount==null && record_count==null && average_amount==null
-        && distribution_by_category==null && distribution_by_risk_flag==null && time_series_by_date==null
-                && created_at==null) ;
+        return (id==null && fileId==null && totalAmount==null && recordCount==null && averageAmount==null
+        && distributionByCategory==null && distributionByRiskFlag==null && timeSeriesByDate==null
+                && createdAt==null) ;
     }
 }

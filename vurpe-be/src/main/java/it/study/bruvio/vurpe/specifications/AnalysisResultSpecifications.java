@@ -20,29 +20,29 @@ public class AnalysisResultSpecifications {
             if(filter.id() !=null){
                 predicates.add(cb.equal(root.get("id"),filter.id()));
             }
-            if(filter.average_amount()!=null){
-                predicates.add(cb.equal(root.get("average_amount"),filter.average_amount()));
+            if(filter.averageAmount()!=null){
+                predicates.add(cb.equal(root.get("averageAmount"),filter.averageAmount()));
             }
-            if(filter.created_at() !=null){
-                predicates.add(cb.equal(root.get("created_at"),filter.created_at()));
+            if(filter.createdAt() !=null){
+                predicates.add(cb.equal(root.get("createdAt"),filter.createdAt()));
             }
-            if(filter.distribution_by_category() !=null){
-                predicates.add(cb.equal(root.get("distribution_by_category"),filter.distribution_by_category()));
+            if(filter.distributionByCategory() !=null){
+                predicates.add(cb.equal(root.get("distributionByCategory"),filter.distributionByCategory()));
             }
-            if(filter.file_id() !=null){
-                predicates.add(cb.equal(root.get("file_id"),filter.file_id()));
+            if(filter.fileId() !=null){
+                predicates.add(cb.equal(root.get("fileId"),filter.fileId()));
             }
-            if(filter.time_series_by_date() !=null){
-                predicates.add(cb.equal(root.get("time_series_by_date"),filter.time_series_by_date()));
+            if(filter.timeSeriesByDate() !=null){
+                predicates.add(cb.equal(root.get("timeSeriesByDate"),filter.timeSeriesByDate()));
             }
-            if(filter.total_amount() != null){
-                predicates.add(cb.equal(root.get("total_amount"),filter.total_amount()));
+            if(filter.totalAmount() != null){
+                predicates.add(cb.equal(root.get("totalAmount"),filter.totalAmount()));
             }
-            if(filter.distribution_by_risk_flag() != null){
-                predicates.add(cb.equal(root.get("distribution_by_risk_flag"),filter.distribution_by_risk_flag()));
+            if(filter.distributionByRiskFlag() != null){
+                predicates.add(cb.equal(root.get("distributionByRiskFlag"),filter.distributionByRiskFlag()));
             }
-            if(filter.record_count() != null){
-                predicates.add(cb.equal(root.get("record_count"),filter.record_count()));
+            if(filter.recordCount() != null){
+                predicates.add(cb.equal(root.get("recordCount"),filter.recordCount()));
             }
             return cb.and(predicates.toArray(Predicate[]::new));
 

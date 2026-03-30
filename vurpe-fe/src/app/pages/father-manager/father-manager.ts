@@ -102,7 +102,7 @@ export class FatherManager {
       }
     }
     if (params.parentId) {
-      httpParams = httpParams.set('file_id', params.parentId);
+      httpParams = httpParams.set('fileId', params.parentId);
     }
     return httpParams;
   }

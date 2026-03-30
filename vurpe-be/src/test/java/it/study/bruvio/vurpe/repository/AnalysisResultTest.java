@@ -43,7 +43,7 @@ public class AnalysisResultTest     {
                     .as("ID must be not null for record: "+AnalysisRes)
                     .isNotNull();
 
-            assertThat(AnalysisRes.getCreated_at())
+            assertThat(AnalysisRes.getCreatedAt())
                     .as("created_at must be not null for record: "+AnalysisRes)
                     .isNotNull();
 
@@ -53,7 +53,7 @@ public class AnalysisResultTest     {
     void shouldRejectInvalidIdType() {
         // Test 1: file_id not null
         AnalysisResult analysisResult = createAnalysisResult();
-        analysisResult.setFile_id(null);
+        analysisResult.setFileId(null);
         assertThrows(ConstraintViolationException.class, () -> {
             repository.saveAndFlush(analysisResult);
         });
@@ -63,7 +63,7 @@ public class AnalysisResultTest     {
     void shouldRejectInvalidCreatedAtType() {
         // Test 2: Validation Test for created_at null
         AnalysisResult analysisResult = createAnalysisResult();
-        analysisResult.setCreated_at(null);
+        analysisResult.setCreatedAt(null);
 
         try (ValidatorFactory factory = Validation.buildDefaultValidatorFactory()) {
             Validator validator = factory.getValidator();
@@ -86,12 +86,12 @@ public class AnalysisResultTest     {
     @Test
     void shouldAcceptValidDataTypes() {
             AnalysisResult result = createAnalysisResult();
-            result.setTotal_amount(new BigDecimal("5000.50"));
-            result.setRecord_count(100);
-            result.setAverage_amount(new BigDecimal("50.00"));
-            result.setDistribution_by_category(Map.of("Dev", 50, "QA", 30));
-            result.setDistribution_by_risk_flag(Map.of("HIGH", 10, "LOW", 90));
-            result.setTime_series_by_date(Map.of("2024-01", new BigDecimal("1000")));
+            result.setTotalAmount(new BigDecimal("5000.50"));
+            result.setRecordCount(100);
+            result.setAverageAmount(new BigDecimal("50.00"));
+            result.setDistributionByCategory(Map.of("Dev", 50, "QA", 30));
+            result.setDistributionByRiskFlag(Map.of("HIGH", 10, "LOW", 90));
+            result.setTimeSeriesByDate(Map.of("2024-01", new BigDecimal("1000")));
         assertDoesNotThrow(() -> {
             AnalysisResult saved = repository.saveAndFlush(result);
             assertNotNull(saved.getId());
@@ -100,8 +100,8 @@ public class AnalysisResultTest     {
 
     private AnalysisResult createAnalysisResult() {
         AnalysisResult analysisResult = new AnalysisResult();
-        analysisResult.setFile_id(UUID.fromString("27d0e7dd-93d5-4ce2-8212-16b3fff35163"));
-        analysisResult.setTotal_amount(new BigDecimal("1000"));
+        analysisResult.setFileId(UUID.fromString("27d0e7dd-93d5-4ce2-8212-16b3fff35163"));
+        analysisResult.setTotalAmount(new BigDecimal("1000"));
 
 
         return analysisResult;

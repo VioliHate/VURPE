@@ -26,35 +26,35 @@ public class AnalysisResult {
 
     @NotNull
     @Column(name = "file_id", nullable = false)
-    private UUID file_id;
+    private UUID fileId;
 
     @Column(name = "total_amount")
-    private BigDecimal total_amount;
+    private BigDecimal totalAmount;
 
     @Column(name = "record_count")
-    private Integer record_count;
+    private Integer recordCount;
 
     @Column(name = "average_amount")
-    private BigDecimal average_amount;
+    private BigDecimal averageAmount;
 
     @JdbcTypeCode(SqlTypes.JSON)
     @Column(name = "distribution_by_category", columnDefinition = "jsonb")
-    private Map<String, Integer> distribution_by_category;
+    private Map<String, Integer> distributionByCategory;
 
     @JdbcTypeCode(SqlTypes.JSON)
     @Column(name = "distribution_by_risk_flag", columnDefinition = "jsonb")
-    private Map<String, Integer> distribution_by_risk_flag;
+    private Map<String, Integer> distributionByRiskFlag;
 
     @JdbcTypeCode(SqlTypes.JSON)
     @Column(name = "time_series_by_date", columnDefinition = "jsonb")
-    private Map<String, BigDecimal> time_series_by_date;
+    private Map<String, BigDecimal> timeSeriesByDate;
 
     @NotNull
     @Column(name = "created_at", nullable = false, updatable = false)
-    private LocalDateTime created_at;
+    private LocalDateTime createdAt;
 
     @PrePersist
     protected void onCreate() {
-        created_at = LocalDateTime.now();
+        createdAt = LocalDateTime.now();
     }
 }

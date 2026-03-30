@@ -42,13 +42,13 @@ public class AnalysisResultService {
             throw new Exception("File not exists!");
         }
         try {
-            analysisResult.setFile_id(fileID);
-            analysisResult.setTotal_amount(repoDataRecord.sumAmountByFileId(fileID));
-            analysisResult.setRecord_count(repoDataRecord.countByFileId(fileID));
-            analysisResult.setAverage_amount(repoDataRecord.avgAmountByFileId(fileID));
-            analysisResult.setDistribution_by_category(this.mapToCount(repoDataRecord.countByCategoryRaw(fileID)));
-            analysisResult.setDistribution_by_risk_flag(this.mapToCount(repoDataRecord.countByRiskFlagRaw(fileID)));
-            analysisResult.setTime_series_by_date(this.mapToDailySum(repoDataRecord.sumAmountTimeSeriesByDate(fileID)));
+            analysisResult.setId(fileID);
+            analysisResult.setTotalAmount(repoDataRecord.sumAmountByFileId(fileID));
+            analysisResult.setRecordCount(repoDataRecord.countByFileId(fileID));
+            analysisResult.setAverageAmount(repoDataRecord.avgAmountByFileId(fileID));
+            analysisResult.setDistributionByCategory(this.mapToCount(repoDataRecord.countByCategoryRaw(fileID)));
+            analysisResult.setDistributionByRiskFlag(this.mapToCount(repoDataRecord.countByRiskFlagRaw(fileID)));
+            analysisResult.setTimeSeriesByDate(this.mapToDailySum(repoDataRecord.sumAmountTimeSeriesByDate(fileID)));
             return repoAnalysis.save(analysisResult);
         }catch (Exception e){
             throw new Exception("Error to create analysis record", e);

@@ -19,4 +19,6 @@ public interface AsyncTaskRepository extends JpaRepository<AsyncTask, UUID>,
         @Query("SELECT new it.study.bruvio.vurpe.dto.response.StatusCountDTO(a.status, COUNT(a)) " +
                         "FROM AsyncTask a GROUP BY a.status")
         List<StatusCountDTO> countTasksByStatus();
+
+        void deleteById(UUID id);
 }

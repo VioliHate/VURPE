@@ -14,4 +14,7 @@ public interface AnalysisResultRepository extends JpaRepository<AnalysisResult, 
         JpaSpecificationExecutor<AnalysisResult> {
 
     Optional<AnalysisResult> findById(UUID analysisResultId);
+
+    void deleteById(UUID id);
+
 }

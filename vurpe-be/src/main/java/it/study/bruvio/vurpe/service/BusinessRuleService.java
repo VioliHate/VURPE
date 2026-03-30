@@ -1,9 +1,12 @@
 package it.study.bruvio.vurpe.service;
 
+import java.util.UUID;
+
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import it.study.bruvio.vurpe.dto.criteria.BusinessRuleFilter;
 import it.study.bruvio.vurpe.dto.response.BusinessRuleResponse;
@@ -20,6 +23,19 @@ public class BusinessRuleService {
     public Page<BusinessRule> search(BusinessRuleFilter filter, Pageable pageable) {
         Specification<BusinessRule> spec = BusinessRuleSpecification.fromFilter(filter);
         return brRepo.findAll(spec, pageable);
+    }
+
+    @Transactional
+    public boolean delete(UUID id) throws Exception {
+        if (!brRepo.existsById(id)) {
+            throw new Exception("File not exists!");
+        }
+        brRepo.deleteById(id);
+        if (!brRepo.existsById(id)) {
+            return true;
+        }
+        return false;
+
     }
 
     public void addBusinessRule(BusinessRuleResponse req) {

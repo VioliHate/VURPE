@@ -24,4 +24,6 @@ public interface FilesRepository extends JpaRepository<Files, UUID>, JpaSpecific
     @Query("SELECT new it.study.bruvio.vurpe.dto.response.StatusCountDTO(f.status, COUNT(f)) " +
             "FROM Files f GROUP BY f.status")
     List<StatusCountDTO> countFilesByStatus();
+
+    void deleteBy(UUID id);
 }

@@ -30,7 +30,6 @@ public class AsyncTaskService {
     private final FilesRepository reposFiles;
     private final SimpMessagingTemplate messagingTemplate;
 
-
     public Page<AsyncTask> search(AsyncTaskFilter filter, Pageable pageable) {
 
         Specification<AsyncTask> spec = AsyncTaskSpecifications.fromFilter(filter);
@@ -46,6 +45,18 @@ public class AsyncTaskService {
         }
     }
 
+    @Transactional
+    public boolean delete(UUID id) throws Exception {
+        if (!repoAsyncTask.existsById(id)) {
+            throw new Exception("File not exists!");
+        }
+        repoAsyncTask.deleteById(id);
+        if (!repoAsyncTask.existsById(id)) {
+            return true;
+        }
+        return false;
+
+    }
 
     @Async("taskExecutor")
     @Transactional
@@ -64,23 +75,21 @@ public class AsyncTaskService {
         }
 
         Files file = reposFiles.getReferenceById(fileUUID);
-        //check file
+        // check file
         if (file == null) {
             this.sendUpdate(fileId, PayloadResponse.error("file not exist", "FILE_NOT_FOUND"));
             throw new IllegalArgumentException("File not Exist for id: " + fileId);
         }
         if (!file.getStatus().equals(FileStatusEnum.UPLOADED)) {
             this.sendUpdate(fileId, PayloadResponse.error(
-                    "Unable to start analysis on file: "+ file.getId() +": current status = " + file.getStatus(),
-                    "INVALID_FILE_STATUS"
-            ));
+                    "Unable to start analysis on file: " + file.getId() + ": current status = " + file.getStatus(),
+                    "INVALID_FILE_STATUS"));
         } else {
             file.setStatus(FileStatusEnum.WORKING);
             reposFiles.saveAndFlush(file);
             this.sendUpdate(fileId, PayloadResponse.success(
                     "Processing Analysis for file: " + file.getId(),
-                    "WORKING_ON_FILE"
-            ));
+                    "WORKING_ON_FILE"));
             UUID taskId = this.queueAnalysisTask(fileUUID);
             AsyncTask asyncTask = repoAsyncTask.getReferenceById(taskId);
             try {
@@ -88,23 +97,20 @@ public class AsyncTaskService {
                 repoAsyncTask.saveAndFlush(asyncTask);
                 sendUpdate(fileId, PayloadResponse.success(
                         "Processing Analysis Task (taskId: " + taskId + ")",
-                        "PROCESSING_TASK"
-                ));
+                        "PROCESSING_TASK"));
                 servInt.applyBusinessRulesToFile(asyncTask.getFile_id());
                 asyncTask.setStatus(TaskStatus.COMPLETED);
                 asyncTask.setCompleted_at(LocalDateTime.now());
                 repoAsyncTask.saveAndFlush(asyncTask);
                 sendUpdate(fileId, PayloadResponse.success(
                         "Completed Analysis Task (taskId: " + taskId + ")",
-                        "COMPLETED_TASK"
-                ));
+                        "COMPLETED_TASK"));
                 file.setStatus(FileStatusEnum.COMPLETED);
                 reposFiles.save(file);
 
                 this.sendUpdate(fileId, PayloadResponse.success(
                         "Analysis Complete for file: " + file.getId(),
-                        "COMPLETED_ANALYSIS"
-                ));
+                        "COMPLETED_ANALYSIS"));
             } catch (Exception e) {
                 asyncTask.setStatus(TaskStatus.FAILED);
                 asyncTask.setCompleted_at(LocalDateTime.now());
@@ -117,7 +123,6 @@ public class AsyncTaskService {
             }
         }
     }
-
 
     protected UUID queueAnalysisTask(UUID fileId) {
 
@@ -133,7 +138,6 @@ public class AsyncTaskService {
         log.info(">>> INVIO SU DESTINATION: [{}]", destination);
         messagingTemplate.convertAndSend(
                 destination,
-                response
-        );
+                response);
     }
 }

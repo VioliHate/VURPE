@@ -28,11 +28,30 @@ public class AnalysisResultController {
     public ResponseEntity<PayloadResponse<Page<AnalysisResultResponse>>> search(
             @ModelAttribute AnalysisResultFilter criteria,
 
-            @PageableDefault(size=20 , sort="id" , direction= Sort.Direction.ASC) Pageable pageable){
-        Page<AnalysisResultResponse> page = service.search(criteria,pageable)
+            @PageableDefault(size = 20, sort = "id", direction = Sort.Direction.ASC) Pageable pageable) {
+        Page<AnalysisResultResponse> page = service.search(criteria, pageable)
                 .map(AnalysisResultResponse::fromEntity);
-        PayloadResponse<Page<AnalysisResultResponse>> response = PayloadResponse.success(page , "Search completed");
+        PayloadResponse<Page<AnalysisResultResponse>> response = PayloadResponse.success(page, "Search completed");
         return ResponseEntity.ok(response);
+    }
+
+    @PostMapping("/analysis/delete")
+    public ResponseEntity<PayloadResponse<String>> delete(
+            @RequestParam("id") String id) throws Exception {
+        UUID RecordId = UUID.fromString(id);
+        try {
+            boolean res = service.delete(RecordId);
+            if (res) {
+                PayloadResponse<String> response = PayloadResponse.success(null,
+                        "deleted completed");
+                return ResponseEntity.ok(response);
+            }
+            PayloadResponse<String> response = PayloadResponse.error("errore in delete ", "");
+            return ResponseEntity.ok(response);
+
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body(PayloadResponse.error(e.getMessage(), "error in delete"));
+        }
     }
 
     @PostMapping("/save-analysis")
@@ -43,9 +62,9 @@ public class AnalysisResultController {
             AnalysisResult analysis = service.saveAnalysisResult(id);
             AnalysisSaveResponse analysisResponse = new AnalysisSaveResponse(
                     analysis.getId().toString(),
-                    MetricsResponse.from(analysis)
-            );
-            PayloadResponse<AnalysisSaveResponse> response = PayloadResponse.success(analysisResponse, "Save completed");
+                    MetricsResponse.from(analysis));
+            PayloadResponse<AnalysisSaveResponse> response = PayloadResponse.success(analysisResponse,
+                    "Save completed");
             return ResponseEntity.ok(response);
         } catch (Exception e) {
             return ResponseEntity.badRequest().body(PayloadResponse.error(e.getMessage(), "SAVE_ANALYSIS_ERROR"));

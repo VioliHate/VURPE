@@ -10,6 +10,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.UUID;
 
@@ -25,5 +26,18 @@ public class FilesService {
 
     public FileStatusEnum getFileStatus(String fileId) {
         return filesRepository.getFileStatusById(UUID.fromString(fileId));
+    }
+
+    @Transactional
+    public boolean delete(UUID id) throws Exception {
+        if (!filesRepository.existsById(id)) {
+            throw new Exception("File not exists!");
+        }
+        filesRepository.deleteById(id);
+        if (!filesRepository.existsById(id)) {
+            return true;
+        }
+        return false;
+
     }
 }

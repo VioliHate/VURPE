@@ -46,4 +46,6 @@ public interface DataRecordRepository extends JpaRepository<DataRecord, UUID>,
     @Query("SELECT new it.study.bruvio.vurpe.dto.response.StatusCountDTO(f.riskFlag, COUNT(f)) FROM DataRecord f GROUP BY f.riskFlag")
     List<StatusCountDTO> countDataRecordsByRiskFlag();
 
+    void deleteById(UUID id);
+
 }

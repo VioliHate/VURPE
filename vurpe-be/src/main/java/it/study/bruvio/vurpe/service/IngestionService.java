@@ -62,7 +62,6 @@ public class IngestionService {
             String[] headerColumns = header.split(";");
             Set<String> setHeaderColumns = new HashSet<>(List.of(headerColumns));
 
-
             if (setHeaderColumns.size() != expectedColumn.size()) {
                 throw new IllegalArgumentException("Number of columns is different");
 
@@ -78,11 +77,11 @@ public class IngestionService {
         return true;
     }
 
-
     private boolean insertRows(MultipartFile file) throws Exception {
         Files f = new Files();
         int count = 1;
-        try (BufferedReader br = new BufferedReader(new InputStreamReader(file.getInputStream(), StandardCharsets.UTF_8))) {
+        try (BufferedReader br = new BufferedReader(
+                new InputStreamReader(file.getInputStream(), StandardCharsets.UTF_8))) {
 
             f.setOriginalName(file.getOriginalFilename());
             f.setFileSize(file.getSize());
@@ -95,11 +94,11 @@ public class IngestionService {
             DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
             List<DataRecord> dtList = new ArrayList<>();
             while ((row = br.readLine()) != null) {
-                if(isHeader) {
+                if (isHeader) {
                     isHeader = false;
                     continue;
                 }
-                if(dataSplitter(row).length == 0){
+                if (dataSplitter(row).length == 0) {
                     continue;
                 }
                 try {
@@ -112,7 +111,6 @@ public class IngestionService {
             }
 
             repoData.saveAll(dtList);
-
 
         } catch (Exception e) {
             throw new Exception("errore riga: " + count, e);
@@ -128,16 +126,16 @@ public class IngestionService {
             throw new Exception("Numero di colonne insufficiente");
         }
         return new DataRecord(
-                f.getId(),//file_id
-                data[0],//original_id
-                new BigDecimal(data[1].trim()), //amount
-                data[2],//category
-                LocalDateTime.parse(data[3].trim(), formatter),//date
-                data[4]//description
+                f.getId(), // file_id
+                data[0], // original_id
+                new BigDecimal(data[1].trim()), // amount
+                data[2], // category
+                LocalDateTime.parse(data[3].trim(), formatter), // date
+                data[4]// description
         );
     }
 
-    private String[] dataSplitter(String row){
+    private String[] dataSplitter(String row) {
         return row.split(";");
     }
 }

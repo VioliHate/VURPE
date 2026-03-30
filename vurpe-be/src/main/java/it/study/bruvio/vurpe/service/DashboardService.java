@@ -22,4 +22,5 @@ public class DashboardService {
         dto.setDataRecordStats(dataRecordRepo.countDataRecordsByRiskFlag());
         return dto;
     }
+
 }

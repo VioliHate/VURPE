@@ -30,7 +30,7 @@ public class AnalysisResultTest     {
     private AnalysisResultRepository repository;
 
     @Test
-    @DisplayName("All records must have non-null ID and create_at")
+    @DisplayName("All records must have non-null ID and createAt")
     void everyRecordMustHaveNonNullIdAndCreatedAt() {
         List<AnalysisResult> allRecords=repository.findAll();
 
@@ -69,12 +69,12 @@ public class AnalysisResultTest     {
             Validator validator = factory.getValidator();
             Set<ConstraintViolation<AnalysisResult>> violations = validator.validate(analysisResult);
             assertThat(violations)
-                    .as("There must be exactly one violation for @NotNull on created_at")
+                    .as("There must be exactly one violation for @NotNull on createdAt")
                     .hasSize(1);
             assertThat(violations)
                     .extracting(ConstraintViolation::getPropertyPath)
                     .extracting(Path::toString)
-                    .containsExactly("created_at");
+                    .containsExactly("createdAt");
 
         } catch (Exception e) {
             fail(e.getMessage(), e);

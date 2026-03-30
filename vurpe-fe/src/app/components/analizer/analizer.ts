@@ -1,7 +1,7 @@
-import { Component, input } from '@angular/core';
-import { MatButton } from '@angular/material/button';
+import { Component, inject, input } from '@angular/core';
 import { MatIcon } from '@angular/material/icon';
 import { ExecutionTerminal } from '../execution-terminal/execution-terminal';
+import { StompService } from '../../services/web-socket-service';
 
 @Component({
   selector: 'app-analizer',
@@ -10,11 +10,18 @@ import { ExecutionTerminal } from '../execution-terminal/execution-terminal';
   styleUrl: './analizer.scss',
 })
 export class Analizer {
-  fileId = input<string | undefined>();
+  fileId = input.required<string>();
   fileStatus = input<string>();
   isStarted: boolean = false;
 
+  private stompService = inject(StompService);
+
   startAnalize() {
     this.isStarted = !this.isStarted;
+
+    this.stompService.subscribeToFile(this.fileId());
+    setTimeout(() => {
+      this.stompService.startAnalysis(this.fileId());
+    }, 500);
   }
 }

@@ -36,8 +36,7 @@ export class App {
   expanded = true;
 
   private stompService = inject(StompService);
-  private destroyRef = inject(DestroyRef);
-  messages = signal<any[]>([]);
+
   status = toSignal(this.stompService.status$, { initialValue: StompStatus.DISCONNECTED });
 
   listMenu = [
@@ -48,10 +47,6 @@ export class App {
 
   constructor() {
     this.connect();
-
-    this.stompService.messages$.pipe(takeUntilDestroyed(this.destroyRef)).subscribe((msg) => {
-      this.messages.update((current) => [...current, msg]);
-    });
   }
 
   connect() {
@@ -64,16 +59,5 @@ export class App {
 
   goBack() {
     this.nav.back();
-  }
-
-  sendTest(): void {
-    const fileId = 'd2b9929b-cf63-4bc0-8aaf-cdda87d1f956';
-    if (this.status() !== StompStatus.CONNECTED) {
-      return;
-    }
-    this.stompService.subscribeToFile(fileId);
-    setTimeout(() => {
-      this.stompService.startAnalysis(fileId);
-    }, 500);
   }
 }

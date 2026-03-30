@@ -60,22 +60,22 @@ public class AsyncTaskController {
         }
     }
 
-    @PostMapping("/asyncTask/delete")
+    @PostMapping("/async-task/delete")
     public ResponseEntity<PayloadResponse<String>> delete(
             @RequestParam("id") String id) throws Exception {
-        UUID RecordId = UUID.fromString(id);
+        UUID recordId = UUID.fromString(id);
         try {
-            boolean res = asyncTaskService.delete(RecordId);
+            boolean res = asyncTaskService.delete(recordId);
             if (res) {
                 PayloadResponse<String> response = PayloadResponse.success(null,
                         "deleted completed");
                 return ResponseEntity.ok(response);
             }
-            PayloadResponse<String> response = PayloadResponse.error("errore in delete ", "");
+            PayloadResponse<String> response = PayloadResponse.error("error on delete ", "");
             return ResponseEntity.ok(response);
 
         } catch (Exception e) {
-            return ResponseEntity.badRequest().body(PayloadResponse.error(e.getMessage(), "error in delete"));
+            return ResponseEntity.badRequest().body(PayloadResponse.error(e.getMessage(), "error on delete"));
         }
     }
 }

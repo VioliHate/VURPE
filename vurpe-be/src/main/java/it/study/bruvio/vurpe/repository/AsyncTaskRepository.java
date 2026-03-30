@@ -20,5 +20,4 @@ public interface AsyncTaskRepository extends JpaRepository<AsyncTask, UUID>,
                         "FROM AsyncTask a GROUP BY a.status")
         List<StatusCountDTO> countTasksByStatus();
 
-        void deleteById(UUID id);
 }

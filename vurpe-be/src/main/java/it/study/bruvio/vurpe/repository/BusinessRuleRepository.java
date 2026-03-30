@@ -12,5 +12,4 @@ import org.springframework.stereotype.Repository;
 public interface BusinessRuleRepository extends JpaRepository<BusinessRule, UUID>,
         JpaSpecificationExecutor<BusinessRule> {
 
-    void deleteById(UUID id);
 }

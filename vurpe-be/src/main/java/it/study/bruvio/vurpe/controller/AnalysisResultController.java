@@ -46,11 +46,11 @@ public class AnalysisResultController {
                         "deleted completed");
                 return ResponseEntity.ok(response);
             }
-            PayloadResponse<String> response = PayloadResponse.error("errore in delete ", "");
+            PayloadResponse<String> response = PayloadResponse.error("error on delete ", "");
             return ResponseEntity.ok(response);
 
         } catch (Exception e) {
-            return ResponseEntity.badRequest().body(PayloadResponse.error(e.getMessage(), "error in delete"));
+            return ResponseEntity.badRequest().body(PayloadResponse.error(e.getMessage(), "error on delete"));
         }
     }
 

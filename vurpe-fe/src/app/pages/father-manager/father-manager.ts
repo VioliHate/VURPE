@@ -172,8 +172,25 @@ export class FatherManager {
     this.Srv.getMetrics(el.id);
   }
 
-  deleteRow(el: any) {
-    console.log('clicked delete', el);
+  async deleteRow(el: any) {
+    const result$ = await this.Srv.delete(el.id);
+    if (result$) {
+      result$.subscribe({
+        next: (res: any) => {
+          if (res.status === 'OK') {
+            this.dialog.success('Cancellazione avvenuta con successo');
+            this.sortField.set('id');
+            this.sortDir.set('DESC');
+          } else {
+            this.dialog.error('Errore durante la cancellazione');
+          }
+        },
+        error: (err: any) => {
+          this.dialog.error('Errore di rete o del server');
+          console.error(err);
+        },
+      });
+    }
   }
 
   private deleteFilter(tableName: string) {

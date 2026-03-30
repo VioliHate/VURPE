@@ -40,9 +40,9 @@ public class FilesController {
     @PostMapping("/files/delete")
     public ResponseEntity<PayloadResponse<String>> delete(
             @RequestParam("id") String id) throws Exception {
-        UUID RecordId = UUID.fromString(id);
+        UUID recordId = UUID.fromString(id);
         try {
-            boolean res = filesService.delete(RecordId);
+            boolean res = filesService.delete(recordId);
             if (res) {
                 PayloadResponse<String> response = PayloadResponse.success(null,
                         "deleted completed");

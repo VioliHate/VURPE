@@ -25,5 +25,4 @@ public interface FilesRepository extends JpaRepository<Files, UUID>, JpaSpecific
             "FROM Files f GROUP BY f.status")
     List<StatusCountDTO> countFilesByStatus();
 
-    void deleteBy(UUID id);
 }

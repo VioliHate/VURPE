@@ -30,6 +30,11 @@ export class MetricsService {
 
   public async addRow(id: string) {
     const httpParams = { fileId: id };
-    return await this.http.post(`${this.apiUrl}/save-analysis`, null, { params: httpParams });
+    return this.http.post(`${this.apiUrl}/save-analysis`, null, { params: httpParams });
+  }
+
+  public async delete(id: string) {
+    const httpParams = { id: id };
+    return this.http.post(`${this.apiUrl}/analysis/delete`, null, { params: httpParams });
   }
 }

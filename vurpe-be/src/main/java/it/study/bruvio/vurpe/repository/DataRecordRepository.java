@@ -38,7 +38,7 @@ public interface DataRecordRepository extends JpaRepository<DataRecord, UUID>,
                     date_trunc('day', d.date)::date AS day,
                     SUM(d.amount) AS total
                 FROM data_records d
-                WHERE d.fileId = :fileId
+                WHERE d.file_id = :fileId
                 GROUP BY date_trunc('day', d.date)
             """, nativeQuery = true)
     List<Object[]> sumAmountTimeSeriesByDate(UUID fileId);

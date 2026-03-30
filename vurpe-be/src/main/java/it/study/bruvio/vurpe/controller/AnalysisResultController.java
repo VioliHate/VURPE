@@ -5,6 +5,7 @@ import it.study.bruvio.vurpe.dto.response.AnalysisResultResponse;
 import it.study.bruvio.vurpe.dto.response.AnalysisSaveResponse;
 import it.study.bruvio.vurpe.dto.response.MetricsResponse;
 import it.study.bruvio.vurpe.dto.response.PayloadResponse;
+import it.study.bruvio.vurpe.entity.AnalysisResult;
 import it.study.bruvio.vurpe.service.AnalysisResultService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -39,9 +40,10 @@ public class AnalysisResultController {
             @RequestParam("fileId") String fileId) throws Exception {
         UUID id = UUID.fromString(fileId);
         try {
+            AnalysisResult analysis = service.saveAnalysisResult(id);
             AnalysisSaveResponse analysisResponse = new AnalysisSaveResponse(
-                    service.saveAnalysisResult(id).getId().toString(),
-                    MetricsResponse.from(service.saveAnalysisResult(id))
+                    analysis.getId().toString(),
+                    MetricsResponse.from(analysis)
             );
             PayloadResponse<AnalysisSaveResponse> response = PayloadResponse.success(analysisResponse, "Save completed");
             return ResponseEntity.ok(response);

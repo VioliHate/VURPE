@@ -42,7 +42,7 @@ public class AnalysisResultService {
             throw new Exception("File not exists!");
         }
         try {
-            analysisResult.setId(fileID);
+            analysisResult.setFileId(fileID);
             analysisResult.setTotalAmount(repoDataRecord.sumAmountByFileId(fileID));
             analysisResult.setRecordCount(repoDataRecord.countByFileId(fileID));
             analysisResult.setAverageAmount(repoDataRecord.avgAmountByFileId(fileID));

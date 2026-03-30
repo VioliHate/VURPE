@@ -176,10 +176,6 @@ export class FatherManager {
     console.log('clicked delete', el);
   }
 
-  editRow(el: any) {
-    console.log('clicked edit', el);
-  }
-
   private deleteFilter(tableName: string) {
     const storageKey = `filters_${tableName}`;
     localStorage.removeItem(storageKey);

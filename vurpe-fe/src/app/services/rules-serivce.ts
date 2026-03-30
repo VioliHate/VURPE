@@ -17,7 +17,7 @@ export class RulesSerivce {
   public tabsConfig: TabConfig = {
     title: 'rules',
     columns: ['id'],
-    buttons: [],
+    buttons: ['Elimina'],
     new: true,
   };
 

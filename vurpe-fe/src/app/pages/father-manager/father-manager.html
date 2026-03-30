@@ -13,7 +13,7 @@
   (filterMapModel)="sendFilters($event)"
   [resetTrigger]="filter()"
 ></app-dynamic-filters>
-@if (parentStatus && parentStatus == 'UPLOADED' && dataResource) {
+@if (parentStatus && parentStatus == 'UPLOADED') {
   <app-analizer [fileId]="parentId"></app-analizer>
 }
 <app-dynamic-table
@@ -24,7 +24,6 @@
   (sortChanged)="onSortChange($event)"
   (selectedDelete)="deleteRow($event)"
   (selectedDetails)="detailsRow($event)"
-  (selectedEdit)="editRow($event)"
   (selectedNew)="addNewRow($event)"
   (viewGraph)="viewGraph($event)"
 >

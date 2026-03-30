@@ -55,12 +55,6 @@
               </button>
 
               <mat-menu #menu="matMenu" class="shadow-lg border-0">
-                @if (config().buttons.includes('Modifica')) {
-                  <button mat-menu-item (click)="selectedEdit.emit(element)" class="py-2">
-                    <mat-icon class="text-primary">edit</mat-icon>
-                    <span>Modifica</span>
-                  </button>
-                }
                 @if (config().buttons.includes('Visualizza')) {
                   <button mat-menu-item (click)="selectedDetails.emit(element)" class="py-2">
                     <mat-icon class="text-info">visibility</mat-icon>

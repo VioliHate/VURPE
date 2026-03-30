@@ -15,7 +15,7 @@ export class FileService {
   public tabsConfig: TabConfig = {
     title: 'file',
     columns: ['id', 'fileSize'],
-    buttons: ['Modifica', 'Elimina', 'Visualizza', 'Metriche'],
+    buttons: ['Elimina', 'Visualizza', 'Metriche'],
     new: true,
   };
 

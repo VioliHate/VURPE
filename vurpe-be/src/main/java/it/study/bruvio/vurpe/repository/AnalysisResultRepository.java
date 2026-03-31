@@ -14,6 +14,7 @@ public interface AnalysisResultRepository extends JpaRepository<AnalysisResult, 
         JpaSpecificationExecutor<AnalysisResult> {
 
     Optional<AnalysisResult> findById(UUID analysisResultId);
+    Iterable<? extends UUID> findAllByFileId(UUID fileId);
 
 
 }

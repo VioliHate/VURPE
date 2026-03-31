@@ -22,24 +22,24 @@ public class AsyncTaskSpecifications {
                 predicates.add(cb.equal(root.get("id"), filter.id()
                 ));
             }
-            if(filter.file_id() != null){
-                predicates.add(cb.equal(root.get("file_id"), filter.file_id()));
+            if(filter.fileId() != null){
+                predicates.add(cb.equal(root.get("fileId"), filter.fileId()));
             }
             if(filter.status() != null){
                 predicates.add(cb.equal(root.get("status"), filter.status().name()));
             }
-            if(filter.error_message() != null && !filter.error_message().trim().isEmpty()){
-                String pattern = "%" + filter.error_message().trim() + "%";
-                predicates.add(cb.like(cb.lower(root.get("error_message")),
+            if(filter.errorMessage() != null && !filter.errorMessage().trim().isEmpty()){
+                String pattern = "%" + filter.errorMessage().trim() + "%";
+                predicates.add(cb.like(cb.lower(root.get("errorMessage")),
                                 pattern.toLowerCase()));
             }
-            if(filter.created_at() != null){
-                predicates.add(cb.equal(root.get("created_at"), filter.created_at()));
+            if(filter.createdAt() != null){
+                predicates.add(cb.equal(root.get("createdAt"), filter.createdAt()));
             }
-            if(Boolean.TRUE.equals(filter.not_completed_at())){
-                predicates.add(cb.isNull(root.get("completed_at")));
-            } else if(filter.completed_at() != null){
-                predicates.add(cb.equal(root.get("completed_at"), filter.completed_at()));
+            if(Boolean.TRUE.equals(filter.notCompletedAt())){
+                predicates.add(cb.isNull(root.get("completedAt")));
+            } else if(filter.completedAt() != null){
+                predicates.add(cb.equal(root.get("completedAt"), filter.completedAt()));
             }
 
 

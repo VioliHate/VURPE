@@ -7,15 +7,15 @@ import java.util.UUID;
 
 public record AsyncTaskFilter(
         UUID id,
-        UUID file_id,
+        UUID fileId,
         TaskStatus status,
-        String error_message,
-        LocalDateTime created_at,
-        LocalDateTime completed_at,
-        Boolean not_completed_at
+        String errorMessage,
+        LocalDateTime createdAt,
+        LocalDateTime completedAt,
+        Boolean notCompletedAt
         ) {
 
     public boolean isEmpty() {
-        return id == null && file_id== null && status == null && error_message== null && created_at == null && completed_at == null && not_completed_at == null;
+        return id == null && fileId== null && status == null && errorMessage== null && createdAt == null && completedAt == null && notCompletedAt == null;
     }
 }

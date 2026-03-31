@@ -98,9 +98,9 @@ public class AsyncTaskService {
                 sendUpdate(fileId, PayloadResponse.success(
                         "Processing Analysis Task (taskId: " + taskId + ")",
                         "PROCESSING_TASK"));
-                servInt.applyBusinessRulesToFile(asyncTask.getFile_id());
+                servInt.applyBusinessRulesToFile(asyncTask.getFileId());
                 asyncTask.setStatus(TaskStatus.COMPLETED);
-                asyncTask.setCompleted_at(LocalDateTime.now());
+                asyncTask.setCompletedAt(LocalDateTime.now());
                 repoAsyncTask.saveAndFlush(asyncTask);
                 sendUpdate(fileId, PayloadResponse.success(
                         "Completed Analysis Task (taskId: " + taskId + ")",
@@ -113,8 +113,8 @@ public class AsyncTaskService {
                         "COMPLETED_ANALYSIS"));
             } catch (Exception e) {
                 asyncTask.setStatus(TaskStatus.FAILED);
-                asyncTask.setCompleted_at(LocalDateTime.now());
-                asyncTask.setError_message(e.getMessage());
+                asyncTask.setCompletedAt(LocalDateTime.now());
+                asyncTask.setErrorMessage(e.getMessage());
                 repoAsyncTask.saveAndFlush(asyncTask);
                 file.setStatus(FileStatusEnum.ERROR);
                 reposFiles.save(file);
@@ -127,7 +127,7 @@ public class AsyncTaskService {
     protected UUID queueAnalysisTask(UUID fileId) {
 
         AsyncTask asyncTask = new AsyncTask();
-        asyncTask.setFile_id(fileId);
+        asyncTask.setFileId(fileId);
         asyncTask.setStatus(TaskStatus.QUEUED);
         AsyncTask saved = repoAsyncTask.saveAndFlush(asyncTask);
         return saved.getId();

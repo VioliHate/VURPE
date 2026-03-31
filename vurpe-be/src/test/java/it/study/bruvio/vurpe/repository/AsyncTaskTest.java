@@ -42,7 +42,7 @@ public class AsyncTaskTest {
                     .as("ID must be not null for record: "+i)
             .isNotNull();
 
-            assertThat(i.getCreated_at())
+            assertThat(i.getCreatedAt())
                     .as("created_at must be not null for record: "+i)
                     .isNotNull();
         });
@@ -56,8 +56,8 @@ public class AsyncTaskTest {
     void shouldRejectInvalidFileIdType() {
         // Test 1: file_id null (NOT NULL)
         AsyncTask testAsyncTask = creatAsyncTask(TaskStatus.QUEUED, null);
-        testAsyncTask.setFile_id(null);
-        testAsyncTask.setCompleted_at(null);
+        testAsyncTask.setFileId(null);
+        testAsyncTask.setCompletedAt(null);
         assertThrows(ConstraintViolationException.class, () -> {
             repository.saveAndFlush(testAsyncTask);
         });
@@ -67,7 +67,7 @@ public class AsyncTaskTest {
         // Test 2: status null (NOT NULL)
         AsyncTask testAsyncTask = creatAsyncTask(TaskStatus.COMPLETED, null);
         testAsyncTask.setStatus(null);
-        testAsyncTask.setCompleted_at(LocalDateTime.now());
+        testAsyncTask.setCompletedAt(LocalDateTime.now());
         assertThrows(ConstraintViolationException.class, () -> {
             repository.saveAndFlush(testAsyncTask);
         });
@@ -77,8 +77,8 @@ public class AsyncTaskTest {
     void shouldRejectInvalidCreatedAtType() {
         // Test 3: Validation Test for created_at null
         AsyncTask testAsyncTask = creatAsyncTask(TaskStatus.PROCESSING, null);
-        testAsyncTask.setCreated_at(null);
-        testAsyncTask.setCompleted_at(null);
+        testAsyncTask.setCreatedAt(null);
+        testAsyncTask.setCompletedAt(null);
 
 
         try (ValidatorFactory factory = Validation.buildDefaultValidatorFactory()) {
@@ -90,7 +90,7 @@ public class AsyncTaskTest {
             assertThat(violations)
                     .extracting(ConstraintViolation::getPropertyPath)
                     .extracting(Path::toString)
-                    .containsExactly("created_at");
+                    .containsExactly("createdAt");
 
         } catch (Exception e) {
             fail(e.getMessage(), e);
@@ -100,20 +100,20 @@ public class AsyncTaskTest {
     @Test
     void shouldNotNullIdCreatedAt() {
         AsyncTask testAsyncTask = creatAsyncTask(TaskStatus.COMPLETED, null);
-        testAsyncTask.setCompleted_at(LocalDateTime.now());
+        testAsyncTask.setCompletedAt(LocalDateTime.now());
 
         assertDoesNotThrow(() -> {
             AsyncTask saved = repository.saveAndFlush(testAsyncTask);
             assertNotNull(saved.getId());
-            assertNotNull(saved.getCreated_at()); // Verifica @PrePersist
+            assertNotNull(saved.getCreatedAt()); // Verifica @PrePersist
         });
     }
 
     private AsyncTask creatAsyncTask(TaskStatus status, String error_message) {
         AsyncTask task = new AsyncTask();
-        task.setFile_id(UUID.fromString("27d0e7dd-93d5-4ce2-8212-16b3fff35163"));
+        task.setFileId(UUID.fromString("27d0e7dd-93d5-4ce2-8212-16b3fff35163"));
         task.setStatus(status);
-        task.setError_message(error_message);
+        task.setErrorMessage(error_message);
         return task;
     }
 

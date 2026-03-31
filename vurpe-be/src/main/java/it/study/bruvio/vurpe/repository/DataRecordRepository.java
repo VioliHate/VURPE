@@ -15,6 +15,8 @@ import java.util.*;
 public interface DataRecordRepository extends JpaRepository<DataRecord, UUID>,
         JpaSpecificationExecutor<DataRecord> {
 
+    Iterable<? extends UUID> findAllByFileId(UUID fileId);
+
     @Query("SELECT d FROM DataRecord d WHERE d.fileId = :fileId")
     List<DataRecord> findByFileId(UUID fileId);
 

@@ -8,20 +8,20 @@ import java.util.UUID;
 
 public record AsyncTaskResponse(
         UUID id,
-        UUID file_id,
+        UUID fileId,
         TaskStatus status,
-        String error_message,
-        LocalDateTime created_at,
-        LocalDateTime completed_at
+        String errorMessage,
+        LocalDateTime createdAt,
+        LocalDateTime completedAt
 ) {
     public static AsyncTaskResponse fromEntity(AsyncTask task){
         return new AsyncTaskResponse(
                 task.getId(),
-                task.getFile_id(),
+                task.getFileId(),
                 task.getStatus(),
-                task.getError_message(),
-                task.getCreated_at(),
-                task.getCompleted_at()
+                task.getErrorMessage(),
+                task.getCreatedAt(),
+                task.getCompletedAt()
         );
     }
 }

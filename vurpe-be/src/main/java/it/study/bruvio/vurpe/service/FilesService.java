@@ -34,10 +34,7 @@ public class FilesService {
             throw new Exception("File not exists!");
         }
         filesRepository.deleteById(id);
-        if (!filesRepository.existsById(id)) {
-            return true;
-        }
-        return false;
+        return !filesRepository.existsById(id);
 
     }
 }

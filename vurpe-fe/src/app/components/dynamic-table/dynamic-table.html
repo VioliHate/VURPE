@@ -67,7 +67,10 @@
                     <span>Metriche</span>
                   </button>
                 }
-                <mat-divider></mat-divider>
+
+                @if (config().buttons.length > 1) {
+                  <mat-divider></mat-divider>
+                }
                 @if (config().buttons.includes('Elimina')) {
                   <button
                     mat-menu-item

@@ -51,7 +51,7 @@ public class BusinessRuleController {
         }
     }
 
-    @PostMapping("/businessRule/delete")
+    @PostMapping("/business-rule/delete")
     public ResponseEntity<PayloadResponse<String>> delete(
             @RequestParam("id") String id) throws Exception {
         UUID recordId = UUID.fromString(id);

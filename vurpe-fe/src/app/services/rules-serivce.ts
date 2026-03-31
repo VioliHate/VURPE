@@ -49,4 +49,11 @@ export class RulesSerivce {
   sendRule(data: BusinessRule) {
     return this.http.post(`${this.apiUrl}/rules/add`, data);
   }
+
+  public async delete(id: string) {
+    const httpParams = { id: id };
+    return await this.http.post(`${this.apiUrl}/business-rule/delete`, null, {
+      params: httpParams,
+    });
+  }
 }

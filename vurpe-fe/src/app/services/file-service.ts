@@ -62,4 +62,9 @@ export class FileService {
     // Questo restituisce un Observable
     return this.http.post(`${this.apiUrl}/uploadCSV`, formData);
   }
+
+  public async delete(id: string) {
+    const httpParams = { id: id };
+    return await this.http.post(`${this.apiUrl}/files/delete`, null, { params: httpParams });
+  }
 }

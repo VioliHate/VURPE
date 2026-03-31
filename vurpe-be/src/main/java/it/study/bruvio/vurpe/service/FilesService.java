@@ -41,9 +41,9 @@ public class FilesService {
             throw new Exception("File not exists!");
         }
 
-        analysisResultRepository.deleteAllById(analysisResultRepository.findAllByFileId(id));
-        dataRecordRepository.deleteAllById(analysisResultRepository.findAllByFileId(id));
-        asyncTaskRepository.deleteAllById(analysisResultRepository.findAllByFileId(id));
+        analysisResultRepository.deleteByFileId(id);
+        dataRecordRepository.deleteByFileId(id);
+        asyncTaskRepository.deleteByFileId(id);
 
         filesRepository.deleteById(id);
         return !filesRepository.existsById(id);

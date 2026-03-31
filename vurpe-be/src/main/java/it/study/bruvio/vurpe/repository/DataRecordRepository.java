@@ -7,6 +7,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
 import java.util.*;
@@ -15,7 +16,8 @@ import java.util.*;
 public interface DataRecordRepository extends JpaRepository<DataRecord, UUID>,
         JpaSpecificationExecutor<DataRecord> {
 
-    Iterable<? extends UUID> findAllByFileId(UUID fileId);
+    @Transactional
+    void deleteByFileId(UUID fileId);
 
     @Query("SELECT d FROM DataRecord d WHERE d.fileId = :fileId")
     List<DataRecord> findByFileId(UUID fileId);

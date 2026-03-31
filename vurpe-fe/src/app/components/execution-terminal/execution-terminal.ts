@@ -15,6 +15,9 @@ export class ExecutionTerminal {
 
   constructor() {
     this.stompService.messages$.pipe(takeUntilDestroyed(this.destroyRef)).subscribe((msg) => {
+      if (msg.status === 'ERROR') {
+        console.log('❌ Errore ricevuto dal server:', msg.message || msg.errorCode);
+      }
       this.messages.update((current) => [...current, msg]);
     });
   }

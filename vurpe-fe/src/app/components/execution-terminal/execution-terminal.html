@@ -25,7 +25,9 @@
           [class.pb-3]="last"
         >
           <span class="text-light small lh-sm">
-            <span class="text-info me-1">›</span> {{ msg.payload }}
+            <span class="text-info me-1">›</span>
+            {{ msg.status === 'ERROR' ? '❌' : '✔️' }}
+            {{ msg.message }}
           </span>
         </div>
       }

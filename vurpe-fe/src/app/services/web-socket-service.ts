@@ -51,17 +51,15 @@ export class StompService {
     this.client.activate();
   }
 
-  subscribeToFile(fileId: string): void {
-    if (!this.client?.active) return;
-
+  subscribeToFile(fileId: string) {
+    if (!this.client?.active || this.statusSubject.value !== StompStatus.CONNECTED) return;
     const destination = `/topic/analysis-task/${fileId}`;
-
     this.client.subscribe(destination, (message: IMessage) => {
       try {
         const payload = JSON.parse(message.body);
         this.messageSubject.next(payload);
       } catch (e) {
-        console.error('Errore parsing messaggio STOMP:', e, message.body);
+        console.error('Errore parsing messaggio STOMP:', e);
       }
     });
   }

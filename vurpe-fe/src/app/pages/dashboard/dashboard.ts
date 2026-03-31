@@ -5,10 +5,11 @@ import { DialogService } from '../../services/dialog-service';
 import { DashboardServices } from '../../services/dashboard-services';
 import { StatsCard } from '../../components/stats-card/stats-card';
 import { MatIcon } from '@angular/material/icon';
+import { Analizer } from '../../components/analizer/analizer';
 
 @Component({
   selector: 'app-dashboard',
-  imports: [DragAndDropCsv, StatsCard, MatIcon],
+  imports: [DragAndDropCsv, StatsCard, MatIcon, Analizer],
   templateUrl: './dashboard.html',
   styleUrl: './dashboard.scss',
 })

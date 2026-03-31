@@ -28,9 +28,9 @@
 
     <!-- COLONNA DESTRA: Nel caso carica il file ed è ok -->
     <div class="col-lg-8 col-xl-9">
-      @if (true) {
+      @if (uploadedFileId()) {
         <div class="card border-0 rounded-4 bg-light h-100">
-          <app-analizer class="p-0" [fileId]="'adsdasdasdasdadasda'"></app-analizer>
+          <app-analizer class="p-0" [fileId]="uploadedFileId()"></app-analizer>
         </div>
       }
     </div>

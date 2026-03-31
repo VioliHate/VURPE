@@ -41,11 +41,12 @@ public class IngestionService {
         if (!validateCsvHeader(file)) {
             return PayloadResponse.error("header error", " ");
         }
-        if (!insertRows(file)) {
+        UUID fileId = insertRows(file).getId();
+        if (!repoFiles.existsById(fileId)) {
             return PayloadResponse.error("row error", " ");
         }
 
-        return PayloadResponse.success("Success", "success ok");
+        return PayloadResponse.success(fileId.toString(), "success ok");
     }
 
     private boolean validateCsvHeader(MultipartFile file) throws IOException {
@@ -77,7 +78,7 @@ public class IngestionService {
         return true;
     }
 
-    private boolean insertRows(MultipartFile file) throws Exception {
+    private Files insertRows(MultipartFile file) throws Exception {
         Files f = new Files();
         int count = 1;
         try (BufferedReader br = new BufferedReader(
@@ -116,8 +117,7 @@ public class IngestionService {
             throw new Exception("errore riga: " + count, e);
         }
         f.setStatus(FileStatusEnum.UPLOADED);
-        repoFiles.save(f);
-        return true;
+        return repoFiles.save(f);
     }
 
     private @NotNull DataRecord getDataRecord(String row, Files f, DateTimeFormatter formatter) throws Exception {

@@ -19,18 +19,21 @@ export class Dashboard {
   statusMessage = signal('');
   DashboardSrv = inject(DashboardServices);
   list = signal<any>([]);
+  uploadedFileId = signal('');
 
   constructor() {
     this.DashboardSrv.getStats().subscribe((resp) => {
       let maps = Object.entries(resp);
       this.list.set(maps);
-      //console.log(this.list() );
     });
   }
 
   onFileProcessed(file: File) {
     this.fileService.callUploadCSV(file).subscribe({
-      next: () => this.dialog.success('File caricato correttamente'),
+      next: (res: any) => {
+        this.uploadedFileId.set(res.payload);
+        this.dialog.success('File caricato correttamente');
+      },
       error: () => {
         this.statusMessage.set('Errore nel CSV');
         this.dialog.error('Errore nel caricamento del file');

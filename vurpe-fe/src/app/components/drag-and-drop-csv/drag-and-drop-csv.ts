@@ -16,6 +16,7 @@ export class DragAndDropCsv {
   isUploading = signal(false);
   statusMessage = model<string>('');
   valueChange = output<string>();
+  deleteFile = output<boolean>();
 
   constructor() {}
 
@@ -79,5 +80,6 @@ export class DragAndDropCsv {
     this.currentFile.set(null);
     this.statusMessage.set(' ');
     this.isUploading.set(false);
+    this.deleteFile.emit(true);
   }
 }

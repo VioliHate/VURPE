@@ -18,6 +18,7 @@
         <drag-and-drop-csv
           (fileProcessed)="onFileProcessed($event)"
           [(statusMessage)]="statusMessage"
+          (deleteFile)="uploadedFileId.set('')"
         ></drag-and-drop-csv>
 
         <div class="mt-4 p-3 rounded-3 bg-light border border-dashed text-center">

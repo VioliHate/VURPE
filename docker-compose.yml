@@ -1,0 +1,43 @@
+services:
+  # DATABASE
+  db:
+    image: postgres:16
+    container_name: vurpe-db
+    restart: always
+    environment:
+      POSTGRES_DB: vurpe_db
+      POSTGRES_USER: vurpeSA
+      POSTGRES_PASSWORD: vurpe123
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+
+  # BACKEND
+  backend:
+    build: ./vurpe-be # Docker andrà in questa cartella a cercare il Dockerfile
+    container_name: vurpe-be-app
+    restart: always
+    ports:
+      - "8080:8080"
+    depends_on:
+      - db
+    environment:
+      SPRING_PROFILES_ACTIVE: docker
+      SPRING_DATASOURCE_URL: jdbc:postgresql://db:5432/vurpe_db
+      SPRING_DATASOURCE_USERNAME: vurpeSA
+      SPRING_DATASOURCE_PASSWORD: vurpe123
+      SPRING_JPA_HIBERNATE_DDL_AUTO: update
+      SPRING_FLYWAY_ENABLED: true
+  # FRONTEND
+  frontend:
+    build: ./vurpe-fe # Docker andrà in questa cartella a cercare il Dockerfile
+    container_name: vurpe-fe-app
+    restart: always
+    ports:
+      - "4200:80" # Lo mappa sulla 4200 del tuo PC
+    depends_on:
+      - backend
+
+volumes:
+  postgres_data:
